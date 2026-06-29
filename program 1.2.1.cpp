@@ -1203,16 +1203,16 @@ public:
 
 class Transaksi {
 private:
-	Obat getObat;
+	Keranjang keranjang;
+	
+	Obat obatDipilih; // perubahan variabel
 	string namaObat;
 	string idTransaksi;
 	string tanggal;
+	
 	double totalPembayaran;
 	double uangBayar;
 	double uangKembali;
-//	vector<Obat> daftarObat;
-//	vector<int> jumlahBeli;
-	Keranjang keranjang;
 	
 public:
 	
@@ -1335,12 +1335,12 @@ public:
 	    cout << "Masukkan Nama Obat : ";
 	    getline(cin >> ws, namaObat);
 	
-	    if (getObat.cariObat(namaObat)) {
-	
+	    if (obatDipilih.cariObat(namaObat)) {
+	    
 	        cout << "\nObat ditemukan!\n";
-	        cout << "Nama     : " << getObat.getnamaObat() << endl;
-	        cout << "Harga    : " << getObat.getHarga() << endl;
-	        cout << "Stok     : " << getObat.getStok() << endl;
+	        cout << "Nama     : " << obatDipilih.getnamaObat() << endl;
+			cout << "Harga    : " << obatDipilih.getHarga() << endl;
+			cout << "Stok     : " << obatDipilih.getStok() << endl;
 	
 	    } else {
 	
