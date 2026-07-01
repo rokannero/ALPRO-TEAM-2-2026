@@ -10,8 +10,6 @@
 #include <cctype> // baru
 using namespace std;
 
-void header(string judul);
-
 class User {
 	private :
 		string idUser;
@@ -1279,32 +1277,12 @@ private:
 
 public:
 
-	// tambahobat baru
-    void tambahObat(Obat obat, int qty) {
+    void tambahObat(Obat obat, int qty){
 
-	    int index = cariIndex(obat.getnamaObat());
-	
-	    // Jika obat sudah ada di keranjang
-	    if(index != -1){
+        daftarObat.push_back(obat);
+        jumlah.push_back(qty);
 
-		    if(jumlah[index] + qty > daftarObat[index].getStok()){
-		
-		        cout << "\nJumlah pembelian melebihi stok yang tersedia!" << endl;
-		        return;
-		    }
-		
-		    jumlah[index] += qty;
-		
-		    cout << "\nJumlah obat berhasil diperbarui." << endl;
-		
-		} else {
-	
-	        daftarObat.push_back(obat);
-	        jumlah.push_back(qty);
-	
-	        cout << "\nObat berhasil ditambahkan ke keranjang." << endl;
-	    }
-	}
+    }
 
     void kosongkanKeranjang(){
 
@@ -1330,29 +1308,6 @@ public:
         return daftarObat.size();
 
     }
-    
-    // baru
-    int cariIndex(string namaObat) {
-
-	    for(int i = 0; i < daftarObat.size(); i++){
-	
-	        if(daftarObat[i].getnamaObat() == namaObat){
-	
-	            return i;
-	
-	        }
-	
-	    }
-	
-	    return -1;
-	}
-    
-    // baru
-    bool keranjangKosong() {
-
-    	return daftarObat.empty();
-
-	}
 
     double hitungSubtotal(){
 
@@ -1367,77 +1322,23 @@ public:
         return subtotal;
 
     }
-    
-    //tampilkeranjang baru
-	void tampilKeranjang() {
-		
-	    if (daftarObat.empty())
-	    {
-	        cout << "\nKeranjang masih kosong.\n";
-	        return;
-	    }
-	
-	    cout << "\n===============================================================\n";
-	    cout << left << setw(5) << "No"
-	         << setw(20) << "Nama Obat"
-	         << setw(10) << "Harga"
-	         << setw(8) << "Qty"
-	         << setw(12) << "Subtotal" << endl;
-	    cout << "===============================================================\n";
-	
-	    for (int i = 0; i < daftarObat.size(); i++)
-	    {
-	        cout << left << setw(5) << i + 1
-	             << setw(20) << daftarObat[i].getnamaObat()
-	             << setw(10) << daftarObat[i].getHarga()
-	             << setw(8) << jumlah[i]
-	             << setw(12) << daftarObat[i].getHarga() * jumlah[i]
-	             << endl;
-	    }
-	
-	    cout << "===============================================================\n";
-	    cout << "Total : Rp " << hitungSubtotal() << endl;
-	    cout << "===============================================================\n";
-	}
-    
-    // baru
-    void ubahJumlah(int index, int jumlahBaru) {
-    	
-	    if(index < 0 || index >= jumlah.size())
-	        return;
-	
-	    if(jumlahBaru <= 0)
-	    {
-	        cout<<"Jumlah tidak valid!\n";
-	        return;
-	    }
-	
-	    if(jumlahBaru > daftarObat[index].getStok())
-	    {
-	        cout<<"Stok tidak mencukupi!\n";
-	        return;
-	    }
-	
-	    jumlah[index] = jumlahBaru;
-	
-	    cout<<"Jumlah berhasil diubah.\n";
-	}
-	
-	// baru
-	void hapusItem(int index) {
-		
-	    if(index < 0 || index >= daftarObat.size())
-	    {
-	        cout << "Item tidak ditemukan!" << endl;
-	        return;
-	    }
-	
-	    daftarObat.erase(daftarObat.begin() + index);
-	    jumlah.erase(jumlah.begin() + index);
-	
-	    cout << "Item berhasil dihapus." << endl;
-	}
-	
+
+    void tampilKeranjang(){
+
+        cout << "\n=========== KERANJANG ===========\n";
+
+        for(int i=0;i<daftarObat.size();i++){
+
+            cout << i+1 << ". "
+                 << daftarObat[i].getnamaObat()
+                 << " x "
+                 << jumlah[i]
+                 << endl;
+
+        }
+
+    }
+
 };
 
 class Transaksi {
@@ -1485,56 +1386,7 @@ public:
 	    idTransaksi = ss.str();
 	}
 	
-	// baru
-	void tambahObatKeKeranjang(){
-
-	    Obat obat;
-	
-	    string nama;
-	    int jumlah;
-	
-	    cout << "Masukkan Nama Obat : ";
-	    getline(cin, nama);
-	
-	    if(obat.cariObat(nama))
-	    {
-	        cout << "\n==========================================" << endl;
-	        cout << "          DATA OBAT DITEMUKAN" << endl;
-	        cout << "==========================================" << endl;
-	
-	        cout << left << setw(15) << "Nama"
-	             << ": " << obat.getnamaObat() << endl;
-	
-	        cout << left << setw(15) << "Harga"
-	             << ": Rp " << obat.getHarga() << endl;
-	
-	        cout << left << setw(15) << "Stok"
-	             << ": " << obat.getStok() << endl;
-	
-	        cout << "==========================================" << endl;
-	
-	        cout << "\nJumlah Beli : ";
-	        cin >> jumlah;
-	        cin.ignore();
-	
-	        if(jumlah <= obat.getStok())
-	        {
-	            keranjang.tambahObat(obat, jumlah);
-	
-	        }
-	        else
-	        {
-	            cout << "\n>> Stok tidak mencukupi!" << endl;
-	        }
-	    }
-	    else
-	    {
-	        cout << "\n>> Obat tidak ditemukan!" << endl;
-	    }
-	
-	}
-	
-	// inputtransaksi baru
+	//
 	void inputTransaksi(){
 
 	    generateID();
@@ -1544,180 +1396,51 @@ public:
 	    char pilih;
 	
 	    do{
-
-		    header("TRANSAKSI PENJUALAN");
-		
-		    cout << "ID Transaksi : " << idTransaksi << endl;
-		
-		    tambahObatKeKeranjang();
-		
-		    cout << "\nTambah obat lagi? (Y/T) : ";
-		    cin >> pilih;
-		    cin.ignore();
-		
-		}while(toupper(pilih)=='Y');
-	    
-	    menuKeranjang();
-			    
-	}
 	
-	void menuKeranjang(){
-
-	    // Jika keranjang kosong, tidak perlu menampilkan menu
-	    if(keranjang.keranjangKosong()){
-	        cout << "\nKeranjang masih kosong!" << endl;
-	        return;
-	    }
+	        Obat obat;
 	
-	    int pilihan;
-	    bool checkout = false;
+	        string nama;
+	        int jumlah;
 	
-	    do{
+	        cout << "\n==================================" << endl;
+	        cout << "ID Transaksi : " << idTransaksi << endl;
+	        cout << "==================================" << endl;
 	
-	        system("cls");
+	        cout << "Masukkan Nama Obat : ";
+	        getline(cin, nama);
 	
-	        header("MENU KERANJANG");
+	        if(obat.cariObat(nama)){
 	
-	        cout << "\n================ MENU =================" << endl;
-	        cout << "1. Tambah Obat" << endl;
-	        cout << "2. Ubah Jumlah" << endl;
-	        cout << "3. Hapus Item" << endl;
-	        cout << "4. Lihat Ringkasan" << endl;
-	        cout << "5. Checkout" << endl;
-	        cout << "6. Batalkan Transaksi" << endl;
-	        cout << "=======================================" << endl;
+	            cout << "\nObat Ditemukan!" << endl;
+	            cout << "Nama  : " << obat.getnamaObat() << endl;
+	            cout << "Harga : " << obat.getHarga() << endl;
+	            cout << "Stok  : " << obat.getStok() << endl;
 	
-	        cout << "Masukkan Pilihan : ";
-	        cin >> pilihan;
+	            cout << "\nJumlah Beli : ";
+	            cin >> jumlah;
+	            cin.ignore();
+	
+	            if(jumlah <= obat.getStok()){
+	
+	                keranjang.tambahObat(obat, jumlah);
+	
+	                cout << "\nObat berhasil ditambahkan ke transaksi." << endl;
+	
+	            }else{
+	
+	                cout << "\nStok tidak mencukupi!" << endl;
+	            }
+	
+	        }else{
+	
+	            cout << "\nObat tidak ditemukan!" << endl;
+	        }
+	
+	        cout << "\nTambah obat lagi? (Y/T) : ";
+	        cin >> pilih;
 	        cin.ignore();
 	
-	        switch(pilihan){
-	
-	        case 1:
-	        {
-	            tambahObatKeKeranjang();
-	            break;
-	        }
-	
-	        case 2:
-	        {
-	            if(keranjang.keranjangKosong())
-			    {
-			        cout << "\nKeranjang masih kosong!" << endl;
-			        break;
-			    }
-			
-			    int nomor;
-			    int jumlahBaru;
-			
-			    cout << "\nNomor Item : ";
-			    cin >> nomor;
-			
-			    cout << "Jumlah Baru : ";
-			    cin >> jumlahBaru;
-			    cin.ignore();
-			
-			    keranjang.ubahJumlah(nomor - 1, jumlahBaru);
-			    
-	            break;
-	        }
-	
-	        case 3:
-	        {
-	            if(keranjang.keranjangKosong())
-			    {
-			        cout << "\nKeranjang masih kosong!" << endl;
-			        break;
-			    }
-			
-			    int nomor;
-			
-			    cout << "\nNomor Item : ";
-			    cin >> nomor;
-			    cin.ignore();
-			
-			    keranjang.hapusItem(nomor - 1);
-			
-			    if(keranjang.keranjangKosong())
-			    {
-			        cout << "\nSemua item telah dihapus." << endl;
-			    }
-    
-	            break;
-	        }
-	
-	        case 4:
-			{
-				
-				keranjang.tampilKeranjang();
-				
-			    cout << "\n\n========== RINGKASAN ==========" << endl;
-			
-			    cout << "Jumlah Item     : "
-			         << keranjang.getSize() << endl;
-			
-			    cout << "Total Belanja   : Rp "
-			         << keranjang.hitungSubtotal() << endl;
-			
-			    break;
-			}
-	
-	        case 5:
-			{
-			    if(keranjang.keranjangKosong())
-			    {
-			        cout << "\nKeranjang masih kosong!" << endl;
-			        break;
-			    }
-			
-			    char konfirmasi;
-			
-			    cout << "\nYakin lanjut ke pembayaran? (Y/T) : ";
-			    cin >> konfirmasi;
-			    cin.ignore();
-			
-			    if(toupper(konfirmasi) == 'Y')
-			    {
-			        checkout = true;
-			    }
-			
-			    break;
-			}
-	
-	        case 6:
-			{
-			    char konfirmasi;
-			
-			    cout << "\nYakin ingin membatalkan transaksi? (Y/T) : ";
-			    cin >> konfirmasi;
-			    cin.ignore();
-			
-			    if(toupper(konfirmasi) == 'Y')
-			    {
-			        keranjang.kosongkanKeranjang();
-			
-			        cout << "\nTransaksi berhasil dibatalkan." << endl;
-			
-			        system("pause");
-			
-			        return;
-			    }
-			
-			    break;
-			}
-	
-	        default:
-	
-	            cout << "\nPilihan tidak tersedia!" << endl;
-	        }
-	
-	        if(!checkout){
-	            cout << endl;
-	            system("pause");
-	        }
-	
-	    }while(!checkout);
-	
+	    }while(toupper(pilih) == 'Y');
 	}
 	    
 	string cetakWaktu() {
@@ -2223,7 +1946,6 @@ int main(){
 
     int pilihan, pilih;
     string namaCari;
-    
     
     do
     {
