@@ -1,0 +1,20 @@
+k001|paracetamol|20000|200|12/03/2027|tablet|20
+k002|paratusin|10000|187|12/03/2028|kaplet|10
+k003|paracetamol 500mg|20000|200|12/03/2027|tablet|20
+k004|amoxicillin|15000|150|15/05/2027|kaplet|10
+k005|vitamin c|12000|300|20/08/2028|tablet|10
+k006|bodrex|8000|250|10/10/2027|tablet|4
+k007|panadol|18000|180|25/06/2028|kaplet|10
+k008|promag|10000|220|18/09/2028|tablet|10
+k009|antasida doen|7000|200|12/11/2027|tablet|10
+k010|obh combi|17000|100|05/12/2027|sirup|100
+k011|mixagrip|9000|180|17/07/2028|kaplet|4
+k012|sanmol|15000|150|22/04/2028|tablet|10
+k013|diapet|12000|120|30/09/2027|kapsul|10
+k014|imboost|35000|100|14/01/2028|kaplet|10
+k015|betadine|25000|80|08/03/2029|cair|60
+k016|cetirizine|18000|140|19/08/2028|tablet|10
+k017|ibuprofen|22000|120|11/05/2028|tablet|10
+k018|omeprazole|25000|90|27/10/2028|kapsul|10
+k019|komix|3000|300|09/12/2027|sachet|1
+k020|tolak linu|4000|345|21/06/2028|sachet|1
