@@ -12,6 +12,8 @@ using namespace std;
 
 void header(string judul);
 
+void footer();
+
 class User {
 	private :
 		string idUser;
@@ -347,56 +349,6 @@ class Karyawan {
 		    cout << "Nama        : " << nama << endl;
 		    cout << "Jabatan     : " << jabatan << endl;
 		    cout << "Gaji        : Rp " << gaji << endl;
-		}
-};
-
-
-
-class Supplier {
-	private :
-		string idSupplier;
-		string namaPerusahaan;
-		string noHP;
-		string alamat;
-		
-	public :
-		Supplier()
-		{
-		    idSupplier = "";
-		    namaPerusahaan = "";
-		}
-		
-		Supplier(string id, string n)
-		{
-		    idSupplier = id;
-		    namaPerusahaan = n;
-		}
-		
-		void setIdSupplier(string id)
-		{
-		    idSupplier = id;
-		}
-		
-		void setNama(string n)
-		{
-		    namaPerusahaan = n;
-		}
-		
-		string getIdSupplier()
-		{
-		    return idSupplier;
-		}
-		
-		string getNama()
-		{
-		    return namaPerusahaan;
-		}
-		
-		void tampilSupplier()
-		{
-		    cout << "\n===== DATA SUPPLIER =====" << endl;
-		    cout << "ID Supplier     : " << idSupplier << endl;
-		    cout << "Nama Perusahaan : " << namaPerusahaan << endl;
 		}
 };
 
@@ -1267,6 +1219,941 @@ public:
 	
 	    file.close();
 	}
+	
+	// Menambah stok obat setelah barang diterima dari supplier
+	void tambahStok(string kodeCari, int jumlahTambah){
+	
+	    ifstream file("daftar_obat.txt");
+	    ofstream temp("temp.txt");
+	
+	    if(!file.is_open()){
+	        cout << "File daftar obat tidak ditemukan!" << endl;
+	        return;
+	    }
+	
+	    string kode;
+	    string nama;
+	    string harga;
+	    string stok;
+	    string exp;
+	    string kategori;
+	    string satuan;
+	
+	    while(getline(file,kode,'|') &&
+	          getline(file,nama,'|') &&
+	          getline(file,harga,'|') &&
+	          getline(file,stok,'|') &&
+	          getline(file,exp,'|') &&
+	          getline(file,kategori,'|') &&
+	          getline(file,satuan))
+	    {
+	
+	        if(kode == kodeCari)
+	        {
+	            int stokBaru = atoi(stok.c_str());
+	            stokBaru += jumlahTambah;
+	
+	            temp << kode << "|"
+	                 << nama << "|"
+	                 << harga << "|"
+	                 << stokBaru << "|"
+	                 << exp << "|"
+	                 << kategori << "|"
+	                 << satuan << endl;
+	        }
+	        else
+	        {
+	            temp << kode << "|"
+	                 << nama << "|"
+	                 << harga << "|"
+	                 << stok << "|"
+	                 << exp << "|"
+	                 << kategori << "|"
+	                 << satuan << endl;
+	        }
+	    }
+	
+	    file.close();
+	    temp.close();
+	
+	    remove("daftar_obat.txt");
+	    rename("temp.txt","daftar_obat.txt");
+	}
+
+};
+
+class Supplier{
+private:
+
+    // Identitas supplier
+    string idSupplier;
+    string namaPerusahaan;
+    string noHP;
+    string alamat;
+    
+    // Data pemesanan
+	string idPesanan;
+	string kodeObat;
+	string namaObat;
+	int jumlahPesan;
+	string tanggalPesan;
+	string statusPesanan;
+
+public:
+
+    // Constructor default
+    Supplier()
+    {
+        idSupplier = "";
+        namaPerusahaan = "";
+        noHP = "";
+        alamat = "";
+    }
+
+    // Constructor dengan parameter
+    Supplier(string id, string nama, string hp, string almt)
+    {
+        idSupplier = id;
+        namaPerusahaan = nama;
+        noHP = hp;
+        alamat = almt;
+    }
+
+    // Setter ID Supplier
+    void setIdSupplier(string id)
+    {
+        idSupplier = id;
+    }
+
+    // Setter Nama Perusahaan
+    void setNama(string nama)
+    {
+        namaPerusahaan = nama;
+    }
+
+    // Setter Nomor HP
+    void setNoHP(string hp)
+    {
+        noHP = hp;
+    }
+
+    // Setter Alamat Supplier
+    void setAlamat(string almt)
+    {
+        alamat = almt;
+    }
+
+    // Getter ID Supplier
+    string getIdSupplier()
+    {
+        return idSupplier;
+    }
+
+    // Getter Nama Perusahaan
+    string getNama()
+    {
+        return namaPerusahaan;
+    }
+
+    // Getter Nomor HP
+    string getNoHP()
+    {
+        return noHP;
+    }
+
+    // Getter Alamat Supplier
+    string getAlamat()
+    {
+        return alamat;
+    }
+
+    // Menampilkan informasi supplier ke layar
+    void tampilSupplier()
+    {
+        cout << "\n==========================================" << endl;
+        cout << "            DATA SUPPLIER" << endl;
+        cout << "==========================================" << endl;
+        cout << "ID Supplier      : " << idSupplier << endl;
+        cout << "Nama Perusahaan  : " << namaPerusahaan << endl;
+        cout << "No. HP           : " << noHP << endl;
+        cout << "Alamat           : " << alamat << endl;
+        cout << "==========================================" << endl;
+    }
+    
+   // Menambahkan data supplier baru ke file
+	void tambahSupplier(){
+	
+	    ofstream file("supplier.txt", ios::app);
+	
+	    if(!file.is_open()){
+	        cout << "File supplier tidak dapat dibuka!" << endl;
+	        return;
+	    }
+	
+	    header("TAMBAH SUPPLIER");
+	
+	    cout << "ID Supplier      : ";
+	    getline(cin, idSupplier);
+	
+	    // Validasi ID tidak boleh sama
+	    if(cariSupplier(idSupplier))
+	    {
+	        cout << "\nID Supplier sudah digunakan!" << endl;
+	        file.close();
+	        footer();
+	        return;
+	    }
+	
+	    cout << "Nama Perusahaan  : ";
+	    getline(cin, namaPerusahaan);
+	
+	    cout << "No. HP           : ";
+	    getline(cin, noHP);
+	
+	    cout << "Alamat           : ";
+	    getline(cin, alamat);
+	
+	    file << idSupplier << "|"
+	         << namaPerusahaan << "|"
+	         << noHP << "|"
+	         << alamat << endl;
+	
+	    file.close();
+	
+	    cout << "\nData supplier berhasil disimpan." << endl;
+	
+	    footer();
+	}
+	
+	// Menampilkan seluruh data supplier
+	void bacaSupplier(){
+	
+	    ifstream file("supplier.txt");
+	
+	    if(!file.is_open()){
+	        cout << "File supplier tidak ditemukan!" << endl;
+	        return;
+	    }
+	
+	    cout << left
+	         << setw(12) << "ID"
+	         << setw(25) << "Nama Perusahaan"
+	         << setw(18) << "No HP"
+	         << setw(25) << "Alamat"
+	         << endl;
+	
+	    cout << "--------------------------------------------------------------------------" << endl;
+	
+	    while(getline(file,idSupplier,'|') &&
+	          getline(file,namaPerusahaan,'|') &&
+	          getline(file,noHP,'|') &&
+	          getline(file,alamat))
+	    {
+	
+	        cout << left
+	             << setw(12) << idSupplier
+	             << setw(25) << namaPerusahaan
+	             << setw(18) << noHP
+	             << setw(25) << alamat
+	             << endl;
+	
+	    }
+	
+	    cout << "--------------------------------------------------------------------------" << endl;
+	
+	    file.close();
+	}
+	
+	// Mencari supplier berdasarkan ID
+	bool cariSupplier(string idCari){
+	
+	    ifstream file("supplier.txt");
+	
+	    if(!file.is_open()){
+	        cout << "File supplier tidak ditemukan!" << endl;
+	        return false;
+	    }
+	
+	    while(getline(file,idSupplier,'|') &&
+	          getline(file,namaPerusahaan,'|') &&
+	          getline(file,noHP,'|') &&
+	          getline(file,alamat))
+	    {
+	
+	        if(idSupplier == idCari){
+	
+	            file.close();
+	            return true;
+	
+	        }
+	    }
+	
+	    file.close();
+	    return false;
+	}
+	
+	// Memilih supplier yang akan digunakan untuk restock
+	bool pilihSupplier(){
+	
+	    system("cls");
+	
+	    header("PILIH SUPPLIER");
+	
+	    bacaSupplier();
+	
+	    string idCari;
+	
+	    cout << "\nMasukkan ID Supplier : ";
+	    getline(cin, idCari);
+	
+	    if(cariSupplier(idCari))
+	    {
+	        cout << "\nSupplier berhasil dipilih." << endl;
+	        cout << "ID Supplier   : " << idSupplier << endl;
+	        cout << "Nama Supplier : " << namaPerusahaan << endl;
+	
+	        footer();
+	
+	        return true;
+	    }
+	
+	    cout << "\nSupplier tidak ditemukan!" << endl;
+	
+	    footer();
+	
+	    return false;
+	}
+	
+	// Mengubah data supplier berdasarkan ID
+	void ubahSupplier(){
+	
+	    string idCari;
+	
+	    cout << "\nMasukkan ID Supplier : ";
+	    getline(cin, idCari);
+	
+	    ifstream file("supplier.txt");
+	    ofstream temp("temp_supplier.txt");
+	
+	    if(!file.is_open() || !temp.is_open()){
+	        cout << "\nFile tidak dapat dibuka!" << endl;
+	        return;
+	    }
+	
+	    bool ditemukan = false;
+	
+	    while(getline(file,idSupplier,'|') &&
+	          getline(file,namaPerusahaan,'|') &&
+	          getline(file,noHP,'|') &&
+	          getline(file,alamat))
+	    {
+	
+	        if(idSupplier == idCari){
+	
+	            ditemukan = true;
+	
+	            cout << "\n===== DATA LAMA =====" << endl;
+	            tampilSupplier();
+	
+	            cout << "\n===== INPUT DATA BARU =====" << endl;
+	
+	            cout << "Nama Perusahaan : ";
+	            getline(cin,namaPerusahaan);
+	
+	            cout << "No. HP          : ";
+	            getline(cin,noHP);
+	
+	            cout << "Alamat          : ";
+	            getline(cin,alamat);
+	        }
+	
+	        temp << idSupplier << "|"
+	             << namaPerusahaan << "|"
+	             << noHP << "|"
+	             << alamat << endl;
+	    }
+	
+	    file.close();
+	    temp.close();
+	
+	    remove("supplier.txt");
+	    rename("temp_supplier.txt","supplier.txt");
+	
+	    if(ditemukan)
+	        cout << "\nData supplier berhasil diubah." << endl;
+	    else
+	        cout << "\nSupplier tidak ditemukan." << endl;
+	}
+	
+	// Menghapus data supplier berdasarkan ID
+	void hapusSupplier(){
+	
+	    string idCari;
+	
+	    cout << "\nMasukkan ID Supplier : ";
+	    getline(cin,idCari);
+	
+	    ifstream file("supplier.txt");
+	    ofstream temp("temp_supplier.txt");
+	
+	    if(!file.is_open() || !temp.is_open()){
+	        cout << "\nFile tidak dapat dibuka!" << endl;
+	        return;
+	    }
+	
+	    bool ditemukan = false;
+	
+	    while(getline(file,idSupplier,'|') &&
+	          getline(file,namaPerusahaan,'|') &&
+	          getline(file,noHP,'|') &&
+	          getline(file,alamat))
+	    {
+	
+	        if(idSupplier == idCari){
+	            ditemukan = true;
+	            continue;
+	        }
+	
+	        temp << idSupplier << "|"
+	             << namaPerusahaan << "|"
+	             << noHP << "|"
+	             << alamat << endl;
+	    }
+	
+	    file.close();
+	    temp.close();
+	
+	    remove("supplier.txt");
+	    rename("temp_supplier.txt","supplier.txt");
+	
+	    if(ditemukan)
+	        cout << "\nSupplier berhasil dihapus." << endl;
+	    else
+	        cout << "\nSupplier tidak ditemukan." << endl;
+	}
+	
+	// Membuat ID pesanan supplier otomatis
+	void generateIDPesanan(){
+	
+	    ifstream file("pesanan_supplier.txt");
+	
+	    int nomor = 1;
+	    string baris;
+	
+	    while(getline(file, baris)){
+	        nomor++;
+	    }
+	
+	    file.close();
+	
+	    stringstream ss;
+	
+	    ss << "PS";
+	
+	    if(nomor < 10)
+	        ss << "000";
+	    else if(nomor < 100)
+	        ss << "00";
+	    else if(nomor < 1000)
+	        ss << "0";
+	
+	    ss << nomor;
+	
+	    idPesanan = ss.str();
+	}
+	
+	// Memilih obat yang akan direstock
+	bool pilihObat(){
+	
+	    system("cls");
+	
+	    header("PILIH OBAT");
+	
+	    Obat obat;
+	
+	    obat.bacaData();
+	
+	    string namaCari;
+	
+	    cout << "\nMasukkan Nama Obat : ";
+	    getline(cin, namaCari);
+	
+	    if(obat.cariObat(namaCari))
+	    {
+	        kodeObat = obat.getkodeObat();
+	        namaObat = obat.getnamaObat();
+	
+	        cout << "\nObat berhasil dipilih." << endl;
+	        cout << "Kode Obat : " << kodeObat << endl;
+	        cout << "Nama Obat : " << namaObat << endl;
+	
+	        footer();
+	
+	        return true;
+	    }
+	
+	    cout << "\nObat tidak ditemukan!" << endl;
+	
+	    footer();
+	
+	    return false;
+	}
+	
+	// Menginput data pemesanan restock
+	void inputDataPesanan(){
+	
+	    cout << "\n========== DATA PEMESANAN ==========\n";
+	
+	    do{
+	
+	        cout << "Jumlah Pesanan : ";
+	        cin >> jumlahPesan;
+	        cin.ignore();
+	
+	        if(jumlahPesan <= 0)
+	        {
+	            cout << "\nJumlah pesanan harus lebih dari 0!\n";
+	        }
+	
+	    }while(jumlahPesan <= 0);
+	
+	    cout << "Tanggal Pesanan (dd-mm-yyyy) : ";
+	    getline(cin, tanggalPesan);
+	
+	    statusPesanan = "Menunggu";
+	}
+	
+	// Menampilkan ringkasan pesanan sebelum disimpan
+	void tampilRingkasanPesanan(){
+	
+	    header("RINGKASAN PESANAN");
+	
+	    cout << "ID Pesanan      : " << idPesanan << endl;
+	    cout << "ID Supplier     : " << idSupplier << endl;
+	    cout << "Nama Supplier   : " << namaPerusahaan << endl;
+	    cout << "Kode Obat       : " << kodeObat << endl;
+	    cout << "Nama Obat       : " << namaObat << endl;
+	    cout << "Jumlah Pesanan  : " << jumlahPesan << endl;
+	    cout << "Tanggal Pesanan : " << tanggalPesan << endl;
+	    cout << "Status          : " << statusPesanan << endl;
+	
+	    footer();
+	}
+	
+	// Menyimpan data pesanan supplier ke file
+	void simpanPesanan(){
+	
+	    ofstream file("pesanan_supplier.txt", ios::app);
+	
+	    if(!file.is_open()){
+	        cout << "File pesanan supplier tidak dapat dibuka!" << endl;
+	        return;
+	    }
+	
+	    file << idPesanan << "|"
+	         << idSupplier << "|"
+	         << kodeObat << "|"
+	         << namaObat << "|"
+	         << jumlahPesan << "|"
+	         << tanggalPesan << "|"
+	         << statusPesanan << endl;
+	
+	    file.close();
+	
+	    cout << "\nPesanan supplier berhasil disimpan." << endl;
+	}
+	
+	// Melakukan pemesanan restock ke supplier
+	void pesanRestock(){
+	
+	    generateIDPesanan();
+	
+	    if(!pilihSupplier())
+	        return;
+	
+	    if(!pilihObat())
+	        return;
+	
+	    inputDataPesanan();
+	
+	    tampilRingkasanPesanan();
+	
+	    char pilih;
+	
+	    cout << "\nSimpan pesanan? (Y/T) : ";
+	    cin >> pilih;
+	    cin.ignore();
+	
+	    if(toupper(pilih) == 'Y')
+	    {
+	        simpanPesanan();
+	
+	        cout << "\nPesanan berhasil disimpan." << endl;
+	    }
+	    else
+	    {
+	        cout << "\nPesanan dibatalkan." << endl;
+	    }
+	}
+	
+	// Menampilkan seluruh data pesanan supplier
+	void bacaPesanan(){
+	
+	    ifstream file("pesanan_supplier.txt");
+	
+	    if(!file.is_open()){
+	        cout << "File pesanan supplier tidak ditemukan!" << endl;
+	        return;
+	    }
+	
+	    string id;
+	    string supplier;
+	    string kode;
+	    string nama;
+	    string jumlah;
+	    string tanggal;
+	    string status;
+	
+	    cout << left
+	         << setw(10) << "ID"
+	         << setw(10) << "Supplier"
+	         << setw(10) << "Kode"
+	         << setw(20) << "Nama Obat"
+	         << setw(10) << "Jumlah"
+	         << setw(15) << "Tanggal"
+	         << setw(15) << "Status"
+	         << endl;
+	
+	    cout << "------------------------------------------------------------------------------------------" << endl;
+	
+	    while(getline(file,id,'|') &&
+	          getline(file,supplier,'|') &&
+	          getline(file,kode,'|') &&
+	          getline(file,nama,'|') &&
+	          getline(file,jumlah,'|') &&
+	          getline(file,tanggal,'|') &&
+	          getline(file,status))
+	    {
+	
+	        cout << left
+	             << setw(10) << id
+	             << setw(10) << supplier
+	             << setw(10) << kode
+	             << setw(20) << nama
+	             << setw(10) << jumlah
+	             << setw(15) << tanggal
+	             << setw(15) << status
+	             << endl;
+	    }
+	
+	    file.close();
+	}
+	
+	// Mencari pesanan berdasarkan ID Pesanan
+	bool cariPesanan(string idCari){
+	
+	    ifstream file("pesanan_supplier.txt");
+	
+	    if(!file.is_open()){
+	        cout << "File pesanan supplier tidak ditemukan!" << endl;
+	        return false;
+	    }
+	
+	    while(getline(file,idPesanan,'|') &&
+	          getline(file,idSupplier,'|') &&
+	          getline(file,kodeObat,'|') &&
+	          getline(file,namaObat,'|') &&
+	          file >> jumlahPesan)
+	    {
+	        file.ignore();
+	
+	        getline(file,tanggalPesan,'|');
+	        getline(file,statusPesanan);
+	
+	        if(idPesanan == idCari)
+	        {
+	            file.close();
+	            return true;
+	        }
+	    }
+	    
+	    cout << "\n========== DATA PESANAN ==========\n";
+
+		cout << "ID Pesanan      : " << idPesanan << endl;
+		cout << "ID Supplier     : " << idSupplier << endl;
+		cout << "Kode Obat       : " << kodeObat << endl;
+		cout << "Nama Obat       : " << namaObat << endl;
+		cout << "Jumlah Pesanan  : " << jumlahPesan << endl;
+		cout << "Tanggal Pesanan : " << tanggalPesan << endl;
+		cout << "Status Saat Ini : " << statusPesanan << endl;
+	
+	    file.close();
+	
+	    return false;
+	}
+	
+	// Memilih status baru pesanan
+	void pilihStatusBaru(){
+	
+	    int pilihan;
+	
+	    cout << "\n========== UPDATE STATUS ==========\n";
+	    cout << "1. Diproses" << endl;
+	    cout << "2. Dikirim" << endl;
+	
+	    cout << "\nPilih Status : ";
+	    cin >> pilihan;
+	    cin.ignore();
+	
+	    switch(pilihan)
+	    {
+	        case 1:
+	            statusPesanan = "Diproses";
+	            break;
+	
+	        case 2:
+	            statusPesanan = "Dikirim";
+	            break;
+	
+	        default:
+	            cout << "\nPilihan tidak valid!" << endl;
+	            statusPesanan = "";
+	    }
+	}
+	
+	// Mengubah status pesanan supplier
+	void updateStatus(){
+	
+	    header("UPDATE STATUS PESANAN");
+	
+	    bacaPesanan();
+	
+	    string idCari;
+	
+	    cout << "\nMasukkan ID Pesanan : ";
+	    getline(cin, idCari);
+	
+	    if(!cariPesanan(idCari))
+	    {
+	        cout << "\nPesanan tidak ditemukan!" << endl;
+	        footer();
+	        return;
+	    }
+	
+	    // Simpan status lama
+		string statusLama = statusPesanan;
+		
+		// User memilih status baru
+		pilihStatusBaru();
+		
+		// Jika pilihan tidak valid
+		if(statusPesanan == "")
+		{
+		    footer();
+		    return;
+		}
+		
+		// Validasi perubahan status
+		if(!validasiStatus(statusLama, statusPesanan))
+		{
+		    cout << "\nPerubahan status tidak valid!" << endl;
+		    cout << "Status hanya boleh berubah secara berurutan." << endl;
+		
+		    footer();
+		    return;
+		}
+	
+	    ubahStatusPesanan(idCari, statusPesanan);
+
+		cout << "\nStatus pesanan berhasil diperbarui." << endl;
+		
+		footer();
+	}
+	
+	// Memvalidasi perubahan status pesanan
+	bool validasiStatus(string statusLama, string statusBaru){
+	
+	    if(statusLama == "Menunggu" && statusBaru == "Diproses")
+	        return true;
+	
+	    if(statusLama == "Diproses" && statusBaru == "Dikirim")
+	        return true;
+	
+	    return false;
+	}
+	
+	// Menampilkan pesanan yang sedang dikirim
+	void bacaPesananDikirim(){
+	
+	    ifstream file("pesanan_supplier.txt");
+	
+	    if(!file.is_open()){
+	        cout << "File pesanan supplier tidak ditemukan!" << endl;
+	        return;
+	    }
+	
+	    string id;
+	    string supplier;
+	    string kode;
+	    string nama;
+	    string jumlah;
+	    string tanggal;
+	    string status;
+	
+	    cout << left
+	         << setw(10) << "ID"
+	         << setw(10) << "Supplier"
+	         << setw(10) << "Kode"
+	         << setw(20) << "Nama Obat"
+	         << setw(10) << "Jumlah"
+	         << setw(15) << "Tanggal"
+	         << setw(15) << "Status"
+	         << endl;
+	
+	    cout << "------------------------------------------------------------------------------------------" << endl;
+	
+	    while(getline(file,id,'|') &&
+	          getline(file,supplier,'|') &&
+	          getline(file,kode,'|') &&
+	          getline(file,nama,'|') &&
+	          getline(file,jumlah,'|') &&
+	          getline(file,tanggal,'|') &&
+	          getline(file,status))
+	    {
+	
+	        if(status == "Dikirim")
+	        {
+	            cout << left
+	                 << setw(10) << id
+	                 << setw(10) << supplier
+	                 << setw(10) << kode
+	                 << setw(20) << nama
+	                 << setw(10) << jumlah
+	                 << setw(15) << tanggal
+	                 << setw(15) << status
+	                 << endl;
+	        }
+	
+	    }
+	
+	    file.close();
+	}
+	
+	// Mengonfirmasi bahwa barang dari supplier telah diterima
+	void konfirmasiBarang(){
+	
+	    system("cls");
+	
+	    header("KONFIRMASI PENERIMAAN BARANG");
+	
+	    bacaPesananDikirim();
+	
+	    string idCari;
+	
+	    cout << "\nMasukkan ID Pesanan : ";
+	    getline(cin,idCari);
+	
+	    // Cari pesanan
+	    if(!cariPesanan(idCari))
+	    {
+	        cout << "\nPesanan tidak ditemukan!" << endl;
+	        footer();
+	        return;
+	    }
+	
+	    // Pastikan status masih Dikirim
+	    if(statusPesanan != "Dikirim")
+	    {
+	        cout << "\nPesanan belum dapat dikonfirmasi." << endl;
+	        cout << "Status saat ini : " << statusPesanan << endl;
+	
+	        footer();
+	        return;
+	    }
+	
+	    cout << "\n========== DATA PESANAN ==========\n";
+	
+	    cout << "ID Pesanan      : " << idPesanan << endl;
+	    cout << "Nama Obat       : " << namaObat << endl;
+	    cout << "Jumlah Pesanan  : " << jumlahPesan << endl;
+	    cout << "Status          : " << statusPesanan << endl;
+	
+	    char pilih;
+	
+	    cout << "\nKonfirmasi barang diterima? (Y/T) : ";
+	    cin >> pilih;
+	    cin.ignore();
+	
+	    if(toupper(pilih) != 'Y')
+	    {
+	        cout << "\nKonfirmasi dibatalkan." << endl;
+	        footer();
+	        return;
+	    }
+	
+	    // Tambah stok obat
+	    Obat obat;
+	
+	    obat.tambahStok(kodeObat, jumlahPesan);
+	
+	    // Ubah status menjadi diterima
+	    ubahStatusPesanan(idCari, "Diterima");
+	
+	    cout << "\nBarang berhasil diterima." << endl;
+	    cout << "Stok obat berhasil diperbarui." << endl;
+	
+	    footer();
+	}
+	
+	// Mengubah status pesanan berdasarkan ID Pesanan
+	void ubahStatusPesanan(string idCari, string statusBaru){
+	
+	    ifstream file("pesanan_supplier.txt");
+	    ofstream temp("temp.txt");
+	
+	    if(!file.is_open()){
+	        cout << "File pesanan supplier tidak ditemukan!" << endl;
+	        return;
+	    }
+	
+	    string id;
+	    string supplier;
+	    string kode;
+	    string nama;
+	    string jumlah;
+	    string tanggal;
+	    string status;
+	
+	    while(getline(file,id,'|') &&
+	          getline(file,supplier,'|') &&
+	          getline(file,kode,'|') &&
+	          getline(file,nama,'|') &&
+	          getline(file,jumlah,'|') &&
+	          getline(file,tanggal,'|') &&
+	          getline(file,status))
+	    {
+	
+	        if(id == idCari)
+	        {
+	            status = statusBaru;
+	        }
+	
+	        temp << id << "|"
+	             << supplier << "|"
+	             << kode << "|"
+	             << nama << "|"
+	             << jumlah << "|"
+	             << tanggal << "|"
+	             << status << endl;
+	    }
+	
+	    file.close();
+	    temp.close();
+	
+	    remove("pesanan_supplier.txt");
+	    rename("temp.txt","pesanan_supplier.txt");
+	}
+
 };
 
 // perubahan class
@@ -2216,6 +3103,35 @@ void menuAdmin(){
 		        cout << "Role tidak dikenal!\n";
 		    }
 		}
+
+// baru
+void header(string judul) {
+    	
+    const int lebar = 50;
+
+    cout << "\n";
+    cout << string(lebar, '=') << endl;
+
+    int spasi = (lebar - judul.length()) / 2;
+
+    cout << string(spasi, ' ')
+         << judul << endl;
+
+    cout << string(lebar, '=') << endl;
+}
+
+// baru
+void footer() {
+    cout << string(50, '=') << endl;
+}
+
+// baru
+void kembaliMenu() { 
+    cout << "\n";
+    system("pause");
+    system("cls");
+}
+
 int main(){
 
     Transaksi transaksi;
