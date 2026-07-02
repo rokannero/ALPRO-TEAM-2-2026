@@ -1,0 +1,2 @@
+USR001|ROKAN|NERO|123|Admin
+USR001|NERO|pepengsut|123|Karyawan
