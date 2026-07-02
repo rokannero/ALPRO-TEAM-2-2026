@@ -115,76 +115,149 @@ class User {
 		int jumlahUser = 0;
 		int loginIndex = -1;
 		
-		void inputUser(User user[], int &jumlahUser){
-			string id, nama, username, password, role;
-			
-			cout << "===== REGISTRASI AKUN USER =====\n";
-		    cout << "ID User   : ";
-		    getline(cin, id);
-		
-		    cout << "Nama      : ";
-		    getline(cin, nama);
-		
-		    cout << "Username  : ";
-		    getline(cin, username);
-		
-		    cout << "Password  : ";
-		    getline(cin, password);
-		
-		    cout << "Role      : ";
-		    getline(cin, role);
-		
-		    user[jumlahUser].setIdUser(id);
-		    user[jumlahUser].setNama(nama);
-		    user[jumlahUser].setUsername(username);
-		    user[jumlahUser].setPassword(password);
-		    user[jumlahUser].setRole(role);
+		void simpanUserKeFile(User user[], int jumlahUser) 
+		{
+			ofstream file("user_data.txt");
+
+			if (!file.is_open()) 
+			{
+				cout << "Gagal membuka file untuk menyimpan data!\n";
+				return;
+			}
+
+			for (int i = 0; i < jumlahUser; i++) 
+			{
+				file << user[i].getIdUser() << "|"
+					<< user[i].getNama() << "|"
+					<< user[i].getUsername() << "|"
+					<< user[i].getPassword() << "|"
+					<< user[i].getRole() << endl;
+			}
+
+			file.close();
 		}
-		void registrasiUser(User user[], int &jumlahUser){
-			
+
+		void bacaUserDariFile(User user[], int &jumlahUser) 
+		{
+			ifstream file("user_data.txt");
+
+			if (!file.is_open()) 
+			{
+				jumlahUser = 0;
+				return;
+			}
+
+			jumlahUser = 0;
+
+			string id, nama, username, password, role;
+
+			while (
+				getline(file, id, '|') &&
+				getline(file, nama, '|') &&
+				getline(file, username, '|') &&
+				getline(file, password, '|') &&
+				getline(file, role)
+			) {
+				if (jumlahUser >= 100)
+				{
+					break;
+				}
+
+				user[jumlahUser].setIdUser(id);
+				user[jumlahUser].setNama(nama);
+				user[jumlahUser].setUsername(username);
+				user[jumlahUser].setPassword(password);
+				user[jumlahUser].setRole(role);
+
+				jumlahUser++;
+			}
+
+			file.close();
+		}
+
+		void inputUser(User user[], int &jumlahUser) 
+		{
+			string id, nama, username, password, role;
+
+			cout << "===== REGISTRASI AKUN USER =====\n";
+			cout << "ID User   : ";
+			getline(cin, id);
+
+			cout << "Nama      : ";
+			getline(cin, nama);
+
+			cout << "Username  : ";
+			getline(cin, username);
+
+			cout << "Password  : ";
+			getline(cin, password);
+
+			cout << "Role      : ";
+			getline(cin, role);
+
+			user[jumlahUser].setIdUser(id);
+			user[jumlahUser].setNama(nama);
+			user[jumlahUser].setUsername(username);
+			user[jumlahUser].setPassword(password);
+			user[jumlahUser].setRole(role);
+		}
+
+		void registrasiUser(User user[], int &jumlahUser) 
+		{
+			bacaUserDariFile(user, jumlahUser);
+
+			if (jumlahUser >= 100) 
+			{
+				cout << "Data user sudah penuh!\n";
+				return;
+			}
+
 			inputUser(user, jumlahUser);
-		    
 			jumlahUser++;
 
-    		cout << "Registrasi berhasil!\n";
+			simpanUserKeFile(user, jumlahUser);
+
+			cout << "Registrasi berhasil dan data disimpan ke user_data.txt!\n";
 		}
 		
 		//====================================================
 		// LOGIN USER
 		//====================================================
-		void login()
+		void login() 
 		{
-		    string username, password;
-		
-		    cout << "\n=== LOGIN ===\n";
-		
-		    cout << "Username : ";
-		    getline(cin, username);
-		
-		    cout << "Password : ";
-		    getline(cin, password);
-		
-		    loginIndex = -1;
-		
-		    for (int i = 0; i < jumlahUser; i++)
-		    {
-		        if (user[i].getUsername() == username &&
-		            user[i].getPassword() == password)
-		        {
-		            loginIndex = i;
-		            break;
-		        }
-		    }
-		
-		    if (loginIndex != -1)
-		    {
-		        cout << "Login berhasil!\n";
-		        cout << "Selamat datang, " << user[loginIndex].getNama() << "\n";
-		    }
-		    else
-		    {
-		        cout << "Login gagal!\n";
-		    }
+			string username, password;
+
+			bacaUserDariFile(user, jumlahUser);
+
+			cout << "\n=== LOGIN ===\n";
+
+			cout << "Username : ";
+			getline(cin, username);
+
+			cout << "Password : ";
+			getline(cin, password);
+
+			loginIndex = -1;
+
+			for (int i = 0; i < jumlahUser; i++) 
+			{
+				if (user[i].getUsername() == username &&
+					user[i].getPassword() == password) 
+				{
+					loginIndex = i;
+					break;
+				}
+			}
+
+			if (loginIndex != -1) 
+			{
+				cout << "Login berhasil!\n";
+				cout << "Selamat datang, " << user[loginIndex].getNama() << "\n";
+			} 
+			else 
+			{
+				cout << "Login gagal! Username atau password salah.\n";
+			}
 		}
 		
 		//====================================================
@@ -199,22 +272,23 @@ class User {
 		//====================================================
 		// GANTI PASSWORD
 		//====================================================
-		void gantiPassword()
+		void gantiPassword() 
 		{
-		    if (loginIndex == -1)
-		    {
-		        cout << "Anda belum login!\n";
-		        return;
-		    }
-		
-		    string passwordBaru;
-		
-		    cout << "Masukkan password baru: ";
-		    getline(cin, passwordBaru);
-		
-		    user[loginIndex].setPassword(passwordBaru);
-		
-		    cout << "Password berhasil diubah!\n";
+			if (loginIndex == -1) 
+			{
+				cout << "Anda belum login!\n";
+				return;
+			}
+
+			string passwordBaru;
+
+			cout << "Masukkan password baru: ";
+			getline(cin, passwordBaru);
+
+			user[loginIndex].setPassword(passwordBaru);
+			simpanUserKeFile(user, jumlahUser);
+
+			cout << "Password berhasil diubah!\n";
 		}
 
 class Admin {
@@ -2135,6 +2209,7 @@ void menuAdmin(){
         	}
 
         system("pause");
+		break;
 
     }while(true);
     
