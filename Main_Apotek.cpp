@@ -175,13 +175,28 @@ class User {
 			file.close();
 		}
 
+		string generateIdUser(int jumlahUser) 
+		{
+			//MENGGUNAKAN LIBRARY STRING UNTUK MENGUBAH NOMOR MENJADI STRING (to_string (nomor))
+			int nomor = jumlahUser + 1;
+
+			if (nomor < 10) {
+				return "USR00" + to_string(nomor);
+			} else if (nomor < 100) {
+				return "USR0" + to_string(nomor);
+			} else {
+				return "USR" + to_string(nomor);
+			}
+		}
+
 		void inputUser(User user[], int &jumlahUser) 
 		{
 			string id, nama, username, password, role;
 
+			id = generateIdUser(jumlahUser);
+
 			cout << "===== REGISTRASI AKUN USER =====\n";
-			cout << "ID User   : ";
-			getline(cin, id);
+			cout << "ID User   : " << id << endl;
 
 			cout << "Nama      : ";
 			getline(cin, nama);
@@ -202,12 +217,10 @@ class User {
 			user[jumlahUser].setRole(role);
 		}
 
-		void registrasiUser(User user[], int &jumlahUser) 
-		{
+		void registrasiUser(User user[], int &jumlahUser) {
 			bacaUserDariFile(user, jumlahUser);
 
-			if (jumlahUser >= 100) 
-			{
+			if (jumlahUser >= 100) {
 				cout << "Data user sudah penuh!\n";
 				return;
 			}
@@ -217,7 +230,7 @@ class User {
 
 			simpanUserKeFile(user, jumlahUser);
 
-			cout << "Registrasi berhasil dan data disimpan ke user_data.txt!\n";
+			cout << "Registrasi berhasil dan data disimpan ke file.txt!\n";
 		}
 		
 		//====================================================
@@ -1006,114 +1019,117 @@ public:
 
     void cekKadaluarsa(){
 
-    ifstream file("daftar_obat.txt");
+		ifstream file("daftar_obat.txt");
 
-    if(!file.is_open()){
-        cout << "File tidak ditemukan!" << endl;
-        return;
-    }
+		if(!file.is_open()){
+			cout << "File tidak ditemukan!" << endl;
+			return;
+		}
 
-    time_t sekarang = time(0);
+		time_t sekarang = time(0);
 
-    string line;
+		string line;
 
-    bool adaKadaluarsa = false;
-    bool adaHampir = false;
+		bool adaKadaluarsa = false;
+		bool adaHampir = false;
 
-    vector<string> daftarKadaluarsa;
-    vector<string> daftarHampir;
+		vector<string> daftarKadaluarsa;
+		vector<string> daftarHampir;
 
-    while(getline(file,line)){
+		while(getline(file,line)){
 
-        stringstream ss(line);
+			stringstream ss(line);
 
-        string kode,nama,harga,stok,exp,kategori,satuan;
+			string kode,nama,harga,stok,exp,kategori,satuan;
 
-        getline(ss,kode,'|');
-        getline(ss,nama,'|');
-        getline(ss,harga,'|');
-        getline(ss,stok,'|');
-        getline(ss,exp,'|');
-        getline(ss,kategori,'|');
-        getline(ss,satuan,'|');
+			getline(ss,kode,'|');
+			getline(ss,nama,'|');
+			getline(ss,harga,'|');
+			getline(ss,stok,'|');
+			getline(ss,exp,'|');
+			getline(ss,kategori,'|');
+			getline(ss,satuan,'|');
 
-        int hari,bulan,tahun;
-        char slash;
+			int hari,bulan,tahun;
+			char slash;
 
-        stringstream tgl(exp);
-        tgl >> hari >> slash >> bulan >> slash >> tahun;
+			stringstream tgl(exp);
+			tgl >> hari >> slash >> bulan >> slash >> tahun;
 
-        tm waktuExp = {};
+			tm waktuExp = {};
 
-        waktuExp.tm_mday = hari;
-        waktuExp.tm_mon  = bulan - 1;
-        waktuExp.tm_year = tahun - 1900;
+			waktuExp.tm_mday = hari;
+			waktuExp.tm_mon  = bulan - 1;
+			waktuExp.tm_year = tahun - 1900;
 
-        time_t tanggalExp = mktime(&waktuExp);
+			time_t tanggalExp = mktime(&waktuExp);
 
-        double selisihHari = difftime(tanggalExp,sekarang)/(60*60*24);
+			double selisihHari = difftime(tanggalExp,sekarang)/(60*60*24);
 
-        if(selisihHari < 0){
+			if(selisihHari < 0){
 
-            adaKadaluarsa = true;
+				adaKadaluarsa = true;
 
-            stringstream data;
-            data << kode << " | "
-                 << nama << " | "
-                 << exp;
+				stringstream data;
+				data << kode << " | "
+					<< nama << " | "
+					<< exp;
 
-            daftarKadaluarsa.push_back(data.str());
+				daftarKadaluarsa.push_back(data.str());
 
-        }
-        else if(selisihHari <= 7){
+			}
+			else if(selisihHari <= 7){
 
-            adaHampir = true;
+				adaHampir = true;
 
-            stringstream data;
-            data << kode << " | "
-                 << nama << " | "
-                 << exp
-                 << " (" << (int)selisihHari << " hari lagi)";
+				stringstream data;
+				data << kode << " | "
+					<< nama << " | "
+					<< exp
+					<< " (" << (int)selisihHari << " hari lagi)";
 
-            daftarHampir.push_back(data.str());
+				daftarHampir.push_back(data.str());
 
-        }
+			}
 
-    }
+		}
 
-    file.close();
+		file.close();
 
-    cout << "\n=========================================\n";
-    cout << "       DAFTAR OBAT KADALUARSA\n";
-    cout << "=========================================\n";
+		cout << "\n=========================================\n";
+		cout << "       DAFTAR OBAT KADALUARSA\n";
+		cout << "=========================================\n";
 
-    if(adaKadaluarsa){
+		if(adaKadaluarsa){
 
-        for(int i=0;i<daftarKadaluarsa.size();i++)
-            cout << daftarKadaluarsa[i] << endl;
+			for(int i=0;i<daftarKadaluarsa.size();i++)
+				cout << daftarKadaluarsa[i] << endl;
 
-    }else{
+		}else{
 
-        cout << "Tidak ada obat yang sudah kadaluarsa.\n";
+			cout << "Tidak ada obat yang sudah kadaluarsa.\n";
 
-    }
+		}
 
-    cout << "\n=========================================\n";
-    cout << "   DAFTAR OBAT HAMPIR KADALUARSA\n";
-    cout << "=========================================\n";
+		cout << "\n=========================================\n";
+		cout << "   DAFTAR OBAT HAMPIR KADALUARSA\n";
+		cout << "=========================================\n";
 
-    if(adaHampir){
+		if(adaHampir)
+		{
 
-        for(int i=0;i<daftarHampir.size();i++)
-            cout << daftarHampir[i] << endl;
+			for(int i=0;i<daftarHampir.size();i++)
+				cout << daftarHampir[i] << endl;
 
-    }else{
+		}
+		else
+		{
 
-        cout << "Tidak ada obat yang hampir kadaluarsa.\n";
+			cout << "Tidak ada obat yang hampir kadaluarsa.\n";
 
-    }
+		}
 
-}
+	}
     
     void stokMenipis(){
 
@@ -2118,102 +2134,101 @@ class Logaktivitas {
 
 };
 
-void menuAdmin(){
-			Obat obat;
-    		Transaksi transaksi;
-    		int pilih;
-    		string namaCari;
-		
-		    do
-		    {
-		        cout << "\n=== MENU ADMIN ===\n";
-		        cout << "1. Lihat User\n";
-		        cout<<"2. Lihat Obat\n";
-		        cout<<"3. Cari Obat\n";
-        		cout<<"4. Tambah Obat\n";
-        		cout<<"5. Edit Data Obat\n";
-       			cout<<"6. Ubah Harga Obat\n";
-       			cout<<"7. Stok Menipis\n";
-       			cout<<"8. Cek Kadaluarsa\n";
-        		cout<<"9. Riwayat Transaksi\n";
-       			cout<<"10. Logout\n";
-        		cout<<"Pilih : ";
-        		cin>>pilih;
-        		cin.ignore();
-		
-		        switch (pilih)
-		        {
-		        case 1:
-		            cout << "\nDATA USER:\n";
-		            for (int i = 0; i < jumlahUser; i++)
-		            {
-		                user[i].tampil();
-		                cout << endl;
-		            }
-		            break;
-				case 2:
-            		obat.bacaData();
-            		break;
+		void menuAdmin(){
+					Obat obat;
+					Transaksi transaksi;
+					int pilih;
+					string namaCari;
+				
+					do
+					{
+						cout << "\n=== MENU ADMIN ===\n";
+						cout << "1. Lihat User\n";
+						cout<<"2. Lihat Obat\n";
+						cout<<"3. Cari Obat\n";
+						cout<<"4. Tambah Obat\n";
+						cout<<"5. Edit Data Obat\n";
+						cout<<"6. Ubah Harga Obat\n";
+						cout<<"7. Stok Menipis\n";
+						cout<<"8. Cek Kadaluarsa\n";
+						cout<<"9. Riwayat Transaksi\n";
+						cout<<"10. Logout\n";
+						cout<<"Pilih : ";
+						cin>>pilih;
+						cin.ignore();
+				
+						switch (pilih)
+						{
+							case 1:
+								cout << "\nDATA USER:\n";
+								for (int i = 0; i < jumlahUser; i++)
+								{
+									user[i].tampil();
+									cout << endl;
+								}
+								break;
 
-        		case 3:
+							case 2:
+								obat.bacaData();
+								break;
 
-            		cout<<"Nama Obat : ";
-            		getline(cin,namaCari);
+							case 3:
+								cout<<"Nama Obat : ";
+								getline(cin,namaCari);
 
-            		if(obat.cariObat(namaCari)){
+								if(obat.cariObat(namaCari)){
 
-                	cout<<"\nKode       : "<<obat.getkodeObat()<<endl;
-                	cout<<"Nama       : "<<obat.getnamaObat()<<endl;
-                	cout<<"Harga      : "<<obat.getHarga()<<endl;
-                	cout<<"Stok       : "<<obat.getStok()<<endl;
-                	cout<<"Expired    : "<<obat.gettanggalExpired()<<endl;
+									cout<<"\nKode       : "<<obat.getkodeObat()<<endl;
+									cout<<"Nama       : "<<obat.getnamaObat()<<endl;
+									cout<<"Harga      : "<<obat.getHarga()<<endl;
+									cout<<"Stok       : "<<obat.getStok()<<endl;
+									cout<<"Expired    : "<<obat.gettanggalExpired()<<endl;
 
-            	}else{
+								}
+								else
+								{
+									cout<<"Obat tidak ditemukan.\n";
+								}
+								break;
 
-                cout<<"Obat tidak ditemukan.\n";
+							case 4:
+								obat.inputObat();
+								break;
 
-            }
+							case 5:
+								obat.ubahDataObat();
+								break;
 
-            break;
+							case 6:
+								obat.ubahHarga();
+								break;
 
-        		case 4:
-            	obat.inputObat();
-            	break;
+							case 7:
+								obat.stokMenipis();
+								break;
 
-        		case 5:
-            	obat.ubahDataObat();
-           		break;
+							case 8:
+								obat.cekKadaluarsa();
+								break;
 
-        		case 6:
-            	obat.ubahHarga();
-            	break;
+							case 9:
+								transaksi.tampilRiwayat();
+								break;
 
-       			case 7:
-            	obat.stokMenipis();
-            	break;
+							case 10:
+								logout();
+								return;
 
-        		case 8:
-            	obat.cekKadaluarsa();
-            	break;
+							default:
+							cout<<"Pilihan salah!\n";
+					}
 
-        		case 9:
-            	transaksi.tampilRiwayat();
-            	break;
+				system("pause");
+				break;
 
-        		case 10:
-            	logout();
-            	return;
-
-        		default:
-            	cout<<"Pilihan salah!\n";
-        	}
-
-        system("pause");
-		break;
-
-    }while(true);
-    
-}
+			}while(true);
+			
+		}
 
 		void menuKaryawan(){
 		    int pilih;

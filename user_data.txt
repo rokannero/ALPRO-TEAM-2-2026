@@ -1,2 +1,3 @@
-USR001|ROKAN|NERO|123|Admin
-USR001|NERO|pepengsut|123|Karyawan
+USR001|ROKAN|superadmin|123|Admin
+USR002|ROKAN|karyawan|123|Karyawan
+USR003|ROKAN|supplier|123|Supplier
