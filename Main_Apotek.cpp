@@ -1365,7 +1365,7 @@ private:
 
     vector<Obat> daftarObat;
     vector<int> jumlah;
-    double subtotal;
+    double subtotalobat;
 
 public:
 
@@ -1446,15 +1446,15 @@ public:
 
     double hitungSubtotal(){
 
-        subtotal = 0;
+        subtotalobat = 0;
 
         for(int i=0;i<daftarObat.size();i++){
 
-            subtotal += daftarObat[i].getHarga()*jumlah[i];
+            subtotalobat += daftarObat[i].getHarga()*jumlah[i];
 
         }
 
-        return subtotal;
+        return subtotalobat;
 
     }
     
@@ -1539,9 +1539,11 @@ private:
 	string idTransaksi;
 	string tanggal;
 	
+	double subtotal;
 	double totalPembayaran;
 	double uangBayar;
 	double uangKembali;
+	double diskon;
 	
 public:
 	
@@ -1858,13 +1860,134 @@ public:
 	    system("cls");
 	}
 	
+	double hitungTotal(){
+
+	  subtotal = 0;
+	    
+	    vector<Obat> daftarObat = keranjang.getDaftarObat();
+    	vector<int> jumlahBeli = keranjang.getJumlah();
+	
+	    cout << "\n==============================================" << endl;
+	    cout << "            RINCIAN PEMBELIAN" << endl;
+	    cout << "==============================================" << endl;
+	
+	    for(int i = 0; i < daftarObat.size(); i++){
+	
+	        double subtotalobat = daftarObat[i].getHarga() * jumlahBeli[i];
+	
+	        cout << setw(20) << left << daftarObat[i].getnamaObat()
+	             << jumlahBeli[i] << " x "
+	             << daftarObat[i].getHarga()
+	             << " = "
+	             << subtotalobat << endl;
+	
+	        subtotal += subtotalobat;
+	
+	    }
+	
+	    cout << "----------------------------------------------" << endl;
+	    cout << "Total Pembayaran : Rp " << subtotal << endl;
+	
+	    return subtotal;
+	
+	}
+	
+	void diskonBelanja(){
+
+    diskon = 0;
+
+    if(subtotal >= 300000){
+        diskon = subtotal * 0.20;
+    }
+    else if( subtotal >= 150000){
+        diskon = subtotal * 0.15;
+    }
+    else if(subtotal >= 75000){
+        diskon = subtotal * 0.10;
+    }
+
+    cout << "\nTotal Belanja : Rp " << subtotal << endl;
+    cout << "Diskon        : Rp " << diskon << endl;
+
+    totalPembayaran = subtotal - diskon;
+
+    cout << "Total Bayar   : Rp " << totalPembayaran << endl;
+}
+
+	void prosesPembayaran(){
+
+	    uangBayar = 0;
+	
+	    cout << "\nMasukkan Uang Pembeli : Rp ";
+	    cin >> uangBayar;
+	
+	    while(uangBayar < totalPembayaran){
+	
+	        cout << "\nUang tidak mencukupi!" << endl;
+	
+	        cout << "Masukkan Uang Pembeli : Rp ";
+	        cin >> uangBayar;
+	
+	    }
+	
+	    uangKembali = uangBayar - totalPembayaran;
+	
+	    cout << "Kembalian : Rp " << uangKembali << endl;
+	
+	    // AMBIL DATA DARI KERANJANG
+	    vector<Obat> daftarObat = keranjang.getDaftarObat();
+	    vector<int> jumlahBeli = keranjang.getJumlah();
+	
+	    // Kurangi stok setiap obat
+	    for(int i = 0; i < daftarObat.size(); i++){
+	
+	        daftarObat[i].kurangiStok(jumlahBeli[i]);
+	        daftarObat[i].simpanPerubahanStok();
+	
+	    }
+	
+	    simpanRiwayat();
+	
+	    cout << "\nPembayaran Berhasil." << endl;
+	}
+	
+    void simpanRiwayat(){
+
+	    ofstream file("riwayat_transaksi.txt", ios::app);
+	
+	    if(!file.is_open()){
+	        cout << "File riwayat tidak dapat dibuka!" << endl;
+	        return;
+	    }
+	
+	    vector<Obat> daftarObat = keranjang.getDaftarObat();
+	    vector<int> jumlahBeli = keranjang.getJumlah();
+	
+	    for(int i = 0; i < daftarObat.size(); i++){
+	
+	        file << idTransaksi << "|"
+	             << cetakTanggal() << "|"
+	             << cetakWaktu() << "|"
+	             << daftarObat[i].getnamaObat() << "|"
+	             << jumlahBeli[i] << "|"
+	             << daftarObat[i].getHarga() << "|"
+	             << daftarObat[i].getHarga() * jumlahBeli[i]
+	             << endl;
+	    }
+	
+	    file.close();
+	}
+	
 	void cetakStruk(){
 
 	    // Memulai transaksi
 	    inputTransaksi();
-	
-	    // Menghitung total belanja
-	    hitungTotal();
+	    
+	    //menghitung total belanjaan
+		hitungTotal();
+		
+		//mengecek apakah mendapatkan diskon atau tidak
+	    diskonBelanja();
 	
 	    // Melakukan pembayaran
 	    prosesPembayaran();
@@ -1902,115 +2025,24 @@ public:
 
 	    cout << "----------------------------------------------" << endl;
 	
-	    cout << right << setw(28) << "TOTAL   : Rp "
+	    cout << right << setw(28) << "TOTAL            : Rp "
+	         << subtotal << endl;
+	         
+	    cout << right << setw(28) << "DISKON           : Rp "
+	         << diskon << endl;
+	         
+	    cout << right << setw(28) << "SETELAH DISKON   : Rp "
 	         << totalPembayaran << endl;
-	
-	    cout << right << setw(28) << "BAYAR   : Rp "
+	    cout << right << setw(28) << "BAYAR            : Rp "
 	         << uangBayar << endl;
 	
-	    cout << right << setw(28) << "KEMBALI : Rp "
+	    cout << right << setw(28) << "KEMBALI          : Rp "
 	         << uangKembali << endl;
 	
 	    cout << "==============================================" << endl;
 	    cout << "      TERIMA KASIH TELAH BERBELANJA" << endl;
 	    cout << "==============================================" << endl;
 	
-	}
-	
-	void prosesPembayaran(){
-
-	    uangBayar = 0;
-	
-	    cout << "\nMasukkan Uang Pembeli : Rp ";
-	    cin >> uangBayar;
-	
-	    while(uangBayar < totalPembayaran){
-	
-	        cout << "\nUang tidak mencukupi!" << endl;
-	
-	        cout << "Masukkan Uang Pembeli : Rp ";
-	        cin >> uangBayar;
-	
-	    }
-	
-	    uangKembali = uangBayar - totalPembayaran;
-	
-	    cout << "Kembalian : Rp " << uangKembali << endl;
-	
-	    // AMBIL DATA DARI KERANJANG
-	    vector<Obat> daftarObat = keranjang.getDaftarObat();
-	    vector<int> jumlahBeli = keranjang.getJumlah();
-	
-	    // Kurangi stok setiap obat
-	    for(int i = 0; i < daftarObat.size(); i++){
-	
-	        daftarObat[i].kurangiStok(jumlahBeli[i]);
-	        daftarObat[i].simpanPerubahanStok();
-	
-	    }
-	
-	    simpanRiwayat();
-	
-	    cout << "\nPembayaran Berhasil." << endl;
-	}
-
-    double hitungTotal(){
-
-	    totalPembayaran = 0;
-	    
-	    vector<Obat> daftarObat = keranjang.getDaftarObat();
-    	vector<int> jumlahBeli = keranjang.getJumlah();
-	
-	    cout << "\n==============================================" << endl;
-	    cout << "            RINCIAN PEMBELIAN" << endl;
-	    cout << "==============================================" << endl;
-	
-	    for(int i = 0; i < daftarObat.size(); i++){
-	
-	        double subtotal = daftarObat[i].getHarga() * jumlahBeli[i];
-	
-	        cout << setw(20) << left << daftarObat[i].getnamaObat()
-	             << jumlahBeli[i] << " x "
-	             << daftarObat[i].getHarga()
-	             << " = "
-	             << subtotal << endl;
-	
-	        totalPembayaran += subtotal;
-	
-	    }
-	
-	    cout << "----------------------------------------------" << endl;
-	    cout << "Total Pembayaran : Rp " << totalPembayaran << endl;
-	
-	    return totalPembayaran;
-	
-	}
-	
-    void simpanRiwayat(){
-
-	    ofstream file("riwayat_transaksi.txt", ios::app);
-	
-	    if(!file.is_open()){
-	        cout << "File riwayat tidak dapat dibuka!" << endl;
-	        return;
-	    }
-	
-	    vector<Obat> daftarObat = keranjang.getDaftarObat();
-	    vector<int> jumlahBeli = keranjang.getJumlah();
-	
-	    for(int i = 0; i < daftarObat.size(); i++){
-	
-	        file << idTransaksi << "|"
-	             << cetakTanggal() << "|"
-	             << cetakWaktu() << "|"
-	             << daftarObat[i].getnamaObat() << "|"
-	             << jumlahBeli[i] << "|"
-	             << daftarObat[i].getHarga() << "|"
-	             << daftarObat[i].getHarga() * jumlahBeli[i]
-	             << endl;
-	    }
-	
-	    file.close();
 	}
 
     void tampilRiwayat(){
