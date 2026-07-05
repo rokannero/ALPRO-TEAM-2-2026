@@ -365,78 +365,1365 @@ class Admin {
 		}
 };
 
-class Karyawan {
-	private :
-		string idKaryawan;
-		string nama;
-		string jabatan;
-		double gaji;
-		
-	public :
-		Karyawan()
-		{
-		    idKaryawan = "";
-		    nama = "";
-		    jabatan = "";
-		    gaji = 0;
-		}
-		
-		Karyawan(string id, string n, string jab, double g)
-		{
-		    idKaryawan = id;
-		    nama = n;
-		    jabatan = jab;
-		    gaji = g;
-		}
-		
-		void setIdKaryawan(string id)
-		{
-		    idKaryawan = id;
-		}
-		
-		void setNama(string n)
-		{
-		    nama = n;
-		}
-		
-		void setJabatan(string jab)
-		{
-		    jabatan = jab;
-		}
-		
-		void setGaji(double g)
-		{
-		    gaji = g;
-		}
-		
-		string getIdKaryawan()
-		{
-		    return idKaryawan;
-		}
-		
-		string getNama()
-		{
-		    return nama;
-		}
-		
-		string getJabatan()
-		{
-		    return jabatan;
-		}
-		
-		double getGaji()
-		{
-		    return gaji;
-		}
-		
-		void tampilKaryawan()
-		{
-		    cout << "\n===== DATA KARYAWAN =====" << endl;
-		    cout << "ID Karyawan : " << idKaryawan << endl;
-		    cout << "Nama        : " << nama << endl;
-		    cout << "Jabatan     : " << jabatan << endl;
-		    cout << "Gaji        : Rp " << gaji << endl;
-		}
+class Karyawan{
+private:
+
+    //=========================
+    // Data Karyawan
+    //=========================
+
+    string idKaryawan;
+    string nama;
+    string jabatan;
+    string alamat;
+    string noHP;
+    int umur;
+    char jk;
+    double gajiPokok;
+
+    //=========================
+    // Data Penggajian
+    //=========================
+
+    int hariMasuk;
+    int hariIzin;
+    int hariAlpha;
+
+    double bonus;
+    double potongan;
+    double totalGaji;
+
+public:
+
+    //=================================================
+    // Constructor Default
+    //=================================================
+
+    Karyawan(){
+
+        idKaryawan="";
+        nama="";
+        jabatan="";
+        alamat="";
+        noHP="";
+        umur=0;
+        jk='-';
+        gajiPokok=0;
+
+        hariMasuk=0;
+        hariIzin=0;
+        hariAlpha=0;
+
+        bonus=0;
+        potongan=0;
+        totalGaji=0;
+
+    }
+
+    //=================================================
+    // Constructor Parameter
+    //=================================================
+
+    Karyawan(string id,
+              string n,
+              string jab,
+              string alm,
+              string hp,
+              int u,
+              char jenis,
+              double gaji){
+
+        idKaryawan=id;
+        nama=n;
+        jabatan=jab;
+        alamat=alm;
+        noHP=hp;
+        umur=u;
+        jk=jenis;
+        gajiPokok=gaji;
+
+        hariMasuk=0;
+        hariIzin=0;
+        hariAlpha=0;
+
+        bonus=0;
+        potongan=0;
+        totalGaji=0;
+    }
+
+    //=================================================
+    // SETTER
+    //=================================================
+
+    void setIdKaryawan(string id){
+        idKaryawan=id;
+    }
+
+    void setNama(string n){
+        nama=n;
+    }
+
+    void setJabatan(string jab){
+        jabatan=jab;
+    }
+
+    void setAlamat(string alm){
+        alamat=alm;
+    }
+
+    void setNoHP(string hp){
+        noHP=hp;
+    }
+
+    void setUmur(int u){
+        umur=u;
+    }
+
+    void setJenisKelamin(char jenis){
+        jk=jenis;
+    }
+
+    void setGajiPokok(double gaji){
+        gajiPokok=gaji;
+    }
+
+    void setHariMasuk(int hm){
+        hariMasuk=hm;
+    }
+
+    void setHariIzin(int hi){
+        hariIzin=hi;
+    }
+
+    void setHariAlpha(int ha){
+        hariAlpha=ha;
+    }
+
+    void setBonus(double b){
+        bonus=b;
+    }
+
+    void setPotongan(double p){
+        potongan=p;
+    }
+
+    void setTotalGaji(double t){
+        totalGaji=t;
+    }
+
+    //=================================================
+    // GETTER
+    //=================================================
+
+    string getIdKaryawan(){
+        return idKaryawan;
+    }
+
+    string getNama(){
+        return nama;
+    }
+
+    string getJabatan(){
+        return jabatan;
+    }
+
+    string getAlamat(){
+        return alamat;
+    }
+
+    string getNoHP(){
+        return noHP;
+    }
+
+    int getUmur(){
+        return umur;
+    }
+
+    char getJenisKelamin(){
+        return jk;
+    }
+
+    double getGajiPokok(){
+        return gajiPokok;
+    }
+
+    int getHariMasuk(){
+        return hariMasuk;
+    }
+
+    int getHariIzin(){
+        return hariIzin;
+    }
+
+    int getHariAlpha(){
+        return hariAlpha;
+    }
+
+    double getBonus(){
+        return bonus;
+    }
+
+    double getPotongan(){
+        return potongan;
+    }
+
+    double getTotalGaji(){
+        return totalGaji;
+    }
+
+    //=================================================
+    // Tampilkan Data
+    //=================================================
+
+    void tampilKaryawan(){
+
+        cout << "\n======================================" << endl;
+        cout << "          DATA KARYAWAN" << endl;
+        cout << "======================================" << endl;
+
+        cout << "ID Karyawan    : " << idKaryawan << endl;
+        cout << "Nama           : " << nama << endl;
+        cout << "Jabatan        : " << jabatan << endl;
+        cout << "Alamat         : " << alamat << endl;
+        cout << "No HP          : " << noHP << endl;
+        cout << "Umur           : " << umur << " Tahun" << endl;
+        cout << "Jenis Kelamin  : " << jk << endl;
+        cout << "Gaji Pokok     : Rp " << gajiPokok << endl;
+
+        cout << "======================================" << endl;
+
+    }
+    //=================================================
+    // Fungsi Input kayrawan
+    //=================================================
+    
+    //====================================================
+// CEK HAK AKSES MENU GAJI
+//====================================================
+bool cekHakAksesGaji()
+{
+    if(jabatan == "General Manager")
+        return true;
+
+    if(jabatan == "Manager")
+        return true;
+
+    if(jabatan == "Vice President")
+        return true;
+
+    return false;
+}
+
+    void inputKaryawan()
+    {
+    ofstream file("data_karyawan.txt", ios::app);
+
+    if(file.is_open()){
+
+        cout << "\n==========================================" << endl;
+        cout << "         INPUT DATA KARYAWAN" << endl;
+        cout << "==========================================" << endl;
+
+        cout << "ID Karyawan        : ";
+        cin >> idKaryawan;
+        cin.ignore();
+
+        cout << "Nama               : ";
+        getline(cin,nama);
+
+        cout << "Jabatan            : ";
+        getline(cin,jabatan);
+
+        cout << "Alamat             : ";
+        getline(cin,alamat);
+
+        cout << "No HP              : ";
+        getline(cin,noHP);
+
+        cout << "Umur               : ";
+        cin >> umur;
+
+        cout << "Jenis Kelamin (L/P): ";
+        cin >> jk;
+
+        cout << "Gaji Pokok         : ";
+        cin >> gajiPokok;
+
+        // Nilai awal absensi
+        hariMasuk = 0;
+        hariIzin = 0;
+        hariAlpha = 0;
+
+        // Nilai awal penggajian
+        bonus = 0;
+        potongan = 0;
+        totalGaji = 0;
+
+        // Simpan ke file
+        file << idKaryawan << "|"
+             << nama << "|"
+             << jabatan << "|"
+             << alamat << "|"
+             << noHP << "|"
+             << umur << "|"
+             << jk << "|"
+             << gajiPokok << "|"
+             << hariMasuk << "|"
+             << hariIzin << "|"
+             << hariAlpha << "|"
+             << bonus << "|"
+             << potongan << "|"
+             << totalGaji
+             << endl;
+
+        file.close();
+
+        cout << "\n==========================================" << endl;
+        cout << "Data karyawan berhasil disimpan." << endl;
+        cout << "==========================================" << endl;
+
+    }
+    else{
+
+        cout << "File data_karyawan.txt tidak dapat dibuka!" << endl;
+
+    }	
+}
+    void bacaDataKaryawan()
+    {
+
+    ifstream file("data_karyawan.txt");
+
+    if(!file.is_open()){
+
+        cout<<"File tidak ditemukan!"<<endl;
+        return;
+
+    }
+
+    string line;
+
+    cout<<"\n==============================================================\n";
+    cout<<"                    DATA KARYAWAN\n";
+    cout<<"==============================================================\n\n";
+
+    cout<<"ID|NAMA|JABATAN|ALAMAT|NO HP|UMUR|JK|GAJI"<<endl<<endl;
+
+    while(getline(file,line)){
+
+        string id="";
+        string nama="";
+        string jabatan="";
+        string alamat="";
+        string noHP="";
+        string umur="";
+        string jk="";
+        string gaji="";
+
+        int field=0;
+
+        for(int i=0;i<line.length();i++){
+
+            if(line[i]=='|'){
+
+                field++;
+
+            }
+            else{
+
+                if(field==0)
+                    id+=line[i];
+
+                else if(field==1)
+                    nama+=line[i];
+
+                else if(field==2)
+                    jabatan+=line[i];
+
+                else if(field==3)
+                    alamat+=line[i];
+
+                else if(field==4)
+                    noHP+=line[i];
+
+                else if(field==5)
+                    umur+=line[i];
+
+                else if(field==6)
+                    jk+=line[i];
+
+                else if(field==7)
+                    gaji+=line[i];
+
+            }
+
+        }
+
+        cout<<id<<" | "
+            <<nama<<" | "
+            <<jabatan<<" | "
+            <<alamat<<" | "
+            <<noHP<<" | "
+            <<umur<<" | "
+            <<jk<<" | Rp "
+            <<gaji<<endl;
+
+    }
+
+    file.close();	
+}
+    	void cariKaryawan()
+{
+    ifstream file("data_karyawan.txt");
+
+    if(!file.is_open())
+    {
+        cout << "File data karyawan tidak ditemukan!\n";
+        return;
+    }
+
+    string cari;
+    cout << "Masukkan ID atau Nama Karyawan : ";
+    getline(cin, cari);
+
+    string line;
+    bool ketemu = false;
+
+    while(getline(file, line))
+    {
+        string id = "";
+        string nama = "";
+        string jabatan = "";
+        string alamat = "";
+        string nohp = "";
+        string umur = "";
+        string jk = "";
+        string gaji = "";
+
+        int field = 0;
+
+        for(int i = 0; i < line.length(); i++)
+        {
+            if(line[i] == '|')
+            {
+                field++;
+            }
+            else
+            {
+                if(field == 0)
+                    id += line[i];
+                else if(field == 1)
+                    nama += line[i];
+                else if(field == 2)
+                    jabatan += line[i];
+                else if(field == 3)
+                    alamat += line[i];
+                else if(field == 4)
+                    nohp += line[i];
+                else if(field == 5)
+                    umur += line[i];
+                else if(field == 6)
+                    jk += line[i];
+                else if(field == 7)
+                    gaji += line[i];
+            }
+        }
+
+        if(id == cari || nama == cari)
+        {
+            ketemu = true;
+
+            cout << "\n=========== DATA KARYAWAN ===========\n";
+            cout << "ID Karyawan : " << id << endl;
+            cout << "Nama        : " << nama << endl;
+            cout << "Jabatan     : " << jabatan << endl;
+            cout << "Alamat      : " << alamat << endl;
+            cout << "No HP       : " << nohp << endl;
+            cout << "Umur        : " << umur << endl;
+            cout << "Jenis Kelamin : " << jk << endl;
+            cout << "Gaji Pokok  : Rp " << gaji << endl;
+            cout << "=====================================\n";
+
+            break;
+        }
+    }
+
+    if(!ketemu)
+    {
+        cout << "\nData karyawan tidak ditemukan.\n";
+    }
+
+    file.close();
+}
+
+    void ubahDataKaryawan()
+	{
+    bacaDataKaryawan();
+
+    cout << endl;
+
+    string idCari;
+    cout << "Masukkan ID Karyawan yang ingin diubah : ";
+    getline(cin, idCari);
+
+    ifstream file("data_karyawan.txt");
+    ofstream temp("temp.txt");
+
+    if(!file.is_open())
+    {
+        cout << "File tidak ditemukan!\n";
+        return;
+    }
+
+    string line;
+    bool ketemu = false;
+
+    while(getline(file, line))
+    {
+        string id = "";
+        string nama = "";
+        string jabatan = "";
+        string alamat = "";
+        string nohp = "";
+        string umur = "";
+        string jk = "";
+        string gaji = "";
+
+        int field = 0;
+
+        for(int i = 0; i < line.length(); i++)
+        {
+            if(line[i] == '|')
+            {
+                field++;
+            }
+            else
+            {
+                if(field == 0)
+                    id += line[i];
+                else if(field == 1)
+                    nama += line[i];
+                else if(field == 2)
+                    jabatan += line[i];
+                else if(field == 3)
+                    alamat += line[i];
+                else if(field == 4)
+                    nohp += line[i];
+                else if(field == 5)
+                    umur += line[i];
+                else if(field == 6)
+                    jk += line[i];
+                else if(field == 7)
+                    gaji += line[i];
+            }
+        }
+
+        if(id == idCari)
+        {
+            ketemu = true;
+
+            cout << "\n===== INPUT DATA BARU =====\n";
+
+            cout << "Nama            : ";
+            getline(cin, nama);
+
+            cout << "Jabatan         : ";
+            getline(cin, jabatan);
+
+            cout << "Alamat          : ";
+            getline(cin, alamat);
+
+            cout << "No HP           : ";
+            getline(cin, nohp);
+
+            cout << "Umur            : ";
+            getline(cin, umur);
+
+            cout << "Jenis Kelamin   : ";
+            getline(cin, jk);
+
+            cout << "Gaji Pokok      : ";
+            getline(cin, gaji);
+
+            temp << id << "|"
+                 << nama << "|"
+                 << jabatan << "|"
+                 << alamat << "|"
+                 << nohp << "|"
+                 << umur << "|"
+                 << jk << "|"
+                 << gaji << endl;
+        }
+        else
+        {
+            temp << line << endl;
+        }
+    }
+
+    file.close();
+    temp.close();
+
+    remove("data_karyawan.txt");
+    rename("temp.txt", "data_karyawan.txt");
+
+    if(ketemu)
+        cout << "\nData karyawan berhasil diubah.\n";
+    else
+        cout << "\nID Karyawan tidak ditemukan.\n";
+}
+
+    void hapusDataKaryawan()
+	{
+    bacaDataKaryawan();
+
+    cout << endl;
+
+    string idCari;
+
+    cout << "Masukkan ID Karyawan yang ingin dihapus : ";
+    getline(cin, idCari);
+
+    ifstream file("data_karyawan.txt");
+
+    if(!file.is_open())
+    {
+        cout << "File tidak ditemukan!\n";
+        return;
+    }
+
+    ofstream temp("temp.txt");
+
+    string line;
+    bool ketemu = false;
+
+    while(getline(file, line))
+    {
+        string id = "";
+        int field = 0;
+
+        for(int i = 0; i < line.length(); i++)
+        {
+            if(line[i] == '|')
+            {
+                field++;
+
+                if(field > 0)
+                    break;
+            }
+            else
+            {
+                id += line[i];
+            }
+        }
+
+        if(id == idCari)
+        {
+            ketemu = true;
+        }
+        else
+        {
+            temp << line << endl;
+        }
+    }
+
+    file.close();
+    temp.close();
+
+    remove("data_karyawan.txt");
+    rename("temp.txt", "data_karyawan.txt");
+
+    if(ketemu)
+    {
+        cout << "\nData karyawan berhasil dihapus.\n";
+    }
+    else
+    {
+        cout << "\nID Karyawan tidak ditemukan.\n";
+    }
+}	
+
+    void inputAbsensi()
+{
+    ifstream file("data_karyawan.txt");
+
+    if(!file.is_open())
+    {
+        cout << "Data karyawan belum ada.\n";
+        return;
+    }
+
+    cout << "========== DATA KARYAWAN ==========\n";
+
+    string line;
+
+    while(getline(file,line))
+    {
+        string id="";
+        string nama="";
+
+        int field=0;
+
+        for(int i=0;i<line.length();i++)
+        {
+            if(line[i]=='|')
+            {
+                field++;
+            }
+            else
+            {
+                if(field==0)
+                    id+=line[i];
+                else if(field==1)
+                    nama+=line[i];
+            }
+        }
+
+        cout<<id<<" - "<<nama<<endl;
+    }
+
+    file.close();
+
+    string idCari;
+    string nama="";
+    string tanggal;
+    string jam;
+    string status;
+
+    cout<<"\nMasukkan ID Karyawan : ";
+    getline(cin,idCari);
+
+    file.open("data_karyawan.txt");
+
+    bool ketemu=false;
+
+    while(getline(file,line))
+    {
+        string id="";
+        int field=0;
+
+        for(int i=0;i<line.length();i++)
+        {
+            if(line[i]=='|')
+            {
+                field++;
+            }
+            else
+            {
+                if(field==0)
+                    id+=line[i];
+                else if(field==1)
+                    nama+=line[i];
+            }
+        }
+
+        if(id==idCari)
+        {
+            ketemu=true;
+            break;
+        }
+
+        nama="";
+    }
+
+    file.close();
+
+    if(!ketemu)
+    {
+        cout<<"ID Karyawan tidak ditemukan.\n";
+        return;
+    }
+
+    cout<<"Tanggal (dd/mm/yyyy) : ";
+    getline(cin,tanggal);
+
+    cout<<"Jam Masuk (HH:MM) : ";
+    getline(cin,jam);
+
+    cout<<"Status (Hadir/Izin/Sakit/Alpha/Terlambat) : ";
+    getline(cin,status);
+
+    ofstream simpan("absensi_karyawan.txt",ios::app);
+
+    simpan<<idCari<<"|"
+          <<nama<<"|"
+          <<tanggal<<"|"
+          <<jam<<"|"
+          <<status<<endl;
+
+    simpan.close();
+
+    cout<<"\nAbsensi berhasil disimpan.\n";
+}
+    void hitungGaji()
+	{
+    bacaDataKaryawan();
+
+    cout << endl;
+
+    string idCari;
+
+    cout << "Masukkan ID Karyawan : ";
+    getline(cin,idCari);
+
+    ifstream file("data_karyawan.txt");
+
+    if(!file.is_open())
+    {
+        cout<<"File data karyawan tidak ditemukan.\n";
+        return;
+    }
+
+    string line;
+
+    string nama="";
+    string jabatan="";
+    string alamat="";
+    string nohp="";
+    string umur="";
+    string jk="";
+    string gajiStr="";
+
+    bool ketemu=false;
+
+    while(getline(file,line))
+    {
+        string id="";
+
+        nama="";
+        jabatan="";
+        alamat="";
+        nohp="";
+        umur="";
+        jk="";
+        gajiStr="";
+
+        int field=0;
+
+        for(int i=0;i<line.length();i++)
+        {
+            if(line[i]=='|')
+            {
+                field++;
+            }
+            else
+            {
+                if(field==0)
+                    id+=line[i];
+                else if(field==1)
+                    nama+=line[i];
+                else if(field==2)
+                    jabatan+=line[i];
+                else if(field==3)
+                    alamat+=line[i];
+                else if(field==4)
+                    nohp+=line[i];
+                else if(field==5)
+                    umur+=line[i];
+                else if(field==6)
+                    jk+=line[i];
+                else if(field==7)
+                    gajiStr+=line[i];
+            }
+        }
+
+        if(id==idCari)
+        {
+            ketemu=true;
+            break;
+        }
+    }
+
+    file.close();
+
+    if(!ketemu)
+    {
+        cout<<"Data karyawan tidak ditemukan.\n";
+        return;
+    }
+
+    double gajiPokok=atof(gajiStr.c_str());
+
+    int hadir=0;
+    int izin=0;
+    int sakit=0;
+    int alpha=0;
+    int terlambat=0;
+
+    ifstream absen("absensi_karyawan.txt");
+
+    while(getline(absen,line))
+    {
+        string id="";
+        string nama="";
+        string tanggal="";
+        string jam="";
+        string status="";
+
+        int field=0;
+
+        for(int i=0;i<line.length();i++)
+        {
+            if(line[i]=='|')
+            {
+                field++;
+            }
+            else
+            {
+                if(field==0)
+                    id+=line[i];
+                else if(field==1)
+                    nama+=line[i];
+                else if(field==2)
+                    tanggal+=line[i];
+                else if(field==3)
+                    jam+=line[i];
+                else if(field==4)
+                    status+=line[i];
+            }
+        }
+
+        if(id==idCari)
+        {
+            if(status=="Hadir")
+                hadir++;
+            else if(status=="Izin")
+                izin++;
+            else if(status=="Sakit")
+                sakit++;
+            else if(status=="Alpha")
+                alpha++;
+            else if(status=="Terlambat")
+                terlambat++;
+        }
+    }
+
+    absen.close();
+
+    double bonus=hadir*10000;
+
+    double potonganAlpha=alpha*50000;
+
+    double potonganTerlambat=terlambat*5000;
+
+    double gajiBersih=
+    gajiPokok
+    +bonus
+    -potonganAlpha
+    -potonganTerlambat;
+
+    cout<<"\n========================================\n";
+    cout<<"          SLIP GAJI KARYAWAN\n";
+    cout<<"========================================\n";
+
+    cout<<"ID Karyawan      : "<<idCari<<endl;
+    cout<<"Nama             : "<<nama<<endl;
+    cout<<"Jabatan          : "<<jabatan<<endl;
+
+    cout<<"\nRekap Absensi\n";
+    cout<<"Hadir            : "<<hadir<<endl;
+    cout<<"Izin             : "<<izin<<endl;
+    cout<<"Sakit            : "<<sakit<<endl;
+    cout<<"Alpha            : "<<alpha<<endl;
+    cout<<"Terlambat        : "<<terlambat<<endl;
+
+    cout<<"\n----------------------------------------\n";
+
+    cout<<"Gaji Pokok       : Rp "<<gajiPokok<<endl;
+    cout<<"Bonus Hadir      : Rp "<<bonus<<endl;
+    cout<<"Potongan Alpha   : Rp "<<potonganAlpha<<endl;
+    cout<<"Potongan Telat   : Rp "<<potonganTerlambat<<endl;
+
+    cout<<"----------------------------------------\n";
+
+    cout<<"GAJI BERSIH      : Rp "<<gajiBersih<<endl;
+
+    cout<<"========================================\n";
+}	
+    void cetakSlipGaji()
+	{
+  
+    bacaDataKaryawan();
+
+    cout << endl;
+
+    string idCari;
+
+    cout << "Masukkan ID Karyawan : ";
+    getline(cin,idCari);
+
+    ifstream file("data_karyawan.txt");
+
+    if(!file.is_open())
+    {
+        cout<<"File data karyawan tidak ditemukan.\n";
+        return;
+    }
+
+    string line;
+
+    string nama="";
+    string jabatan="";
+    string alamat="";
+    string nohp="";
+    string umur="";
+    string jk="";
+    string gajiStr="";
+
+    bool ketemu=false;
+
+    while(getline(file,line))
+    {
+        string id="";
+
+        nama="";
+        jabatan="";
+        alamat="";
+        nohp="";
+        umur="";
+        jk="";
+        gajiStr="";
+
+        int field=0;
+
+        for(int i=0;i<line.length();i++)
+        {
+            if(line[i]=='|')
+            {
+                field++;
+            }
+            else
+            {
+                if(field==0)
+                    id+=line[i];
+                else if(field==1)
+                    nama+=line[i];
+                else if(field==2)
+                    jabatan+=line[i];
+                else if(field==3)
+                    alamat+=line[i];
+                else if(field==4)
+                    nohp+=line[i];
+                else if(field==5)
+                    umur+=line[i];
+                else if(field==6)
+                    jk+=line[i];
+                else if(field==7)
+                    gajiStr+=line[i];
+            }
+        }
+
+        if(id==idCari)
+        {
+            ketemu=true;
+            break;
+        }
+    }
+
+    file.close();
+
+    if(!ketemu)
+    {
+        cout<<"Data karyawan tidak ditemukan.\n";
+        return;
+    }
+
+    double gajiPokok = atof(gajiStr.c_str());
+
+    int hadir=0;
+    int izin=0;
+    int sakit=0;
+    int alpha=0;
+    int terlambat=0;
+
+    ifstream absen("absensi_karyawan.txt");
+
+    while(getline(absen,line))
+    {
+        string id="";
+        string namaAbsen="";
+        string tanggal="";
+        string jam="";
+        string status="";
+
+        int field=0;
+
+        for(int i=0;i<line.length();i++)
+        {
+            if(line[i]=='|')
+            {
+                field++;
+            }
+            else
+            {
+                if(field==0)
+                    id+=line[i];
+                else if(field==1)
+                    namaAbsen+=line[i];
+                else if(field==2)
+                    tanggal+=line[i];
+                else if(field==3)
+                    jam+=line[i];
+                else if(field==4)
+                    status+=line[i];
+            }
+        }
+
+        if(id==idCari)
+        {
+            if(status=="Hadir")
+                hadir++;
+            else if(status=="Izin")
+                izin++;
+            else if(status=="Sakit")
+                sakit++;
+            else if(status=="Alpha")
+                alpha++;
+            else if(status=="Terlambat")
+                terlambat++;
+        }
+    }
+
+    absen.close();
+
+    double bonus = hadir * 10000;
+    double potonganAlpha = alpha * 50000;
+    double potonganTerlambat = terlambat * 5000;
+
+    double gajiBersih =
+    gajiPokok
+    + bonus
+    - potonganAlpha
+    - potonganTerlambat;
+
+    cout << "\n=============================================\n";
+    cout << "             SLIP GAJI KARYAWAN\n";
+    cout << "=============================================\n";
+
+    cout << "ID Karyawan     : " << idCari << endl;
+    cout << "Nama            : " << nama << endl;
+    cout << "Jabatan         : " << jabatan << endl;
+
+    cout << "---------------------------------------------\n";
+
+    cout << "Jumlah Hadir    : " << hadir << endl;
+    cout << "Jumlah Izin     : " << izin << endl;
+    cout << "Jumlah Sakit    : " << sakit << endl;
+    cout << "Jumlah Alpha    : " << alpha << endl;
+    cout << "Jumlah Terlambat: " << terlambat << endl;
+
+    cout << "---------------------------------------------\n";
+
+    cout << "Gaji Pokok      : Rp " << gajiPokok << endl;
+    cout << "Bonus Hadir     : Rp " << bonus << endl;
+    cout << "Potongan Alpha  : Rp " << potonganAlpha << endl;
+    cout << "Potongan Telat  : Rp " << potonganTerlambat << endl;
+
+    cout << "---------------------------------------------\n";
+
+    cout << "GAJI BERSIH     : Rp " << gajiBersih << endl;
+
+    cout << "=============================================\n";
+
+    ofstream slip("slip_gaji.txt",ios::app);
+
+    slip << idCari << "|"
+         << nama << "|"
+         << jabatan << "|"
+         << hadir << "|"
+         << izin << "|"
+         << sakit << "|"
+         << alpha << "|"
+         << terlambat << "|"
+         << gajiPokok << "|"
+         << bonus << "|"
+         << potonganAlpha << "|"
+         << potonganTerlambat << "|"
+         << gajiBersih
+         << endl;
+
+    slip.close();
+
+    cout << "\nSlip gaji berhasil disimpan ke slip_gaji.txt\n";
+}
+
+    void cariSlipGaji()
+{
+    ifstream file("slip_gaji.txt");
+
+    if(!file.is_open())
+    {
+        cout << "File slip gaji tidak ditemukan!" << endl;
+        return;
+    }
+
+    string cari;
+    cout << "Masukkan ID Karyawan atau Nama : ";
+    getline(cin, cari);
+
+    bool ketemu = false;
+    string line;
+
+    while(getline(file, line))
+    {
+        string id = "";
+        string nama = "";
+        string jabatan = "";
+        string tanggal = "";
+        string hadir = "";
+        string gaji = "";
+
+        int field = 0;
+
+        for(int i = 0; i < line.length(); i++)
+        {
+            if(line[i] == '|')
+            {
+                field++;
+            }
+            else
+            {
+                if(field == 0)
+                    id += line[i];
+
+                else if(field == 1)
+                    nama += line[i];
+
+                else if(field == 2)
+                    jabatan += line[i];
+
+                else if(field == 3)
+                    tanggal += line[i];
+
+                else if(field == 4)
+                    hadir += line[i];
+
+                else if(field == 5)
+                    gaji += line[i];
+            }
+        }
+
+        if(id == cari || nama == cari)
+        {
+            ketemu = true;
+
+            cout << "\n===============================" << endl;
+            cout << "        SLIP GAJI" << endl;
+            cout << "===============================" << endl;
+            cout << "ID Karyawan   : " << id << endl;
+            cout << "Nama          : " << nama << endl;
+            cout << "Jabatan       : " << jabatan << endl;
+            cout << "Periode       : " << tanggal << endl;
+            cout << "Total Hadir   : " << hadir << endl;
+            cout << "Total Gaji    : Rp " << gaji << endl;
+            cout << "===============================" << endl;
+
+            break;
+        }
+    }
+
+    if(!ketemu)
+    {
+        cout << "\nSlip gaji tidak ditemukan." << endl;
+    }
+
+    file.close();
+}	
+ 
+ 
+ void rekapGajiBulanan()
+{
+    ifstream file("slip_gaji.txt");
+
+    if(!file.is_open())
+    {
+        cout << "File slip gaji tidak ditemukan!" << endl;
+        return;
+    }
+
+    string periodeCari;
+
+    cout << "Masukkan Periode (MM/YYYY) : ";
+    getline(cin, periodeCari);
+
+    string line;
+
+    bool ada = false;
+
+    int jumlahKaryawan = 0;
+
+    double totalGaji = 0;
+
+    cout << "\n===============================================" << endl;
+    cout << "           REKAP GAJI BULANAN" << endl;
+    cout << "===============================================" << endl;
+
+    while(getline(file,line))
+    {
+        string id="";
+        string nama="";
+        string jabatan="";
+        string periode="";
+        string hadir="";
+        string gaji="";
+
+        int field=0;
+
+        for(int i=0;i<line.length();i++)
+        {
+            if(line[i]=='|')
+            {
+                field++;
+            }
+            else
+            {
+                if(field==0)
+                    id+=line[i];
+                else if(field==1)
+                    nama+=line[i];
+                else if(field==2)
+                    jabatan+=line[i];
+                else if(field==3)
+                    periode+=line[i];
+                else if(field==4)
+                    hadir+=line[i];
+                else if(field==5)
+                    gaji+=line[i];
+            }
+        }
+
+        if(periode==periodeCari)
+        {
+            ada=true;
+
+            jumlahKaryawan++;
+
+            double nominal=atof(gaji.c_str());
+
+            totalGaji += nominal;
+
+            cout << "ID        : " << id << endl;
+            cout << "Nama      : " << nama << endl;
+            cout << "Jabatan   : " << jabatan << endl;
+            cout << "Hadir     : " << hadir << " Hari" << endl;
+            cout << "Gaji      : Rp " << nominal << endl;
+            cout << "-----------------------------------------------" << endl;
+        }
+    }
+
+    file.close();
+
+    if(!ada)
+    {
+        cout << "Data periode tersebut tidak ditemukan." << endl;
+        return;
+    }
+
+    cout << endl;
+    cout << "Jumlah Karyawan : " << jumlahKaryawan << endl;
+    cout << "Total Pengeluaran Gaji : Rp " << totalGaji << endl;
+    cout << "===============================================" << endl;
+}
+
 };
 
 class Obat {
@@ -3181,8 +4468,128 @@ class Logaktivitas {
 
 };
 
+	void menuPenggajian(){
+
+    Karyawan karyawan;
+
+    int pilih;
+
+    do
+    {
+        cout << "\n===== MENU PENGGAJIAN =====" << endl;
+        cout << "1. Hitung Gaji" << endl;
+        cout << "2. Cetak Slip Gaji" << endl;
+        cout << "3. Cari Slip Gaji" << endl;
+        cout << "4. Rekap Gaji Bulanan" << endl;
+        cout << "0. Kembali" << endl;
+
+        cout << "Pilih : ";
+        cin >> pilih;
+        cin.ignore();
+
+        switch(pilih)
+        {
+            case 1:
+                karyawan.hitungGaji();
+                break;
+
+            case 2:
+                karyawan.cetakSlipGaji();
+                break;
+
+            case 3:
+                karyawan.cariSlipGaji();
+                break;
+
+            case 4:
+                karyawan.rekapGajiBulanan();
+                break;
+
+            case 0:
+                break;
+
+            default:
+                cout << "Pilihan tidak tersedia." << endl;
+        }
+
+    }while(pilih != 0);
+}
+
+	void menuSDM()
+{
+    Karyawan karyawan;
+
+    int pilih;
+
+    do
+    {
+        cout<<"\n==================================="<<endl;
+        cout<<"        MENU MANAJEMEN SDM"<<endl;
+        cout<<"==================================="<<endl;
+        cout<<"1. Input Karyawan"<<endl;
+        cout<<"2. Data Karyawan"<<endl;
+        cout<<"3. Cari Karyawan"<<endl;
+        cout<<"4. Ubah Data"<<endl;
+        cout<<"5. Hapus Data"<<endl;
+        cout<<"6. Input Absensi"<<endl;
+        cout<<"7. Penggajian"<<endl;
+        cout<<"0. Kembali"<<endl;
+
+        cout<<"Pilih : ";
+        cin>>pilih;
+        cin.ignore();
+
+        switch(pilih)
+        {
+            case 1:
+                karyawan.inputKaryawan();
+                break;
+
+            case 2:
+                karyawan.bacaDataKaryawan();
+                break;
+
+            case 3:
+                karyawan.cariKaryawan();
+                break;
+
+            case 4:
+                karyawan.ubahDataKaryawan();
+                break;
+
+            case 5:
+                karyawan.hapusDataKaryawan();
+                break;
+
+            case 6:
+                karyawan.inputAbsensi();
+                break;
+
+            case 7:
+
+                if(karyawan.cekHakAksesGaji())
+                {
+                    menuPenggajian();
+                }
+                else
+                {
+                    cout<<"Akses Ditolak!"<<endl;
+                }
+
+                break;
+
+            case 0:
+                break;
+
+            default:
+                cout<<"Pilihan tidak tersedia."<<endl;
+        }
+
+    }while(pilih!=0);
+}
 void menuAdmin(){
 			Obat obat;
+			Karyawan karyawan;
     		Transaksi transaksi;
     		int pilih;
     		string namaCari;
@@ -3199,7 +4606,8 @@ void menuAdmin(){
        			cout<<"7. Stok Menipis\n";
        			cout<<"8. Cek Kadaluarsa\n";
        			cout<<"9. Monitoring Obat\n";
-        		cout<<"10. Riwayat Transaksi\n";
+       			cout<<"10. Menu SDM\n";
+        		cout<<"11. Riwayat Transaksi\n";
        			cout<<"0. Logout\n";
         		cout<<"Pilih : ";
         		cin>>pilih;
@@ -3265,9 +4673,13 @@ void menuAdmin(){
 				break;
 				
         		case 10:
+            	menuSDM();
+            	break;
+            	
+				case 11:
             	transaksi.tampilRiwayat();
             	break;
-
+            	
         		case 0:
             	logout();
             	return;
@@ -3332,7 +4744,7 @@ void menuAdmin(){
 		
 		    } while (true);
 		}
-    
+		   
     void menuUtama(){
 		    if (loginIndex == -1)
 		    {
@@ -3422,6 +4834,6 @@ int main(){
         }
         
         } while (pilih != 3);
-    
+
     return 0;
 }
