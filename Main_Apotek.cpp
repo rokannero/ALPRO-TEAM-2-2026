@@ -4682,48 +4682,14 @@ class Logaktivitas {
 
     }while(pilih!=0);
 }
-void menuAdmin(){
-			Obat obat;
-			Karyawan karyawan;
-    		Transaksi transaksi;
-    		int pilih;
-    		string namaCari;
-		
-		    do
-		    {
-		        cout << "\n=== MENU ADMIN ===\n";
-		        cout << "1. Lihat User\n";
-		        cout<<"2. Lihat Obat\n";
-		        cout<<"3. Cari Obat\n";
-        		cout<<"4. Tambah Obat\n";
-        		cout<<"5. Edit Data Obat\n";
-       			cout<<"6. Ubah Harga Obat\n";
-       			cout<<"7. Stok Menipis\n";
-       			cout<<"8. Cek Kadaluarsa\n";
-       			cout<<"9. Monitoring Obat\n";
-       			cout<<"10. Menu SDM\n";
-        		cout<<"11. Riwayat Transaksi\n";
-       			cout<<"0. Logout\n";
-        		cout<<"Pilih : ";
-        		cin>>pilih;
-        		cin.ignore();
-		
-		        switch (pilih)
-		        {
-		        case 1:
-		            cout << "\nDATA USER:\n";
-		            for (int i = 0; i < jumlahUser; i++)
-		            {
-		                user[i].tampil();
-		                cout << endl;
-		            }
-		            break;
-				case 2:
-            		obat.bacaData();
-            		break;
+
+void menuKelolaObat() {
+    Obat obat;
+    int pilih;
+    string namaCari;
 
     do {
-        // system("cls");
+        system("cls");
 
         cout << "\n=== KELOLA OBAT ===\n";
         cout << "1. Lihat Obat\n";
@@ -4748,16 +4714,13 @@ void menuAdmin(){
             cout << "Nama Obat : ";
             getline(cin, namaCari);
 
-            if (obat.cariObat(namaCari)) 
-			{
+            if (obat.cariObat(namaCari)) {
                 cout << "\nKode    : " << obat.getkodeObat() << endl;
                 cout << "Nama    : " << obat.getnamaObat() << endl;
                 cout << "Harga   : " << obat.getHarga() << endl;
                 cout << "Stok    : " << obat.getStok() << endl;
                 cout << "Expired : " << obat.gettanggalExpired() << endl;
-            } 
-			else 
-			{
+            } else {
                 cout << "Obat tidak ditemukan.\n";
             }
             break;
@@ -4932,8 +4895,7 @@ void menuAdmin() {
             break;
 
         case 4:
-			cout << "Fitur kelola karyawan belum dibuat.\n";
-            // menuKelolaKaryawan();
+            menuSDM();
             break;
 
         case 5:
