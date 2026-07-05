@@ -14,6 +14,56 @@ void header(string judul);
 
 void footer();
 
+// baru
+void kembaliMenu() { 
+	cout << "\nTekan Enter untuk lanjut...";
+    cin.get();
+    // system("cls");
+}
+
+
+bool hanyaAngka(string teks) {
+    if (teks == "") 
+	{
+        return false;
+    }
+
+    for (int i = 0; i < teks.length(); i++) 
+	{
+        if (teks[i] < '0' || teks[i] > '9') 
+		{
+            return false;
+        }
+    }
+
+    return true;
+}
+
+int ubahKeAngka(string teks) 
+{
+    int angka = 0;
+
+    for (int i = 0; i < teks.length(); i++) 
+	{
+        angka = angka * 10 + (teks[i] - '0');
+    }
+
+    return angka;
+}
+
+int inputPilihanMenu() {
+    string input;
+
+    getline(cin, input);
+
+    if (!hanyaAngka(input)) 
+	{
+        return -1;
+    }
+
+    return ubahKeAngka(input);
+}
+
 class User {
 	private :
 		string idUser;
@@ -212,6 +262,11 @@ class User {
 			cout << "Role      : ";
 			getline(cin, role);
 
+			for (int i = 0; i < role.length(); i++)
+			{
+				role[i] = tolower(role[i]);
+			}
+
 			user[jumlahUser].setIdUser(id);
 			user[jumlahUser].setNama(nama);
 			user[jumlahUser].setUsername(username);
@@ -232,7 +287,7 @@ class User {
 
 			simpanUserKeFile(user, jumlahUser);
 
-			cout << "Registrasi berhasil dan data disimpan ke file.txt!\n";
+			cout << "Registrasi berhasil dan data disimpan ke user_data.txt!\n";
 		}
 		
 		//====================================================
@@ -757,16 +812,17 @@ public:
 	    }
 	
 	    file.close();
-		
-		bacaData();
-		
+
+		bacaDataObat();
+
 		cout << endl;
 	
 	    string kodeCari;
 	
 	    cout << "Masukkan Kode Obat yang ingin diubah : ";
 		cin >> kodeCari;
-	
+		cin.ignore();
+
 	    bool ketemu=false;
 	
 	    for(int i=0;i<daftar.size();i++){
@@ -848,18 +904,29 @@ public:
 			cout << "Masukkan Kode Obat : ";
 	    	cin >> kodeObat;
 	    	cin.ignore();
+
 			cout << "Masukkan Nama Obat : ";
 			getline(cin, namaObat);
+			
 			cout << "Masukkan Harga Obat :";
 			cin >> harga;
+	    	cin.ignore();
+			
 			cout << "Masukkan Stok Obat :";
 			cin >> stok;
+	    	cin.ignore();
+			
 			cout << "Masukkan Tanggal Expired Obat (Tgl/Bln/Thn):";
 			cin >> tanggalExpired;
+	    	cin.ignore();
+			
 			cout << "Masukkan Kategori Obat :";
 			cin >> kategori;
+	    	cin.ignore();
+			
 			cout << "Masukkan Satuan Obat per kaplet/tablet :";
 			cin >> satuan;
+	    	cin.ignore();
 			
 	        file << kodeObat << "|"
 	             << namaObat << "|"
@@ -988,7 +1055,7 @@ public:
     bool adaHampir=false;
 
     cout<<"\n=========================================\n";
-    cout<<"			DAFTAR OBAT KADALUARSA\n";
+    cout<<"          DAFTAR OBAT KADALUARSA\n";
     cout<<"=========================================\n";
 
 		while(getline(file,line)){
@@ -1074,7 +1141,7 @@ public:
     file.seekg(0);
 
     cout<<"\n=========================================\n";
-    cout<<"DAFTAR OBAT HAMPIR KADALUARSA\n";
+    cout<<"     DAFTAR OBAT HAMPIR KADALUARSA\n";
     cout<<"=========================================\n";
 
     while(getline(file,line)){
@@ -1154,7 +1221,7 @@ public:
 
     if(!adaHampir){
 
-        cout<<"Tidak ada obat yang hampir kadaluarsa.\n";
+        cout<<"\nTidak ada obat yang hampir kadaluarsa.\n";
 
     }
 
@@ -1196,7 +1263,9 @@ public:
 
                 field++;
 
-            }else{
+            }
+			else
+			{
 
                 if(field==0)
                     kode+=line[i];
@@ -1306,12 +1375,12 @@ public:
 
     file.close();
 
-    bacaData();
+    bacaDataObat();
 
     string kodeCari;
     cout << "\nMasukkan Kode Obat yang akan diubah harganya : ";
     cin >> kodeCari;
-
+	cin.ignore();
     bool ketemu = false;
 
     for(int i = 0; i < daftar.size(); i++){
@@ -1325,6 +1394,7 @@ public:
             cout << "Harga lama : " << daftar[i].getHarga() << endl;
             cout << "Masukkan harga baru : ";
             cin >> hargaBaru;
+			cin.ignore();
 
             daftar[i].setHarga(hargaBaru);
 
@@ -1380,7 +1450,7 @@ public:
 	    }
 	}
 	
-    void bacaData(){	//membaca dan menampilkan data di file.txt
+    void bacaDataObat(){	//membaca dan menampilkan data di file.txt
     	 ifstream file("daftar_obat.txt");
 
 	    string line;
@@ -1713,7 +1783,7 @@ public:
 	// Memilih supplier yang akan digunakan untuk restock
 	bool pilihSupplier(){
 	
-	    system("cls");
+	    // system("cls");
 	
 	    header("PILIH SUPPLIER");
 	
@@ -1883,13 +1953,13 @@ public:
 	// Memilih obat yang akan direstock
 	bool pilihObat(){
 	
-	    system("cls");
+	    // system("cls");
 	
 	    header("PILIH OBAT");
 	
 	    Obat obat;
 	
-	    obat.bacaData();
+	    obat.bacaDataObat();
 	
 	    string namaCari;
 	
@@ -2089,10 +2159,19 @@ public:
 	        getline(file,statusPesanan);
 	
 	        if(idPesanan == idCari)
-	        {
-	            file.close();
-	            return true;
-	        }
+			{
+				cout << "\n========== DATA PESANAN ==========\n";
+				cout << "ID Pesanan      : " << idPesanan << endl;
+				cout << "ID Supplier     : " << idSupplier << endl;
+				cout << "Kode Obat       : " << kodeObat << endl;
+				cout << "Nama Obat       : " << namaObat << endl;
+				cout << "Jumlah Pesanan  : " << jumlahPesan << endl;
+				cout << "Tanggal Pesanan : " << tanggalPesan << endl;
+				cout << "Status Saat Ini : " << statusPesanan << endl;
+
+				file.close();
+				return true;
+			}
 	    }
 	    
 	    cout << "\n========== DATA PESANAN ==========\n";
@@ -2120,8 +2199,8 @@ public:
 	    cout << "2. Dikirim" << endl;
 	
 	    cout << "\nPilih Status : ";
-	    cin >> pilihan;
-	    cin.ignore();
+	    
+		pilihan = inputPilihanMenu();
 	
 	    switch(pilihan)
 	    {
@@ -2136,6 +2215,7 @@ public:
 	        default:
 	            cout << "\nPilihan tidak valid!" << endl;
 	            statusPesanan = "";
+				break;
 	    }
 	}
 	
@@ -2260,7 +2340,7 @@ public:
 	// Mengonfirmasi bahwa barang dari supplier telah diterima
 	void konfirmasiBarang(){
 	
-	    system("cls");
+	    // system("cls");
 	
 	    header("KONFIRMASI PENERIMAAN BARANG");
 	
@@ -2641,33 +2721,6 @@ public:
 	
 	}
 	
-	// inputtransaksi baru
-	void inputTransaksi(){
-
-	    generateID();
-	
-	    keranjang.kosongkanKeranjang(); // ? BENAR
-	
-	    char pilih;
-	
-	    do{
-
-		    header("TRANSAKSI PENJUALAN");
-		
-		    cout << "ID Transaksi : " << idTransaksi << endl;
-		
-		    tambahObatKeKeranjang();
-		
-		    cout << "\nTambah obat lagi? (Y/T) : ";
-		    cin >> pilih;
-		    cin.ignore();
-		
-		}while(toupper(pilih)=='Y');
-	    
-	    menuKeranjang();
-			    
-	}
-	
 	void menuKeranjang(){
 
 	    // Jika keranjang kosong, tidak perlu menampilkan menu
@@ -2681,7 +2734,7 @@ public:
 	
 	    do{
 	
-	        system("cls");
+	        // system("cls");
 	
 	        header("MENU KERANJANG");
 	
@@ -2695,8 +2748,7 @@ public:
 	        cout << "=======================================" << endl;
 	
 	        cout << "Masukkan Pilihan : ";
-	        cin >> pilihan;
-	        cin.ignore();
+	        pilihan = inputPilihanMenu();
 	
 	        switch(pilihan){
 	
@@ -2719,7 +2771,8 @@ public:
 			
 			    cout << "\nNomor Item : ";
 			    cin >> nomor;
-			
+				cin.ignore();
+
 			    cout << "Jumlah Baru : ";
 			    cin >> jumlahBaru;
 			    cin.ignore();
@@ -2804,8 +2857,8 @@ public:
 			        keranjang.kosongkanKeranjang();
 			
 			        cout << "\nTransaksi berhasil dibatalkan." << endl;
-			
-			        system("pause");
+					cout << "\nTekan Enter untuk lanjut...";
+			        cin.get();
 			
 			        return;
 			    }
@@ -2819,12 +2872,51 @@ public:
 	        }
 	
 	        if(!checkout){
-	            cout << endl;
-	            system("pause");
+	            cout << "\nTekan Enter untuk lanjut...";
+	            cin.get();
 	        }
 	
 	    }while(!checkout);
 	
+	}
+
+	// inputtransaksi baru
+	void inputTransaksi(){
+	    generateID();
+	
+	    keranjang.kosongkanKeranjang(); // ? BENAR
+	
+	    char pilih;
+	
+	    do{
+
+		    header("TRANSAKSI PENJUALAN");
+		
+		    cout << "ID Transaksi : " << idTransaksi << endl;
+		
+		    tambahObatKeKeranjang();
+			
+			if (keranjang.keranjangKosong()) 
+			{
+            	cout << "\nBelum ada obat di keranjang." << endl;
+        	}
+
+		    cout << "\nTambah obat lagi? (Y/T) : ";
+		    cin >> pilih;
+		    cin.ignore();
+		
+		}while(toupper(pilih)=='Y');
+
+		if (keranjang.keranjangKosong()) 
+		{
+			cout << "\nTransaksi dibatalkan karena keranjang kosong." << endl;
+			cout << "\nTekan Enter untuk lanjut...";
+			cin.get();
+			return;
+    	}
+	    
+	    menuKeranjang();
+			    
 	}
 	    
 	string cetakWaktu() {
@@ -2871,8 +2963,9 @@ public:
 	        cout << "Obat tidak ditemukan!\n";
 	
 	    }
-	    system("pause");
-	    system("cls");
+		cout << "\nTekan Enter untuk lanjut...";
+	    cin.get();
+	    // system("cls");
 	}
 	
 	double hitungTotal(){
@@ -2935,13 +3028,15 @@ public:
 	
 	    cout << "\nMasukkan Uang Pembeli : Rp ";
 	    cin >> uangBayar;
-	
+		cin.ignore();
+		
 	    while(uangBayar < totalPembayaran){
-	
-	        cout << "\nUang tidak mencukupi!" << endl;
-	
+			
+			cout << "\nUang tidak mencukupi!" << endl;
+			
 	        cout << "Masukkan Uang Pembeli : Rp ";
 	        cin >> uangBayar;
+			cin.ignore();
 	
 	    }
 	
@@ -3181,183 +3276,405 @@ class Logaktivitas {
 
 };
 
-void menuAdmin(){
-			Obat obat;
-    		Transaksi transaksi;
-    		int pilih;
-    		string namaCari;
-		
-		    do
-		    {
-		        cout << "\n=== MENU ADMIN ===\n";
-		        cout << "1. Lihat User\n";
-		        cout<<"2. Lihat Obat\n";
-		        cout<<"3. Cari Obat\n";
-        		cout<<"4. Tambah Obat\n";
-        		cout<<"5. Edit Data Obat\n";
-       			cout<<"6. Ubah Harga Obat\n";
-       			cout<<"7. Stok Menipis\n";
-       			cout<<"8. Cek Kadaluarsa\n";
-       			cout<<"9. Monitoring Obat\n";
-        		cout<<"10. Riwayat Transaksi\n";
-       			cout<<"0. Logout\n";
-        		cout<<"Pilih : ";
-        		cin>>pilih;
-        		cin.ignore();
-		
-		        switch (pilih)
-		        {
-		        case 1:
-		            cout << "\nDATA USER:\n";
-		            for (int i = 0; i < jumlahUser; i++)
-		            {
-		                user[i].tampil();
-		                cout << endl;
-		            }
-		            break;
-				case 2:
-            		obat.bacaData();
-            		break;
+void menuKelolaObat() {
+    Obat obat;
+    int pilih;
+    string namaCari;
 
-        		case 3:
+    do {
+        // system("cls");
 
-            		cout<<"Nama Obat : ";
-            		getline(cin,namaCari);
+        cout << "\n=== KELOLA OBAT ===\n";
+        cout << "1. Lihat Obat\n";
+        cout << "2. Cari Obat\n";
+        cout << "3. Tambah Obat\n";
+        cout << "4. Edit Data Obat\n";
+        cout << "5. Ubah Harga Obat\n";
+        cout << "6. Stok Menipis\n";
+        cout << "7. Cek Kadaluarsa\n";
+        cout << "8. Monitoring Obat\n";
+        cout << "0. Kembali\n";
+        cout << "Pilih : ";
 
-            		if(obat.cariObat(namaCari)){
+        pilih = inputPilihanMenu();
 
-                	cout<<"\nKode       : "<<obat.getkodeObat()<<endl;
-                	cout<<"Nama       : "<<obat.getnamaObat()<<endl;
-                	cout<<"Harga      : "<<obat.getHarga()<<endl;
-                	cout<<"Stok       : "<<obat.getStok()<<endl;
-                	cout<<"Expired    : "<<obat.gettanggalExpired()<<endl;
-
-            	}else{
-
-                cout<<"Obat tidak ditemukan.\n";
-
-            }
-
+        switch (pilih) {
+        case 1:
+            obat.bacaDataObat();
             break;
 
-        		case 4:
-            	obat.inputObat();
-            	break;
+        case 2:
+            cout << "Nama Obat : ";
+            getline(cin, namaCari);
 
-        		case 5:
-            	obat.ubahDataObat();
-           		break;
+            if (obat.cariObat(namaCari)) 
+			{
+                cout << "\nKode    : " << obat.getkodeObat() << endl;
+                cout << "Nama    : " << obat.getnamaObat() << endl;
+                cout << "Harga   : " << obat.getHarga() << endl;
+                cout << "Stok    : " << obat.getStok() << endl;
+                cout << "Expired : " << obat.gettanggalExpired() << endl;
+            } 
+			else 
+			{
+                cout << "Obat tidak ditemukan.\n";
+            }
+            break;
 
-        		case 6:
-            	obat.ubahHarga();
-            	break;
+        case 3:
+            obat.inputObat();
+            break;
 
-       			case 7:
-            	obat.stokMenipis();
-            	break;
+        case 4:
+            obat.ubahDataObat();
+            break;
 
-        		case 8:
-            	obat.cekKadaluarsa();
-            	break;
-				
-				case 9:
-				obat.tampilMonitoring();
-				break;
-				
-        		case 10:
-            	transaksi.tampilRiwayat();
-            	break;
+        case 5:
+            obat.ubahHarga();
+            break;
 
-        		case 0:
-            	logout();
-            	return;
+        case 6:
+            obat.stokMenipis();
+            break;
 
-        		default:
-            	cout<<"Pilihan salah!\n";
-        	}
+        case 7:
+            obat.cekKadaluarsa();
+            break;
 
-        system("pause");
+        case 8:
+            obat.tampilMonitoring();
+            break;
 
-    }while(true);
-    
+        case 0:
+            return;
+
+        default:
+            cout << "Pilihan salah! Masukkan angka 0 sampai 8.\n";
+            break;
+        }
+
+        kembaliMenu();
+
+    } while (true);
 }
 
-		void menuKaryawan(){
-		    int pilih;
-		
-		    do
-		    {
-		        cout << "\n=== MENU KARYAWAN ===\n";
-		        cout << "1. Input Transaksi\n";
-		        cout << "2. Lihat Obat\n";
-		        cout << "3. Hitung Total\n";
-		        cout << "4. Logout\n";
-		        cout << "Pilih: ";
-		        cin >> pilih;
-		        cin.ignore();
-		
-		        switch (pilih)
-		        {
-		        case 2:
-		            cout << "Menampilkan data obat...\n";
-		            break;
-		
-		        case 4:
-		            logout();
-		            return;
-		        }
-		
-		    } while (true);
+void menuKelolaSupplier() {
+    Supplier supplier;
+    int pilih;
+    string idCari;
+
+    do {
+        // system("cls");
+
+        cout << "\n=== KELOLA SUPPLIER ===\n";
+        cout << "1. Tambah Supplier\n";
+        cout << "2. Lihat Data Supplier\n";
+        cout << "3. Cari Supplier\n";
+        cout << "4. Ubah Data Supplier\n";
+        cout << "5. Hapus Supplier\n";
+        cout << "6. Buat Pesanan Restock\n";
+        cout << "7. Lihat Pesanan Supplier\n";
+        cout << "8. Update Status Pesanan\n";
+        cout << "9. Konfirmasi Barang Diterima\n";
+        cout << "0. Kembali\n";
+        cout << "Pilih : ";
+
+        pilih = inputPilihanMenu();
+
+        switch (pilih) {
+        case 1:
+            supplier.tambahSupplier();
+            break;
+
+        case 2:
+            supplier.bacaSupplier();
+            break;
+
+        case 3:
+            cout << "\nMasukkan ID Supplier : ";
+            getline(cin, idCari);
+
+            if (supplier.cariSupplier(idCari)) 
+			{
+                supplier.tampilSupplier();
+            } 
+			else 
+			{
+                cout << "\nSupplier tidak ditemukan.\n";
+            }
+            break;
+
+        case 4:
+            supplier.ubahSupplier();
+            break;
+
+        case 5:
+            supplier.hapusSupplier();
+            break;
+
+        case 6:
+            supplier.pesanRestock();
+            break;
+
+        case 7:
+            supplier.bacaPesanan();
+            break;
+
+        case 8:
+            supplier.updateStatus();
+            break;
+
+        case 9:
+            supplier.konfirmasiBarang();
+            break;
+
+        case 0:
+            return;
+
+        default:
+            cout << "Pilihan salah! Masukkan angka 0 sampai 9.\n";
+            break;
+        }
+
+        kembaliMenu();
+
+    } while (true);
+}
+
+void menuAdmin() {
+    Obat obat;
+    Supplier supplier;
+    Transaksi transaksi;
+    int pilih;
+    string namaCari;
+
+    do {
+        // system("cls");
+
+        cout << "\n=== MENU ADMIN ===\n";
+        cout << "1. Lihat User\n";
+        cout << "2. Kelola Obat\n";
+        cout << "3. Kelola Supplier\n";
+        cout << "4. Kelola Karyawan\n";
+        cout << "5. Riwayat Transaksi\n";
+        cout << "6. Laporan Keuangan\n";
+        cout << "7. Log Aktivitas\n";
+        cout << "8. Ganti Password\n";
+        cout << "0. Logout\n";
+        cout << "Pilih : ";
+
+        pilih = inputPilihanMenu();
+
+        switch (pilih) {
+        case 1:
+            bacaUserDariFile(user, jumlahUser);
+            cout << "\nDATA USER:\n";
+            if (jumlahUser == 0) 
+			{
+                cout << "Belum ada data user.\n";
+            } 
+			else 
+			{
+                for (int i = 0; i < jumlahUser; i++) {
+                    user[i].tampil();
+                    cout << endl;
+                }
+            }
+            break;
+
+        case 2:
+            menuKelolaObat();
+            break;
+
+        case 3:
+            menuKelolaSupplier();
+            break;
+
+        case 4:
+			cout << "Fitur kelola karyawan belum dibuat.\n";
+            // menuKelolaKaryawan();
+            break;
+
+        case 5:
+            transaksi.tampilRiwayat();
+            break;
+
+        case 6:
+			cout << "Fitur laporan keuangan belum dibuat.\n";
+            // menuLaporanKeuangan();
+            break;
+
+        case 7:
+            // log.tampilLog();
+            cout << "Fitur log aktivitas belum dibuat.\n";
+            break;
+
+        case 8:
+            gantiPassword();
+            break;
+
+        case 0:
+            logout();
+            return;
+
+        default:
+            cout << "Pilihan salah! Masukkan angka 0 sampai 8.\n";
+            break;
+        }
+
+        kembaliMenu();
+
+    } while (true);
+}
+
+void menuKaryawan() {
+    Transaksi transaksi;
+    Supplier supplier;
+    Obat obat;
+    int pilih;
+
+    do {
+        // system("cls");
+
+        cout << "\n=== MENU KARYAWAN ===\n";
+        cout << "1. Transaksi Penjualan\n";
+        cout << "2. Lihat Obat\n";
+        cout << "3. Cari Obat\n";
+        cout << "4. Buat Pesanan Restock\n";
+        cout << "5. Konfirmasi Penerimaan Barang\n";
+        cout << "6. Riwayat Transaksi\n";
+        cout << "7. Ganti Password\n";
+        cout << "0. Logout\n";
+        cout << "Pilih : ";
+
+        pilih = inputPilihanMenu();
+
+        switch (pilih) {
+        case 1:
+            transaksi.cetakStruk();
+            break;
+
+        case 2:
+            obat.bacaDataObat();
+            break;
+
+        case 3:
+        {
+            string namaCari;
+            cout << "Nama Obat : ";
+            getline(cin, namaCari);
+
+            if (obat.cariObat(namaCari)) {
+                cout << "\nKode    : " << obat.getkodeObat() << endl;
+                cout << "Nama    : " << obat.getnamaObat() << endl;
+                cout << "Harga   : " << obat.getHarga() << endl;
+                cout << "Stok    : " << obat.getStok() << endl;
+                cout << "Expired : " << obat.gettanggalExpired() << endl;
+            } else {
+                cout << "Obat tidak ditemukan.\n";
+            }
+            break;
+        }
+
+        case 4:
+            supplier.pesanRestock();
+            break;
+
+        case 5:
+            supplier.konfirmasiBarang();
+            break;
+
+        case 6:
+            transaksi.tampilRiwayat();
+            break;
+
+        case 7:
+            gantiPassword();
+            break;
+
+        case 0:
+            logout();
+            return;
+
+        default:
+            cout << "Pilihan salah! Masukkan angka 0 sampai 7.\n";
+            break;
+        }
+
+        kembaliMenu();
+
+    } while (true);
+}
+
+void menuSupplier() {
+    Supplier supplier;
+    int pilih;
+
+    do {
+        // system("cls");
+
+        cout << "\n=== MENU SUPPLIER ===\n";
+        cout << "1. Lihat Pesanan Masuk\n";
+        cout << "2. Update Status Pesanan\n";
+        cout << "3. Ganti Password\n";
+        cout << "0. Logout\n";
+        cout << "Pilih : ";
+
+        pilih = inputPilihanMenu();
+
+        switch (pilih) {
+        case 1:
+            supplier.bacaPesanan();
+            break;
+
+        case 2:
+            supplier.updateStatus();
+            break;
+
+        case 3:
+            gantiPassword();
+            break;
+
+        case 0:
+            logout();
+            return;
+
+        default:
+            cout << "Pilihan salah! Masukkan angka 0 sampai 3.\n";
+            break;
+        }
+
+        kembaliMenu();
+
+    } while (true);
+}
+
+void menuUtama(){
+		if (loginIndex == -1)
+		{
+			cout << "Anda belum login!\n";
+			return;
 		}
-		
-			void menuSupplier(){
-		    int pilih;
-		
-		    do
-		    {
-		        cout << "\n=== MENU SUPPLIER ===\n";
-		        cout << "1. Konfirmasi Barang\n";
-		        cout << "2. Update Status Pesanan\n";
-		        cout << "3. Logout\n";
-		        cout << "Pilih: ";
-		        cin >> pilih;
-		        cin.ignore();
-		
-		        switch (pilih)
-		        {
-		        case 3:
-		            logout();
-		            return;
-		        }
-		
-		    } while (true);
+	
+		string role = user[loginIndex].getRole();
+
+		if (role == "admin")
+		{
+			menuAdmin();
 		}
-    
-    void menuUtama(){
-		    if (loginIndex == -1)
-		    {
-		        cout << "Anda belum login!\n";
-		        return;
-		    }
-		
-		    string role = user[loginIndex].getRole();
-		    if (role == "Admin")
-		    {
-		        menuAdmin();
-		    }
-		    else if (role == "Karyawan")
-		    {
-		        menuKaryawan();
-		    }
-		    else if (role == "Supplier")
-		    {
-		        menuSupplier();
-		    }
-		    else
-		    {
-		        cout << "Role tidak dikenal!\n";
-		    }
+		else if (role == "karyawan")
+		{
+			menuKaryawan();
 		}
+		else if (role == "supplier")
+		{
+			menuSupplier();
+		}
+		else
+		{
+			cout << "Role tidak dikenal!\n";
+		}
+	}
 
 // baru
 void header(string judul) {
@@ -3380,13 +3697,6 @@ void footer() {
     cout << string(50, '=') << endl;
 }
 
-// baru
-void kembaliMenu() { 
-    cout << "\n";
-    system("pause");
-    system("cls");
-}
-
 int main(){
 
     Transaksi transaksi;
@@ -3403,8 +3713,8 @@ int main(){
         cout << "2. Login\n";
         cout << "3. Keluar\n";
         cout << "Pilih: ";
-        cin >> pilih;
-        cin.ignore();
+        
+		pilih = inputPilihanMenu();
 
         switch (pilih)
         {
@@ -3419,6 +3729,10 @@ int main(){
                 menuUtama();
             }
             break;
+
+		default:
+			cout << "[!] Pilihan salah! Masukkan angka 1 sampai 3.\n";
+			break;
         }
         
         } while (pilih != 3);
