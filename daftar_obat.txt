@@ -18,3 +18,4 @@ k017|ibuprofen|22000|120|11/05/2028|tablet|10
 k018|omeprazole|25000|90|27/10/2028|kapsul|10
 k019|komix|3000|300|09/12/2027|sachet|1
 k020|tolak linu|4000|345|21/06/2028|sachet|1
+k021|Tera F|12000|100|12/12/2029|Tablet|10

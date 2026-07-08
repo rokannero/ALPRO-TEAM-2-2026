@@ -51,6 +51,100 @@ int ubahKeAngka(string teks)
     return angka;
 }
 
+int stringKeAngka(string teks) {
+    int angka = 0;
+
+    for (int i = 0; i < teks.length(); i++) {
+        if (teks[i] >= '0' && teks[i] <= '9') {
+            angka = angka * 10 + (teks[i] - '0');
+        }
+    }
+
+    return angka;
+}
+
+string angkaKeString(int angka) {
+    return to_string(angka);
+}
+
+string ambilField(string baris, int posisiField) {
+    string hasil = "";
+    int field = 0;
+
+    for (int i = 0; i < baris.length(); i++) {
+        if (baris[i] == '|') {
+            field++;
+        } else if (field == posisiField) {
+            hasil += baris[i];
+        }
+    }
+
+    return hasil;
+}
+
+bool cocokPrefix(string id, string prefix) {
+    if (id.length() < prefix.length()) {
+        return false;
+    }
+
+    for (int i = 0; i < prefix.length(); i++) {
+        if (id[i] != prefix[i]) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+int ambilNomorDariId(string id, string prefix) {
+    string nomor = "";
+
+    if (!cocokPrefix(id, prefix)) {
+        return 0;
+    }
+
+    for (int i = prefix.length(); i < id.length(); i++) {
+        nomor += id[i];
+    }
+
+    return stringKeAngka(nomor);
+}
+
+string formatId(string prefix, int nomor, int jumlahDigit) {
+    string angka = angkaKeString(nomor);
+    string nol = "";
+
+    while (nol.length() + angka.length() < jumlahDigit) {
+        nol += "0";
+    }
+
+    return prefix + nol + angka;
+}
+
+string generateIdDariFile(string namaFile, string prefix, int jumlahDigit, int posisiFieldId) {
+    ifstream file(namaFile);
+
+    int nomorTerbesar = 0;
+    string baris;
+
+    if (!file.is_open()) {
+        return formatId(prefix, 1, jumlahDigit);
+    }
+
+    while (getline(file, baris)) {
+        string id = ambilField(baris, posisiFieldId);
+        int nomor = ambilNomorDariId(id, prefix);
+
+        if (nomor > nomorTerbesar) {
+            nomorTerbesar = nomor;
+        }
+    }
+
+    file.close();
+
+    return formatId(prefix, nomorTerbesar + 1, jumlahDigit);
+}
+
 int inputPilihanMenu() {
     string input;
 
@@ -167,6 +261,111 @@ class User {
 		int jumlahUser = 0;
 		int loginIndex = -1;
 		
+class Logaktivitas {
+private:
+    string namaFile = "log_aktivitas.txt";
+
+public:
+    string getTanggal() {
+        time_t sekarang = time(0);
+        tm *waktu = localtime(&sekarang);
+
+        stringstream ss;
+        ss << setfill('0')
+           << setw(2) << waktu->tm_mday << "/"
+           << setw(2) << waktu->tm_mon + 1 << "/"
+           << waktu->tm_year + 1900;
+
+        return ss.str();
+    }
+
+    string getWaktu() {
+        time_t sekarang = time(0);
+        tm *waktu = localtime(&sekarang);
+
+        stringstream ss;
+        ss << setfill('0')
+           << setw(2) << waktu->tm_hour << ":"
+           << setw(2) << waktu->tm_min;
+
+        return ss.str();
+    }
+
+    void catatLog(string aktivitas, string keterangan) {
+        ofstream file(namaFile, ios::app);
+
+        if (!file.is_open()) {
+            cout << "File log aktivitas tidak dapat dibuka!\n";
+            return;
+        }
+
+        string id = "-";
+        string nama = "-";
+        string role = "-";
+
+        if (loginIndex != -1) {
+            id = user[loginIndex].getIdUser();
+            nama = user[loginIndex].getNama();
+            role = user[loginIndex].getRole();
+        }
+
+        file << getTanggal() << "|"
+             << getWaktu() << "|"
+             << id << "|"
+             << nama << "|"
+             << role << "|"
+             << aktivitas << "|"
+             << keterangan << endl;
+
+        file.close();
+    }
+
+    void tampilLog() {
+        ifstream file(namaFile);
+
+        if (!file.is_open()) {
+            cout << "Belum ada log aktivitas.\n";
+            return;
+        }
+
+        string tanggal, waktu, id, nama, role, aktivitas, keterangan;
+
+        cout << "\n================ LOG AKTIVITAS ================\n";
+        cout << left
+             << setw(12) << "Tanggal"
+             << setw(8) << "Waktu"
+             << setw(12) << "ID User"
+             << setw(18) << "Nama"
+             << setw(12) << "Role"
+             << setw(18) << "Aktivitas"
+             << "Keterangan"
+             << endl;
+
+        cout << "--------------------------------------------------------------------------\n";
+
+        while (getline(file, tanggal, '|') &&
+               getline(file, waktu, '|') &&
+               getline(file, id, '|') &&
+               getline(file, nama, '|') &&
+               getline(file, role, '|') &&
+               getline(file, aktivitas, '|') &&
+               getline(file, keterangan)) {
+
+            cout << left
+                 << setw(12) << tanggal
+                 << setw(8) << waktu
+                 << setw(12) << id
+                 << setw(18) << nama
+                 << setw(12) << role
+                 << setw(18) << aktivitas
+                 << keterangan
+                 << endl;
+        }
+
+        file.close();
+    }
+};
+
 		void simpanUserKeFile(User user[], int jumlahUser) 
 		{
 			ofstream file("user_data.txt");
@@ -323,6 +522,8 @@ class User {
 			{
 				cout << "Login berhasil!\n";
 				cout << "Selamat datang, " << user[loginIndex].getNama() << "\n";
+                Logaktivitas log;
+                log.catatLog("LOGIN", "User berhasil login");
 			} 
 			else 
 			{
@@ -335,6 +536,8 @@ class User {
 		//====================================================
 		void logout()
 		{
+            Logaktivitas log;
+            log.catatLog("LOGOUT", "User logout dari sistem");
 		    loginIndex = -1;
 		    cout << "Logout berhasil!\n";
 		}
@@ -359,6 +562,8 @@ class User {
 			simpanUserKeFile(user, jumlahUser);
 
 			cout << "Password berhasil diubah!\n";
+            Logaktivitas log;
+            log.catatLog("GANTI PASSWORD", "User mengganti password akun");
 		}
 
 class Admin {
@@ -679,10 +884,11 @@ bool cekHakAksesGaji()
         cout << "         INPUT DATA KARYAWAN" << endl;
         cout << "==========================================" << endl;
 
-        cout << "ID Karyawan        : ";
-        cin >> idKaryawan;
-        cin.ignore();
 
+        idKaryawan = generateIdDariFile("data_karyawan.txt", "KRY", 3, 0);
+
+        cout << "ID Karyawan        : " << idKaryawan << endl;
+        
         cout << "Nama               : ";
         getline(cin,nama);
 
@@ -1090,6 +1296,8 @@ bool cekHakAksesGaji()
     if(ketemu)
     {
         cout << "\nData karyawan berhasil dihapus.\n";
+        Logaktivitas log;
+        log.catatLog("HAPUS KARYAWAN", "Menghapus data karyawan");
     }
     else
     {
@@ -2181,6 +2389,8 @@ public:
 	    tulis.close();
 	
 	    cout<<"Data berhasil diubah.\n";
+        Logaktivitas log;
+        log.catatLog("EDIT OBAT", "Mengubah data obat dengan kode: " + kodeCari);
 	}
 
     void inputObat(){
@@ -2188,9 +2398,9 @@ public:
 
 	    if (file.is_open()) {
 	    	
-			cout << "Masukkan Kode Obat : ";
-	    	cin >> kodeObat;
-	    	cin.ignore();
+			kodeObat = generateIdDariFile("obat.txt", "OBT", 3, 0);
+
+            cout << "Kode Obat : " << kodeObat << endl;
 
 			cout << "Masukkan Nama Obat : ";
 			getline(cin, namaObat);
@@ -2224,6 +2434,9 @@ public:
 	             << satuan << "\n";
 	
 	        file.close();
+
+            Logaktivitas log;
+            log.catatLog("TAMBAH OBAT", "Menambahkan obat: " + namaObat);
 	    } 
 	    else {
 	        cout << "File tidak bisa dibuka!\n";
@@ -2710,6 +2923,8 @@ public:
     tulis.close();
 
     cout << "\nHarga obat berhasil diubah." << endl;
+    Logaktivitas log;
+    log.catatLog("UBAH HARGA OBAT", "Mengubah harga obat");
 }
     
     void simpanData(){
@@ -2966,10 +3181,11 @@ public:
 	    }
 	
 	    header("TAMBAH SUPPLIER");
-	
-	    cout << "ID Supplier      : ";
-	    getline(cin, idSupplier);
-	
+
+	    idSupplier = generateIdDariFile("supplier.txt", "SUP", 3, 0);
+
+        cout << "ID Supplier      : " << idSupplier << endl;
+	    
 	    // Validasi ID tidak boleh sama
 	    if(cariSupplier(idSupplier))
 	    {
@@ -3336,6 +3552,8 @@ public:
 	    file.close();
 	
 	    cout << "\nPesanan supplier berhasil disimpan." << endl;
+        Logaktivitas log;
+        log.catatLog("RESTOCK", "Membuat pesanan restock obat: " + namaObat);
 	}
 	
 	// Melakukan pemesanan restock ke supplier
@@ -3364,6 +3582,8 @@ public:
 	        simpanPesanan();
 	
 	        cout << "\nPesanan berhasil disimpan." << endl;
+            Logaktivitas log;
+            log.catatLog("RESTOCK", "Membuat pesanan restock obat: " + namaObat);
 	    }
 	    else
 	    {
@@ -3686,6 +3906,9 @@ public:
 	
 	    cout << "\nBarang berhasil diterima." << endl;
 	    cout << "Stok obat berhasil diperbarui." << endl;
+
+        Logaktivitas log;
+        log.catatLog("KONFIRMASI BARANG", "Barang restock diterima: " + namaObat);
 	
 	    footer();
 	}
@@ -3889,27 +4112,295 @@ public:
 	        cout<<"Stok tidak mencukupi!\n";
 	        return;
 	    }
-	
+        
 	    jumlah[index] = jumlahBaru;
-	
+        
 	    cout<<"Jumlah berhasil diubah.\n";
 	}
 	
 	// baru
 	void hapusItem(int index) {
-		
-	    if(index < 0 || index >= daftarObat.size())
+        
+        if(index < 0 || index >= daftarObat.size())
 	    {
-	        cout << "Item tidak ditemukan!" << endl;
+            cout << "Item tidak ditemukan!" << endl;
 	        return;
 	    }
-	
+        
 	    daftarObat.erase(daftarObat.begin() + index);
 	    jumlah.erase(jumlah.begin() + index);
-	
+        
 	    cout << "Item berhasil dihapus." << endl;
 	}
 	
+};
+
+class LaporanKeuangan {
+private:
+    string fileKeuangan = "keuangan.txt";
+
+public:
+    string tanggalHariIni() {
+        time_t sekarang = time(0);
+        tm *waktu = localtime(&sekarang);
+
+        stringstream ss;
+
+        ss << setfill('0')
+           << setw(2) << waktu->tm_mday << "/"
+           << setw(2) << waktu->tm_mon + 1 << "/"
+           << waktu->tm_year + 1900;
+
+        return ss.str();
+    }
+
+    void catatKeuangan(string id, string jenis, string kategori, string keterangan, double pemasukan, double pengeluaran) {
+        ofstream file(fileKeuangan, ios::app);
+
+        if (!file.is_open()) 
+        {
+            cout << "File keuangan tidak dapat dibuka!\n";
+            return;
+        }
+
+        file << id << "|"
+             << tanggalHariIni() << "|"
+             << jenis << "|"
+             << kategori << "|"
+             << keterangan << "|"
+             << pemasukan << "|"
+             << pengeluaran << endl;
+
+        file.close();
+    }
+
+    void catatPemasukanPenjualan(string idTransaksi, double total) {
+        catatKeuangan(
+            idTransaksi,
+            "PEMASUKAN",
+            "PENJUALAN",
+            "Penjualan obat",
+            total,
+            0
+        );
+    }
+
+    void catatPengeluaranRestock(string idPesanan, string namaObat, double totalBiaya) {
+        catatKeuangan(
+            idPesanan,
+            "PENGELUARAN",
+            "RESTOCK",
+            "Restock " + namaObat,
+            0,
+            totalBiaya
+        );
+    }
+
+    void catatPengeluaranGaji(string idGaji, string namaKaryawan, double totalGaji) {
+        catatKeuangan(
+            idGaji,
+            "PENGELUARAN",
+            "GAJI",
+            "Gaji " + namaKaryawan,
+            0,
+            totalGaji
+        );
+    }
+
+    void inputPengeluaranRutin() {
+        string id, kategori, keterangan;
+        double nominal;
+
+        cout << "\n=== INPUT PENGELUARAN RUTIN ===\n";
+        id = generateIdDariFile("keuangan.txt", "PG", 3, 0);
+
+        cout << "ID Pengeluaran : " << id << endl;  
+
+        cout << "Kategori (SEWA/LISTRIK/AIR/INTERNET/LAINNYA) : ";
+        getline(cin, kategori);
+
+        cout << "Keterangan : ";
+        getline(cin, keterangan);
+
+        cout << "Nominal Pengeluaran : Rp ";
+        cin >> nominal;
+        cin.ignore();
+
+        if (nominal <= 0) 
+        {
+            cout << "Nominal harus lebih dari 0!\n";
+            return;
+        }
+
+        catatKeuangan(
+            id,
+            "PENGELUARAN",
+            kategori,
+            keterangan,
+            0,
+            nominal
+        );
+
+        cout << "Pengeluaran berhasil dicatat.\n";
+    }
+
+    bool cocokTanggal(string tanggal, int hari, int bulan, int tahun) {
+        int h, b, t;
+        char s1, s2;
+
+        stringstream ss(tanggal);
+        ss >> h >> s1 >> b >> s2 >> t;
+
+        return h == hari && b == bulan && t == tahun;
+    }
+
+    bool cocokBulan(string tanggal, int bulan, int tahun) {
+        int h, b, t;
+        char s1, s2;
+
+        stringstream ss(tanggal);
+        ss >> h >> s1 >> b >> s2 >> t;
+
+        return b == bulan && t == tahun;
+    }
+
+    bool cocokTahun(string tanggal, int tahun) {
+        int h, b, t;
+        char s1, s2;
+
+        stringstream ss(tanggal);
+        ss >> h >> s1 >> b >> s2 >> t;
+
+        return t == tahun;
+    }
+
+    void tampilLaporan(int mode) {
+        ifstream file(fileKeuangan);
+
+        if (!file.is_open()) 
+        {
+            cout << "Belum ada data keuangan.\n";
+            return;
+        }
+
+        int hari = 0, bulan = 0, tahun = 0;
+
+        if (mode == 1) 
+        {
+            cout << "Masukkan hari  : ";
+            cin >> hari;
+            cout << "Masukkan bulan : ";
+            cin >> bulan;
+            cout << "Masukkan tahun : ";
+            cin >> tahun;
+            cin.ignore();
+        } 
+        else if (mode == 2) 
+        {
+            cout << "Masukkan bulan : ";
+            cin >> bulan;
+            cout << "Masukkan tahun : ";
+            cin >> tahun;
+            cin.ignore();
+        } 
+        else if (mode == 3) 
+        {
+            cout << "Masukkan tahun : ";
+            cin >> tahun;
+            cin.ignore();
+        }
+
+        string line;
+        double totalPemasukan = 0;
+        double totalPengeluaran = 0;
+        bool adaData = false;
+
+        cout << "\n================ LAPORAN KEUANGAN ================\n";
+        cout << left
+             << setw(12) << "Tanggal"
+             << setw(14) << "Jenis"
+             << setw(14) << "Kategori"
+             << setw(25) << "Keterangan"
+             << setw(14) << "Masuk"
+             << setw(14) << "Keluar"
+             << endl;
+
+        cout << "--------------------------------------------------------------------------\n";
+
+        while (getline(file, line)) {
+            stringstream ss(line);
+
+            string id, tanggal, jenis, kategori, keterangan;
+            string pemasukanStr, pengeluaranStr;
+
+            getline(ss, id, '|');
+            getline(ss, tanggal, '|');
+            getline(ss, jenis, '|');
+            getline(ss, kategori, '|');
+            getline(ss, keterangan, '|');
+            getline(ss, pemasukanStr, '|');
+            getline(ss, pengeluaranStr);
+
+            bool tampil = false;
+
+            if (mode == 1 && cocokTanggal(tanggal, hari, bulan, tahun)) 
+            {
+                tampil = true;
+            } 
+            else if (mode == 2 && cocokBulan(tanggal, bulan, tahun)) 
+            {
+                tampil = true;
+            } 
+            else if (mode == 3 && cocokTahun(tanggal, tahun)) 
+            {
+                tampil = true;
+            }
+
+            if (tampil) 
+            {
+                double pemasukan = stod(pemasukanStr);
+                double pengeluaran = stod(pengeluaranStr);
+
+                cout << left
+                     << setw(12) << tanggal
+                     << setw(14) << jenis
+                     << setw(14) << kategori
+                     << setw(25) << keterangan
+                     << setw(14) << pemasukan
+                     << setw(14) << pengeluaran
+                     << endl;
+
+                totalPemasukan += pemasukan;
+                totalPengeluaran += pengeluaran;
+                adaData = true;
+            }
+        }
+
+        file.close();
+
+        if (!adaData) 
+        {
+            cout << "Tidak ada data pada periode tersebut.\n";
+            return;
+        }
+
+        cout << "--------------------------------------------------------------------------\n";
+        cout << "Total Pemasukan   : Rp " << totalPemasukan << endl;
+        cout << "Total Pengeluaran : Rp " << totalPengeluaran << endl;
+        cout << "Saldo Bersih      : Rp " << totalPemasukan - totalPengeluaran << endl;
+    }
+
+    void laporanHarian() {
+        tampilLaporan(1);
+    }
+
+    void laporanBulanan() {
+        tampilLaporan(2);
+    }
+
+    void laporanTahunan() {
+        tampilLaporan(3);
+    }
 };
 
 class Transaksi {
@@ -4344,8 +4835,12 @@ public:
 	    }
 	
 	    simpanRiwayat();
+        LaporanKeuangan laporan;
+        laporan.catatPemasukanPenjualan(idTransaksi, totalPembayaran);
 	
 	    cout << "\nPembayaran Berhasil." << endl;
+        Logaktivitas log;
+        log.catatLog("TRANSAKSI", "Transaksi penjualan berhasil: " + idTransaksi);
 	}
 	
     void simpanRiwayat(){
@@ -4542,27 +5037,6 @@ class Pesanan {
 		
 };
 
-class Laporan {
-	private :
-		vector<Transaksi> dataTransaksi;
-		string periode;
-		double totalPendapatan;
-		int jumlahTransaksi;
-		
-	public :
-};
-
-class Logaktivitas {
-	private :
-		string idUser;
-		string aktivitas;
-		string waktu;
-		string keterangan;
-		
-	public :
-
-};
-
 	void menuPenggajian(){
 
     Karyawan karyawan;
@@ -4579,8 +5053,8 @@ class Logaktivitas {
         cout << "0. Kembali" << endl;
 
         cout << "Pilih : ";
-        cin >> pilih;
-        cin.ignore();
+        
+        pilih = inputPilihanMenu();
 
         switch(pilih)
         {
@@ -4605,6 +5079,7 @@ class Logaktivitas {
 
             default:
                 cout << "Pilihan tidak tersedia." << endl;
+                break;
         }
 
     }while(pilih != 0);
@@ -4619,7 +5094,7 @@ class Logaktivitas {
     do
     {
         cout<<"\n==================================="<<endl;
-        cout<<"        MENU MANAJEMEN SDM"<<endl;
+        cout<<"         MENU MANAJEMEN SDM"<<endl;
         cout<<"==================================="<<endl;
         cout<<"1. Input Karyawan"<<endl;
         cout<<"2. Data Karyawan"<<endl;
@@ -4689,7 +5164,7 @@ void menuKelolaObat() {
     string namaCari;
 
     do {
-        system("cls");
+        // system("cls");
 
         cout << "\n=== KELOLA OBAT ===\n";
         cout << "1. Lihat Obat\n";
@@ -4845,6 +5320,81 @@ void menuKelolaSupplier() {
     } while (true);
 }
 
+void menuLaporanKeuangan() {
+    LaporanKeuangan laporan;
+    int pilih;
+
+    do {
+        cout << "\n=== MENU LAPORAN KEUANGAN ===\n";
+        cout << "1. Laporan Harian\n";
+        cout << "2. Laporan Bulanan\n";
+        cout << "3. Laporan Tahunan\n";
+        cout << "4. Input Pengeluaran Rutin\n";
+        cout << "0. Kembali\n";
+        cout << "Pilih : ";
+
+        pilih = inputPilihanMenu();
+
+        switch (pilih) {
+        case 1:
+            laporan.laporanHarian();
+            break;
+
+        case 2:
+            laporan.laporanBulanan();
+            break;
+
+        case 3:
+            laporan.laporanTahunan();
+            break;
+
+        case 4:
+            laporan.inputPengeluaranRutin();
+            break;
+
+        case 0:
+            return;
+
+        default:
+            cout << "Pilihan salah! Masukkan angka 0 sampai 4.\n";
+            break;
+        }
+
+        kembaliMenu();
+
+    } while (true);
+}
+
+void menuLogAktivitas() {
+    Logaktivitas log;
+    int pilih;
+
+    do {
+        cout << "\n=== MENU LOG AKTIVITAS ===\n";
+        cout << "1. Lihat Semua Log\n";
+        cout << "0. Kembali\n";
+        cout << "Pilih : ";
+
+        pilih = inputPilihanMenu();
+
+        switch (pilih) {
+        case 1:
+            log.tampilLog();
+            break;
+
+        case 0:
+            return;
+
+        default:
+            cout << "Pilihan salah! Masukkan angka 0 sampai 1.\n";
+            break;
+        }
+
+        kembaliMenu();
+
+    } while (true);
+}
+
 void menuAdmin() {
     Obat obat;
     Supplier supplier;
@@ -4903,13 +5453,11 @@ void menuAdmin() {
             break;
 
         case 6:
-			cout << "Fitur laporan keuangan belum dibuat.\n";
-            // menuLaporanKeuangan();
+            menuLaporanKeuangan();
             break;
 
         case 7:
-            // log.tampilLog();
-            cout << "Fitur log aktivitas belum dibuat.\n";
+            menuLogAktivitas();
             break;
 
         case 8:
@@ -5061,6 +5609,11 @@ void menuUtama(){
 	
 		string role = user[loginIndex].getRole();
 
+        for (int i = 0; i < role.length(); i++)
+			{
+				role[i] = tolower(role[i]);
+			}
+
 		if (role == "admin")
 		{
 			menuAdmin();
@@ -5104,7 +5657,7 @@ int main(){
 
     Transaksi transaksi;
     Obat obat;
-
+    
     int pilihan, pilih;
     string namaCari;
     
@@ -5118,21 +5671,23 @@ int main(){
         cout << "Pilih: ";
         
 		pilih = inputPilihanMenu();
-
+        
         switch (pilih)
         {
-        case 1:
+            case 1:
             registrasiUser(user, jumlahUser);
             break;
-
-        case 2:
+            
+            case 2:
             login();
             if (loginIndex != -1)
             {
                 menuUtama();
             }
             break;
-
+        case 3:
+            cout << "Terima kasih telah menggunakan sistem ini.\n";
+            break;
 		default:
 			cout << "[!] Pilihan salah! Masukkan angka 1 sampai 3.\n";
 			break;
