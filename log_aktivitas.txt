@@ -1,0 +1,4 @@
+08/07/2026|20:32|USR001|ROKAN|ADmIN|LOGIN|User berhasil login
+08/07/2026|20:39|USR001|ROKAN|admin|LOGIN|User berhasil login
+08/07/2026|20:42|USR001|ROKAN|admin|GANTI PASSWORD|User mengganti password akun
+08/07/2026|20:43|USR001|ROKAN|admin|LOGOUT|User logout dari sistem
