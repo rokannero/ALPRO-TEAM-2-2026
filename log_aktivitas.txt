@@ -2,3 +2,9 @@
 08/07/2026|20:39|USR001|ROKAN|admin|LOGIN|User berhasil login
 08/07/2026|20:42|USR001|ROKAN|admin|GANTI PASSWORD|User mengganti password akun
 08/07/2026|20:43|USR001|ROKAN|admin|LOGOUT|User logout dari sistem
+09/07/2026|18:05|USR001|ROKAN|admin|LOGIN|User berhasil login
+09/07/2026|18:09|USR001|ROKAN|admin|LOGIN|User berhasil login
+09/07/2026|18:12|USR001|ROKAN|admin|LOGIN|User berhasil login
+09/07/2026|18:13|USR001|ROKAN|admin|LOGOUT|User logout dari sistem
+09/07/2026|18:14|USR001|ROKAN|admin|LOGIN|User berhasil login
+09/07/2026|18:48|USR001|ROKAN|admin|LOGIN|User berhasil login
