@@ -14,6 +14,9 @@ void header(string judul);
 
 void footer();
 
+string formatRupiah(double angka);
+string formatRupiah(string angkaStr); 
+
 // baru
 void kembaliMenu() { 
 	cout << "\nTekan Enter untuk lanjut...";
@@ -1598,13 +1601,29 @@ bool cekHakAksesGaji()
 
     cout<<"----------------------------------------\n";
 
-    cout<<"GAJI BERSIH      : Rp "<<gajiBersih<<endl;
+    cout<<"GAJI BERSIH      : Rp "<< formatRupiah(gajiBersih) <<endl;
 
     cout<<"========================================\n";
+}
+
+string getPeriode()
+{
+    time_t sekarang = time(0);
+    tm *waktu = localtime(&sekarang);
+
+    int bulan = waktu->tm_mon + 1;
+    int tahun = waktu->tm_year + 1900;
+
+    string bulanStr = to_string(bulan);
+
+    if(bulanStr.length() < 2)
+        bulanStr = "0" + bulanStr;
+
+    return bulanStr + "/" + to_string(tahun);
 }	
+
     void cetakSlipGaji()
-	{
-  
+{
     bacaDataKaryawan();
 
     cout << endl;
@@ -1758,6 +1777,8 @@ bool cekHakAksesGaji()
     - potonganAlpha
     - potonganTerlambat;
 
+    string periode = getPeriode();   // <-- BARU
+
     cout << "\n=============================================\n";
     cout << "             SLIP GAJI KARYAWAN\n";
     cout << "=============================================\n";
@@ -1765,6 +1786,7 @@ bool cekHakAksesGaji()
     cout << "ID Karyawan     : " << idCari << endl;
     cout << "Nama            : " << nama << endl;
     cout << "Jabatan         : " << jabatan << endl;
+    cout << "Periode         : " << periode << endl;   // <-- BARU
 
     cout << "---------------------------------------------\n";
 
@@ -1776,14 +1798,14 @@ bool cekHakAksesGaji()
 
     cout << "---------------------------------------------\n";
 
-    cout << "Gaji Pokok      : Rp " << gajiPokok << endl;
+    cout << "Gaji Pokok      : Rp " << formatRupiah(gajiPokok)<< endl;
     cout << "Bonus Hadir     : Rp " << bonus << endl;
     cout << "Potongan Alpha  : Rp " << potonganAlpha << endl;
     cout << "Potongan Telat  : Rp " << potonganTerlambat << endl;
 
     cout << "---------------------------------------------\n";
 
-    cout << "GAJI BERSIH     : Rp " << gajiBersih << endl;
+    cout << "GAJI BERSIH     : Rp " << formatRupiah(gajiBersih)<< endl;
 
     cout << "=============================================\n";
 
@@ -1792,6 +1814,7 @@ bool cekHakAksesGaji()
     slip << idCari << "|"
          << nama << "|"
          << jabatan << "|"
+         << periode << "|"              // <-- FIELD BARU (index 3)
          << hadir << "|"
          << izin << "|"
          << sakit << "|"
@@ -1831,9 +1854,17 @@ bool cekHakAksesGaji()
         string id = "";
         string nama = "";
         string jabatan = "";
-        string tanggal = "";
+        string periode = "";
         string hadir = "";
-        string gaji = "";
+        string izin = "";
+        string sakit = "";
+        string alpha = "";
+        string terlambat = "";
+        string gajiPokok = "";
+        string bonus = "";
+        string potA = "";
+        string potT = "";
+        string gajiBersih = "";
 
         int field = 0;
 
@@ -1847,21 +1878,32 @@ bool cekHakAksesGaji()
             {
                 if(field == 0)
                     id += line[i];
-
                 else if(field == 1)
                     nama += line[i];
-
                 else if(field == 2)
                     jabatan += line[i];
-
                 else if(field == 3)
-                    tanggal += line[i];
-
+                    periode += line[i];
                 else if(field == 4)
                     hadir += line[i];
-
                 else if(field == 5)
-                    gaji += line[i];
+                    izin += line[i];
+                else if(field == 6)
+                    sakit += line[i];
+                else if(field == 7)
+                    alpha += line[i];
+                else if(field == 8)
+                    terlambat += line[i];
+                else if(field == 9)
+                    gajiPokok += line[i];
+                else if(field == 10)
+                    bonus += line[i];
+                else if(field == 11)
+                    potA += line[i];
+                else if(field == 12)
+                    potT += line[i];
+                else if(field == 13)
+                    gajiBersih += line[i];
             }
         }
 
@@ -1875,9 +1917,9 @@ bool cekHakAksesGaji()
             cout << "ID Karyawan   : " << id << endl;
             cout << "Nama          : " << nama << endl;
             cout << "Jabatan       : " << jabatan << endl;
-            cout << "Periode       : " << tanggal << endl;
+            cout << "Periode       : " << periode << endl;
             cout << "Total Hadir   : " << hadir << endl;
-            cout << "Total Gaji    : Rp " << gaji << endl;
+            cout << "Total Gaji    : Rp " << formatRupiah(gajiBersih)<< endl;
             cout << "===============================" << endl;
 
             break;
@@ -1927,7 +1969,15 @@ bool cekHakAksesGaji()
         string jabatan="";
         string periode="";
         string hadir="";
-        string gaji="";
+        string izin="";
+        string sakit="";
+        string alpha="";
+        string terlambat="";
+        string gajiPokok="";
+        string bonus="";
+        string potA="";
+        string potT="";
+        string gajiBersih="";
 
         int field=0;
 
@@ -1950,7 +2000,23 @@ bool cekHakAksesGaji()
                 else if(field==4)
                     hadir+=line[i];
                 else if(field==5)
-                    gaji+=line[i];
+                    izin+=line[i];
+                else if(field==6)
+                    sakit+=line[i];
+                else if(field==7)
+                    alpha+=line[i];
+                else if(field==8)
+                    terlambat+=line[i];
+                else if(field==9)
+                    gajiPokok+=line[i];
+                else if(field==10)
+                    bonus+=line[i];
+                else if(field==11)
+                    potA+=line[i];
+                else if(field==12)
+                    potT+=line[i];
+                else if(field==13)
+                    gajiBersih+=line[i];
             }
         }
 
@@ -1960,7 +2026,7 @@ bool cekHakAksesGaji()
 
             jumlahKaryawan++;
 
-            double nominal=atof(gaji.c_str());
+            double nominal=atof(gajiBersih.c_str());
 
             totalGaji += nominal;
 
@@ -1968,7 +2034,7 @@ bool cekHakAksesGaji()
             cout << "Nama      : " << nama << endl;
             cout << "Jabatan   : " << jabatan << endl;
             cout << "Hadir     : " << hadir << " Hari" << endl;
-            cout << "Gaji      : Rp " << nominal << endl;
+            cout << "Gaji      : Rp " << formatRupiah(nominal)<< endl;
             cout << "-----------------------------------------------" << endl;
         }
     }
@@ -1983,7 +2049,7 @@ bool cekHakAksesGaji()
 
     cout << endl;
     cout << "Jumlah Karyawan : " << jumlahKaryawan << endl;
-    cout << "Total Pengeluaran Gaji : Rp " << totalGaji << endl;
+    cout << "Total Pengeluaran Gaji : Rp " << formatRupiah(totalGaji )<< endl;
     cout << "===============================================" << endl;
 }
 
@@ -5633,6 +5699,47 @@ void menuUtama(){
 	}
 
 // baru
+
+string formatRupiah(double angka)
+{
+    long long nilai = (long long)angka;
+
+    bool negatif = false;
+
+    if(nilai < 0)
+    {
+        negatif = true;
+        nilai = -nilai;
+    }
+
+    string angkaStr = to_string(nilai);
+    string hasil = "";
+
+    int hitung = 0;
+
+    for(int i = angkaStr.length() - 1; i >= 0; i--)
+    {
+        hasil = angkaStr[i] + hasil;
+        hitung++;
+
+        if(hitung % 3 == 0 && i != 0)
+        {
+            hasil = "." + hasil;
+        }
+    }
+
+    if(negatif)
+        hasil = "-" + hasil;
+
+    return hasil;
+}
+
+string formatRupiah(string angkaStr)
+{
+    double angka = atof(angkaStr.c_str());
+    return formatRupiah(angka);
+}
+
 void header(string judul) {
     	
     const int lebar = 50;
@@ -5661,7 +5768,7 @@ int main(){
     int pilihan, pilih;
     string namaCari;
     
-    
+    cout << fixed << setprecision(0);
     do
     {
         cout << "\n=== SISTEM APOTEK ===\n";
