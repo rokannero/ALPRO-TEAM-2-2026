@@ -8,3 +8,31 @@
 09/07/2026|18:13|USR001|ROKAN|admin|LOGOUT|User logout dari sistem
 09/07/2026|18:14|USR001|ROKAN|admin|LOGIN|User berhasil login
 09/07/2026|18:48|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|12:54|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|12:55|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|12:59|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|13:02|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|13:03|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|13:06|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|13:08|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|13:09|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|13:17|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|13:19|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|13:23|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|13:31|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|13:31|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|13:36|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|13:38|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|13:42|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|13:45|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|14:01|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|14:02|USR001|ROKAN|admin|TAMBAH SUPPLIER|Menambahkan supplier baru: PT SEJAHTERA
+11/07/2026|14:13|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|14:13|USR001|ROKAN|admin|HAPUS SUPPLIER|Menghapus supplier dengan ID: SUP003
+11/07/2026|14:19|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|14:22|USR001|ROKAN|admin|RESTOCK|Membuat pesanan restock obat: Tera F
+11/07/2026|14:22|USR001|ROKAN|admin|RESTOCK|Membuat pesanan restock obat: Tera F
+11/07/2026|14:47|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|14:49|USR001|ROKAN|admin|KONFIRMASI BARANG|Barang restock diterima: Tera F
+11/07/2026|14:50|USR001|ROKAN|admin|LOGOUT|User logout dari sistem
+11/07/2026|15:01|USR001|ROKAN|admin|LOGIN|User berhasil login
