@@ -1,12 +1,10 @@
 #include <iostream>
 #include <iomanip>
-#include <vector>
 #include <ctime>
 #include <fstream>
 #include <sstream>
 #include <string>
 #include <cstdlib>
-#include <algorithm> // baru
 #include <cctype> // baru
 using namespace std;
 
@@ -2187,7 +2185,8 @@ public:
 	// 
 	void sortingNama(){
 
-	    vector<Obat> data;
+	    Obat data[100];
+	    int jumlah = 0;
 	
 	    ifstream file("daftar_obat.txt");
 	
@@ -2202,144 +2201,130 @@ public:
 	
 	        stringstream ss(line);
 	
-	        Obat obat;
-	
 	        string hargaStr;
 	        string stokStr;
 	
-	        getline(ss, obat.kodeObat, '|');
-	        getline(ss, obat.namaObat, '|');
+	        getline(ss, data[jumlah].kodeObat, '|');
+	        getline(ss, data[jumlah].namaObat, '|');
 	        getline(ss, hargaStr, '|');
 	        getline(ss, stokStr, '|');
-	        getline(ss, obat.tanggalExpired, '|');
-	        getline(ss, obat.kategori, '|');
-	        getline(ss, obat.satuan, '|');
+	        getline(ss, data[jumlah].tanggalExpired, '|');
+	        getline(ss, data[jumlah].kategori, '|');
+	        getline(ss, data[jumlah].satuan, '|');
 	
-	        obat.harga = atof(hargaStr.c_str());
-	        obat.stok = atoi(stokStr.c_str());
+	        data[jumlah].harga = atof(hargaStr.c_str());
+	        data[jumlah].stok = atoi(stokStr.c_str());
 	
-	        data.push_back(obat);
+	        jumlah++;
 	    }
 	
 	    file.close();
 	
-	    // Bubble Sort berdasarkan nama obat
-	    for(int i = 0; i < data.size() - 1; i++){
+	    for(int i=0;i<jumlah-1;i++){
 	
-	        for(int j = 0; j < data.size() - i - 1; j++){
+	        for(int j=0;j<jumlah-i-1;j++){
 	
-	            string nama1 = ubahKeLower(data[j].namaObat);
-	            string nama2 = ubahKeLower(data[j+1].namaObat);
+	            if(ubahKeLower(data[j].namaObat) >
+	               ubahKeLower(data[j+1].namaObat)){
 	
-	            if(nama1 > nama2){
-	
-	                Obat temp = data[j];
-	                data[j] = data[j+1];
-	                data[j+1] = temp;
+	                Obat temp=data[j];
+	                data[j]=data[j+1];
+	                data[j+1]=temp;
 	
 	            }
-	
 	        }
-	
 	    }
 	
-	    cout << "\n===== DAFTAR OBAT (SORTING NAMA A-Z) =====\n\n";
+	    cout<<"\n===== DAFTAR OBAT (SORTING NAMA A-Z) =====\n\n";
+	    cout<<"KODE|NAMA|HARGA|STOK|TGL EXP|KATEGORI|SATUAN|\n\n";
 	
-	    cout << "KODE|NAMA|HARGA|STOK|TGL EXP|KATEGORI|SATUAN|\n\n";
+	    for(int i=0;i<jumlah;i++){
 	
-	    for(int i = 0; i < data.size(); i++){
-	
-	        cout << data[i].kodeObat << "|"
-	             << data[i].namaObat << "|"
-	             << data[i].harga << "|"
-	             << data[i].stok << "|"
-	             << data[i].tanggalExpired << "|"
-	             << data[i].kategori << "|"
-	             << data[i].satuan << "|" << endl << endl;
+	        cout<<data[i].kodeObat<<"|"
+	            <<data[i].namaObat<<"|"
+	            <<data[i].harga<<"|"
+	            <<data[i].stok<<"|"
+	            <<data[i].tanggalExpired<<"|"
+	            <<data[i].kategori<<"|"
+	            <<data[i].satuan<<"|"<<endl<<endl;
 	
 	    }
-	
 	}
 	
 	//
 	void sortingHarga(){
 
-	    vector<Obat> data;
+	    Obat data[100];
+	    int jumlah=0;
 	
 	    ifstream file("daftar_obat.txt");
 	
 	    if(!file.is_open()){
-	        cout << "File tidak ditemukan!" << endl;
+	        cout<<"File tidak ditemukan!"<<endl;
 	        return;
 	    }
 	
 	    string line;
 	
-	    while(getline(file, line)){
+	    while(getline(file,line)){
 	
 	        stringstream ss(line);
-	
-	        Obat obat;
 	
 	        string hargaStr;
 	        string stokStr;
 	
-	        getline(ss, obat.kodeObat, '|');
-	        getline(ss, obat.namaObat, '|');
-	        getline(ss, hargaStr, '|');
-	        getline(ss, stokStr, '|');
-	        getline(ss, obat.tanggalExpired, '|');
-	        getline(ss, obat.kategori, '|');
-	        getline(ss, obat.satuan, '|');
+	        getline(ss,data[jumlah].kodeObat,'|');
+	        getline(ss,data[jumlah].namaObat,'|');
+	        getline(ss,hargaStr,'|');
+	        getline(ss,stokStr,'|');
+	        getline(ss,data[jumlah].tanggalExpired,'|');
+	        getline(ss,data[jumlah].kategori,'|');
+	        getline(ss,data[jumlah].satuan,'|');
 	
-	        obat.harga = atof(hargaStr.c_str());
-	        obat.stok = atoi(stokStr.c_str());
+	        data[jumlah].harga=atof(hargaStr.c_str());
+	        data[jumlah].stok=atoi(stokStr.c_str());
 	
-	        data.push_back(obat);
+	        jumlah++;
 	    }
 	
 	    file.close();
 	
-	    // Bubble Sort berdasarkan harga (termurah ke termahal)
-	    for(int i = 0; i < data.size() - 1; i++){
+	    for(int i=0;i<jumlah-1;i++){
 	
-	        for(int j = 0; j < data.size() - i - 1; j++){
+	        for(int j=0;j<jumlah-i-1;j++){
 	
-	            if(data[j].harga > data[j+1].harga){
+	            if(data[j].harga>data[j+1].harga){
 	
-	                Obat temp = data[j];
-	                data[j] = data[j+1];
-	                data[j+1] = temp;
+	                Obat temp=data[j];
+	                data[j]=data[j+1];
+	                data[j+1]=temp;
 	
 	            }
-	
 	        }
-	
 	    }
 	
-	    cout << "\n===== DAFTAR OBAT (SORTING HARGA TERMURAH) =====\n\n";
+	    cout<<"\n===== DAFTAR OBAT (SORTING HARGA TERMURAH) =====\n\n";
+	    cout<<"KODE|NAMA|HARGA|STOK|TGL EXP|KATEGORI|SATUAN|\n\n";
 	
-	    cout << "KODE|NAMA|HARGA|STOK|TGL EXP|KATEGORI|SATUAN|\n\n";
+	    for(int i=0;i<jumlah;i++){
 	
-	    for(int i = 0; i < data.size(); i++){
-	
-	        cout << data[i].kodeObat << "|"
-	             << data[i].namaObat << "|"
-	             << data[i].harga << "|"
-	             << data[i].stok << "|"
-	             << data[i].tanggalExpired << "|"
-	             << data[i].kategori << "|"
-	             << data[i].satuan << "|" << endl << endl;
+	        cout<<data[i].kodeObat<<"|"
+	            <<data[i].namaObat<<"|"
+	            <<data[i].harga<<"|"
+	            <<data[i].stok<<"|"
+	            <<data[i].tanggalExpired<<"|"
+	            <<data[i].kategori<<"|"
+	            <<data[i].satuan<<"|"<<endl<<endl;
 	
 	    }
-	
 	}
 	
 	void ubahDataObat() {
 		
     	ifstream file("daftar_obat.txt");
 	
-	    vector<Obat> daftar;
+	    Obat daftar[100];
+		int jumlah = 0;
 	    string line;
 	
 	    while(getline(file,line)){
@@ -2369,7 +2354,8 @@ public:
 	        o.setKategori(kat);
 	        o.setSatuan(sat);
 	
-	        daftar.push_back(o);
+	        daftar[jumlah] = o;
+			jumlah++;
 	    }
 	
 	    file.close();
@@ -2386,7 +2372,7 @@ public:
 
 	    bool ketemu=false;
 	
-	    for(int i=0;i<daftar.size();i++){
+	    for(int i=0;i<jumlah;i++){
 	
 	        if(daftar[i].getkodeObat()==kodeCari){
 	
@@ -2440,7 +2426,7 @@ public:
 	
 	    ofstream tulis("daftar_obat.txt");
 	
-	    for(int i=0;i<daftar.size();i++){
+	    for(int i=0;i<jumlah;i++){
 	
 	        tulis<<daftar[i].getkodeObat()<<"|"
 	             <<daftar[i].getnamaObat()<<"|"
@@ -2539,7 +2525,8 @@ public:
 	//
 	void simpanPerubahanStok(){
 
-	    vector<Obat> data;
+	    Obat data[100];
+		int jumlah=0;
 	
 	    ifstream file("daftar_obat.txt");
 	
@@ -2565,14 +2552,15 @@ public:
 	        obat.harga = atof(hargaStr.c_str());
 	        obat.stok = atoi(stokStr.c_str());
 	
-	        data.push_back(obat);
+	        data[jumlah]=obat;
+			jumlah++;
 	
 	    }
 	
 	    file.close();
 	
 	    // Cari obat berdasarkan kode
-	    for(int i = 0; i < data.size(); i++){
+	    for(int i=0;i<jumlah;i++) {
 	
 	        if(data[i].kodeObat == kodeObat){
 	
@@ -2586,7 +2574,7 @@ public:
 	
 	    ofstream simpan("daftar_obat.txt");
 	
-	    for(int i = 0; i < data.size(); i++){
+	    for(int i=0;i<jumlah;i++) {
 	
 	        simpan << data[i].kodeObat << "|"
 	               << data[i].namaObat << "|"
@@ -2902,96 +2890,98 @@ public:
     
     void ubahHarga(){
 
-    ifstream file("daftar_obat.txt");
-
-    if(!file.is_open()){
-        cout << "File tidak ditemukan!" << endl;
-        return;
-    }
-
-    vector<Obat> daftar;
-    string line;
-
-    while(getline(file, line)){
-
-        stringstream ss(line);
-
-        Obat o;
-
-        string kode, nama, hargaStr, stokStr, exp, kat, sat;
-
-        getline(ss, kode, '|');
-        getline(ss, nama, '|');
-        getline(ss, hargaStr, '|');
-        getline(ss, stokStr, '|');
-        getline(ss, exp, '|');
-        getline(ss, kat, '|');
-        getline(ss, sat, '|');
-
-        o.setKodeObat(kode);
-        o.setNamaObat(nama);
-        o.setHarga(atof(hargaStr.c_str()));
-        o.setStok(atoi(stokStr.c_str()));
-        o.setTanggalExpired(exp);
-        o.setKategori(kat);
-        o.setSatuan(sat);
-
-        daftar.push_back(o);
-    }
-
-    file.close();
-
-    bacaDataObat();
-
-    string kodeCari;
-    cout << "\nMasukkan Kode Obat yang akan diubah harganya : ";
-    cin >> kodeCari;
-	cin.ignore();
-    bool ketemu = false;
-
-    for(int i = 0; i < daftar.size(); i++){
-
-        if(daftar[i].getkodeObat() == kodeCari){
-
-            ketemu = true;
-
-            double hargaBaru;
-
-            cout << "Harga lama : " << daftar[i].getHarga() << endl;
-            cout << "Masukkan harga baru : ";
-            cin >> hargaBaru;
-			cin.ignore();
-
-            daftar[i].setHarga(hargaBaru);
-
-            break;
-        }
-    }
-
-    if(!ketemu){
-        cout << "Kode obat tidak ditemukan." << endl;
-        return;
-    }
-
-    ofstream tulis("daftar_obat.txt");
-
-    for(int i = 0; i < daftar.size(); i++){
-
-        tulis << daftar[i].getkodeObat() << "|"
-              << daftar[i].getnamaObat() << "|"
-              << daftar[i].getHarga() << "|"
-              << daftar[i].getStok() << "|"
-              << daftar[i].gettanggalExpired() << "|"
-              << daftar[i].getKategori() << "|"
-              << daftar[i].getSatuan() << endl;
-    }
-
-    tulis.close();
-
-    cout << "\nHarga obat berhasil diubah." << endl;
-    Logaktivitas log;
-    log.catatLog("UBAH HARGA OBAT", "Mengubah harga obat");
-}
+	    ifstream file("daftar_obat.txt");
+	
+	    if(!file.is_open()){
+	        cout << "File tidak ditemukan!" << endl;
+	        return;
+	    }
+	
+	   	Obat daftar[100];
+		int jumlah=0;
+	    string line;
+	
+	    while(getline(file, line)){
+	
+	        stringstream ss(line);
+	
+	        Obat o;
+	
+	        string kode, nama, hargaStr, stokStr, exp, kat, sat;
+	
+	        getline(ss, kode, '|');
+	        getline(ss, nama, '|');
+	        getline(ss, hargaStr, '|');
+	        getline(ss, stokStr, '|');
+	        getline(ss, exp, '|');
+	        getline(ss, kat, '|');
+	        getline(ss, sat, '|');
+	
+	        o.setKodeObat(kode);
+	        o.setNamaObat(nama);
+	        o.setHarga(atof(hargaStr.c_str()));
+	        o.setStok(atoi(stokStr.c_str()));
+	        o.setTanggalExpired(exp);
+	        o.setKategori(kat);
+	        o.setSatuan(sat);
+	
+	        daftar[jumlah]=o;
+			jumlah++;
+	    }
+	
+	    file.close();
+	
+	    bacaDataObat();
+	
+	    string kodeCari;
+	    cout << "\nMasukkan Kode Obat yang akan diubah harganya : ";
+	    cin >> kodeCari;
+		cin.ignore();
+	    bool ketemu = false;
+	
+	    for(int i=0;i<jumlah;i++){
+	
+	        if(daftar[i].getkodeObat() == kodeCari){
+	
+	            ketemu = true;
+	
+	            double hargaBaru;
+	
+	            cout << "Harga lama : " << daftar[i].getHarga() << endl;
+	            cout << "Masukkan harga baru : ";
+	            cin >> hargaBaru;
+				cin.ignore();
+	
+	            daftar[i].setHarga(hargaBaru);
+	
+	            break;
+	        }
+	    }
+	
+	    if(!ketemu){
+	        cout << "Kode obat tidak ditemukan." << endl;
+	        return;
+	    }
+	
+	    ofstream tulis("daftar_obat.txt");
+	
+	    for(int i=0;i<jumlah;i++){
+	
+	        tulis << daftar[i].getkodeObat() << "|"
+	              << daftar[i].getnamaObat() << "|"
+	              << daftar[i].getHarga() << "|"
+	              << daftar[i].getStok() << "|"
+	              << daftar[i].gettanggalExpired() << "|"
+	              << daftar[i].getKategori() << "|"
+	              << daftar[i].getSatuan() << endl;
+	    }
+	
+	    tulis.close();
+	
+	    cout << "\nHarga obat berhasil diubah." << endl;
+	    Logaktivitas log;
+	    log.catatLog("UBAH HARGA OBAT", "Mengubah harga obat");
+	}
     
     void simpanData(){
     	ofstream file("daftar_obat.txt", ios::app);
@@ -4058,8 +4048,10 @@ public:
 class Keranjang{
 private:
 
-    vector<Obat> daftarObat;
-    vector<int> jumlah;
+    Obat daftarObat[100];
+	int jumlah[100];
+	int banyakData = 0;
+
     double subtotalobat;
 
 public:
@@ -4084,8 +4076,9 @@ public:
 		
 		} else {
 	
-	        daftarObat.push_back(obat);
-	        jumlah.push_back(qty);
+	        daftarObat[banyakData] = obat;
+			jumlah[banyakData] = qty;
+			banyakData++;
 	
 	        cout << "\nObat berhasil ditambahkan ke keranjang." << endl;
 	    }
@@ -4093,33 +4086,32 @@ public:
 
     void kosongkanKeranjang(){
 
-        daftarObat.clear();
-        jumlah.clear();
+        banyakData = 0;
 
     }
 
-    vector<Obat> getDaftarObat(){
+    Obat* getDaftarObat(){
 
-        return daftarObat;
+	    return daftarObat;
+	
+	}
 
-    }
+    int* getJumlah(){
 
-    vector<int> getJumlah(){
-
-        return jumlah;
-
-    }
+	    return jumlah;
+	
+	}
 
     int getSize(){
 
-        return daftarObat.size();
+        return banyakData;
 
     }
     
     // baru
     int cariIndex(string namaObat) {
 
-	    for(int i = 0; i < daftarObat.size(); i++){
+	    for(int i=0;i<banyakData;i++){
 	
 	        if(daftarObat[i].getnamaObat() == namaObat){
 	
@@ -4135,7 +4127,7 @@ public:
     // baru
     bool keranjangKosong() {
 
-    	return daftarObat.empty();
+    	return banyakData == 0;
 
 	}
 
@@ -4143,7 +4135,7 @@ public:
 
         subtotalobat = 0;
 
-        for(int i=0;i<daftarObat.size();i++){
+        for(int i=0;i<banyakData;i++) {
 
             subtotalobat += daftarObat[i].getHarga()*jumlah[i];
 
@@ -4156,7 +4148,7 @@ public:
     //tampilkeranjang baru
 	void tampilKeranjang() {
 		
-	    if (daftarObat.empty())
+	    if(banyakData == 0)
 	    {
 	        cout << "\nKeranjang masih kosong.\n";
 	        return;
@@ -4170,7 +4162,7 @@ public:
 	         << setw(12) << "Subtotal" << endl;
 	    cout << "===============================================================\n";
 	
-	    for (int i = 0; i < daftarObat.size(); i++)
+	    for(int i=0;i<banyakData;i++)
 	    {
 	        cout << left << setw(5) << i + 1
 	             << setw(20) << daftarObat[i].getnamaObat()
@@ -4188,7 +4180,7 @@ public:
     // baru
     void ubahJumlah(int index, int jumlahBaru) {
     	
-	    if(index < 0 || index >= jumlah.size())
+	    if(index >= banyakData)
 	        return;
 	
 	    if(jumlahBaru <= 0)
@@ -4211,14 +4203,20 @@ public:
 	// baru
 	void hapusItem(int index) {
         
-        if(index < 0 || index >= daftarObat.size())
-	    {
-            cout << "Item tidak ditemukan!" << endl;
-	        return;
-	    }
+        if(index < 0 || index >= banyakData)
+		{
+		    cout << "Item tidak ditemukan!" << endl;
+		    return;
+		}
         
-	    daftarObat.erase(daftarObat.begin() + index);
-	    jumlah.erase(jumlah.begin() + index);
+	    for(int i=index;i<banyakData-1;i++){
+
+		    daftarObat[i] = daftarObat[i+1];
+		    jumlah[i] = jumlah[i+1];
+		
+		}
+		
+		banyakData--;
         
 	    cout << "Item berhasil dihapus." << endl;
 	}
@@ -4838,16 +4836,16 @@ public:
 	
 	double hitungTotal(){
 
-	  subtotal = 0;
-	    
-	    vector<Obat> daftarObat = keranjang.getDaftarObat();
-    	vector<int> jumlahBeli = keranjang.getJumlah();
+	    subtotal = 0;
+	
+	    Obat* daftarObat = keranjang.getDaftarObat();
+	    int* jumlahBeli = keranjang.getJumlah();
 	
 	    cout << "\n==============================================" << endl;
 	    cout << "            RINCIAN PEMBELIAN" << endl;
 	    cout << "==============================================" << endl;
 	
-	    for(int i = 0; i < daftarObat.size(); i++){
+	    for(int i = 0; i < keranjang.getSize(); i++){
 	
 	        double subtotalobat = daftarObat[i].getHarga() * jumlahBeli[i];
 	
@@ -4865,7 +4863,6 @@ public:
 	    cout << "Total Pembayaran : Rp " << subtotal << endl;
 	
 	    return subtotal;
-	
 	}
 	
 	void diskonBelanja(){
@@ -4891,20 +4888,20 @@ public:
 }
 
 	void prosesPembayaran(){
-
+	
 	    uangBayar = 0;
 	
 	    cout << "\nMasukkan Uang Pembeli : Rp ";
 	    cin >> uangBayar;
-		cin.ignore();
-		
+	    cin.ignore();
+	
 	    while(uangBayar < totalPembayaran){
-			
-			cout << "\nUang tidak mencukupi!" << endl;
-			
+	
+	        cout << "\nUang tidak mencukupi!" << endl;
+	
 	        cout << "Masukkan Uang Pembeli : Rp ";
 	        cin >> uangBayar;
-			cin.ignore();
+	        cin.ignore();
 	
 	    }
 	
@@ -4913,11 +4910,11 @@ public:
 	    cout << "Kembalian : Rp " << uangKembali << endl;
 	
 	    // AMBIL DATA DARI KERANJANG
-	    vector<Obat> daftarObat = keranjang.getDaftarObat();
-	    vector<int> jumlahBeli = keranjang.getJumlah();
+	    Obat* daftarObat = keranjang.getDaftarObat();
+	    int* jumlahBeli = keranjang.getJumlah();
 	
 	    // Kurangi stok setiap obat
-	    for(int i = 0; i < daftarObat.size(); i++){
+	    for(int i = 0; i < keranjang.getSize(); i++){
 	
 	        daftarObat[i].kurangiStok(jumlahBeli[i]);
 	        daftarObat[i].simpanPerubahanStok();
@@ -4925,12 +4922,14 @@ public:
 	    }
 	
 	    simpanRiwayat();
-        LaporanKeuangan laporan;
-        laporan.catatPemasukanPenjualan(idTransaksi, totalPembayaran);
+	
+	    LaporanKeuangan laporan;
+	    laporan.catatPemasukanPenjualan(idTransaksi, totalPembayaran);
 	
 	    cout << "\nPembayaran Berhasil." << endl;
-        Logaktivitas log;
-        log.catatLog("TRANSAKSI", "Transaksi penjualan berhasil: " + idTransaksi);
+	
+	    Logaktivitas log;
+	    log.catatLog("TRANSAKSI", "Transaksi penjualan berhasil: " + idTransaksi);
 	}
 	
     void simpanRiwayat(){
@@ -4942,10 +4941,10 @@ public:
 	        return;
 	    }
 	
-	    vector<Obat> daftarObat = keranjang.getDaftarObat();
-	    vector<int> jumlahBeli = keranjang.getJumlah();
+	    Obat* daftarObat = keranjang.getDaftarObat();
+	    int* jumlahBeli = keranjang.getJumlah();
 	
-	    for(int i = 0; i < daftarObat.size(); i++){
+	    for(int i = 0; i < keranjang.getSize(); i++){
 	
 	        file << idTransaksi << "|"
 	             << cetakTanggal() << "|"
@@ -4955,6 +4954,7 @@ public:
 	             << daftarObat[i].getHarga() << "|"
 	             << daftarObat[i].getHarga() * jumlahBeli[i]
 	             << endl;
+	
 	    }
 	
 	    file.close();
@@ -4964,11 +4964,11 @@ public:
 
 	    // Memulai transaksi
 	    inputTransaksi();
-	    
-	    //menghitung total belanjaan
-		hitungTotal();
-		
-		//mengecek apakah mendapatkan diskon atau tidak
+	
+	    // Menghitung total belanjaan
+	    hitungTotal();
+	
+	    // Mengecek apakah mendapatkan diskon atau tidak
 	    diskonBelanja();
 	
 	    // Melakukan pembayaran
@@ -4990,31 +4990,32 @@ public:
 	         << setw(12) << "Subtotal" << endl;
 	
 	    cout << "----------------------------------------------" << endl;
-	    
-	    vector<Obat> daftarObat = keranjang.getDaftarObat();
-		vector<int> jumlahBeli = keranjang.getJumlah();
 	
-	    for(int i=0;i<daftarObat.size();i++){
+	    Obat* daftarObat = keranjang.getDaftarObat();
+	    int* jumlahBeli = keranjang.getJumlah();
+	
+	    for(int i = 0; i < keranjang.getSize(); i++){
 	
 	        cout << left
 	             << setw(20) << daftarObat[i].getnamaObat()
 	             << setw(8) << jumlahBeli[i]
 	             << setw(10) << daftarObat[i].getHarga()
-	             << setw(12) << daftarObat[i].getHarga()*jumlahBeli[i]
+	             << setw(12) << daftarObat[i].getHarga() * jumlahBeli[i]
 	             << endl;
 	
 	    }
-
+	
 	    cout << "----------------------------------------------" << endl;
 	
 	    cout << right << setw(28) << "TOTAL            : Rp "
 	         << subtotal << endl;
-	         
+	
 	    cout << right << setw(28) << "DISKON           : Rp "
 	         << diskon << endl;
-	         
+	
 	    cout << right << setw(28) << "SETELAH DISKON   : Rp "
 	         << totalPembayaran << endl;
+	
 	    cout << right << setw(28) << "BAYAR            : Rp "
 	         << uangBayar << endl;
 	
@@ -5117,14 +5118,17 @@ public:
 
 class Pesanan {
 	private :
-		string idPesanan;
-		Supplier supplier;
-		vector<Obat> daftarObat;
-		string tanggalPesan;
-		string statusPesanan;
+	    string idPesanan;
+	    Supplier supplier;
+	
+	    Obat daftarObat[100];
+	    int jumlahObat = 0;
+	
+	    string tanggalPesan;
+	    string statusPesanan;
 	
 	public :
-		
+
 };
 
 	void menuPenggajian(){
@@ -5832,3 +5836,4 @@ int main(){
 
     return 0;
 }
+
