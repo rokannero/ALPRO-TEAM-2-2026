@@ -1,0 +1,2 @@
+KRY001|Yanto Ismail|Manager|07/2026|0|0|0|0|1|6e+06|0|0|5000|5.995e+06
+KRY002|Yanto raharja|Manager|07/2026|0|0|0|0|1|8e+06|0|0|5000|7.995e+06

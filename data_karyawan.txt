@@ -1,1 +1,3 @@
-KRY001|Siit|Manager|Jalan Melati|081234567890|27|P|6.000.000
+KRY001|Susanto Ismail|Staff|Jalan Melati|081234567890|25|L|1.5e+06|0|0|0|0|0|0
+KRY002|Yanto raharja|Manager|Jalan Anggrek|08081234567|32|L|8e+06|0|0|0|0|0|0
+KRY003|Ronaldino|Manager|Jalan Bunga|0812345677890|42|L|5e+06|0|0|0|0|0|0
