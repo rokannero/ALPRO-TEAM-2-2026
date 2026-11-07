@@ -36,3 +36,54 @@
 11/07/2026|14:49|USR001|ROKAN|admin|KONFIRMASI BARANG|Barang restock diterima: Tera F
 11/07/2026|14:50|USR001|ROKAN|admin|LOGOUT|User logout dari sistem
 11/07/2026|15:01|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|15:12|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|15:19|USR001|ROKAN|admin|LOGOUT|User logout dari sistem
+11/07/2026|15:19|USR002|ROKAN|karyawan|LOGIN|User berhasil login
+11/07/2026|15:20|USR002|ROKAN|karyawan|TRANSAKSI|Transaksi penjualan berhasil: TRX0002
+11/07/2026|15:21|USR002|ROKAN|karyawan|LOGOUT|User logout dari sistem
+11/07/2026|15:21|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|15:28|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|15:49|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|15:55|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|15:57|USR001|ROKAN|admin|LOGOUT|User logout dari sistem
+11/07/2026|15:57|USR002|ROKAN|karyawan|LOGIN|User berhasil login
+11/07/2026|15:58|USR002|ROKAN|karyawan|TRANSAKSI|Transaksi penjualan berhasil: TRX0003
+11/07/2026|15:58|USR002|ROKAN|karyawan|LOGOUT|User logout dari sistem
+11/07/2026|15:59|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|16:04|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|16:09|USR002|ROKAN|karyawan|LOGIN|User berhasil login
+11/07/2026|16:10|USR002|ROKAN|karyawan|RESTOCK|Membuat pesanan restock obat: Tera F
+11/07/2026|16:10|USR002|ROKAN|karyawan|RESTOCK|Membuat pesanan restock obat: Tera F
+11/07/2026|16:10|USR002|ROKAN|karyawan|LOGOUT|User logout dari sistem
+11/07/2026|16:10|USR003|ROKAN|supplier|LOGIN|User berhasil login
+11/07/2026|16:11|USR003|ROKAN|supplier|LOGOUT|User logout dari sistem
+11/07/2026|16:11|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|16:15|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|16:15|USR001|ROKAN|admin|KONFIRMASI BARANG|Barang restock diterima: Tera F
+11/07/2026|16:17|USR001|ROKAN|admin|UBAH HARGA OBAT|Mengubah harga obat
+11/07/2026|16:36|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|16:38|USR001|ROKAN|admin|RESTOCK|Membuat pesanan restock obat: paratusin
+11/07/2026|16:38|USR001|ROKAN|admin|RESTOCK|Membuat pesanan restock obat: paratusin
+11/07/2026|16:54|USR002|ROKAN|karyawan|LOGIN|User berhasil login
+11/07/2026|16:54|USR002|ROKAN|karyawan|TRANSAKSI|Transaksi penjualan berhasil: TRX0004
+11/07/2026|16:55|USR002|ROKAN|karyawan|LOGOUT|User logout dari sistem
+11/07/2026|16:55|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|16:55|USR001|ROKAN|admin|RESTOCK|Membuat pesanan restock obat: Tera F
+11/07/2026|16:55|USR001|ROKAN|admin|RESTOCK|Membuat pesanan restock obat: Tera F
+11/07/2026|16:55|USR001|ROKAN|admin|LOGOUT|User logout dari sistem
+11/07/2026|16:56|USR003|ROKAN|supplier|LOGIN|User berhasil login
+11/07/2026|16:56|USR003|ROKAN|supplier|LOGOUT|User logout dari sistem
+11/07/2026|16:56|USR002|ROKAN|karyawan|LOGIN|User berhasil login
+11/07/2026|16:56|USR002|ROKAN|karyawan|KONFIRMASI BARANG|Barang restock diterima: Tera F
+11/07/2026|16:58|USR002|ROKAN|karyawan|LOGOUT|User logout dari sistem
+11/07/2026|16:58|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|17:00|USR001|ROKAN|admin|UBAH HARGA OBAT|Mengubah harga obat
+11/07/2026|17:12|USR002|ROKAN|karyawan|LOGIN|User berhasil login
+11/07/2026|17:13|USR002|ROKAN|karyawan|TRANSAKSI|Transaksi penjualan berhasil: TRX0005
+11/07/2026|17:13|USR002|ROKAN|karyawan|LOGOUT|User logout dari sistem
+11/07/2026|17:13|USR001|ROKAN|admin|LOGIN|User berhasil login
+11/07/2026|17:14|USR001|ROKAN|admin|RESTOCK|Membuat pesanan restock obat: Tera F
+11/07/2026|17:14|USR001|ROKAN|admin|RESTOCK|Membuat pesanan restock obat: Tera F
+12/07/2026|14:26|USR001|ROKAN|admin|LOGIN|User berhasil login
+12/07/2026|14:28|USR001|ROKAN|admin|LOGOUT|User logout dari sistem
+12/07/2026|21:31|USR001|ROKAN|admin|LOGIN|User berhasil login

@@ -68,6 +68,13 @@ string angkaKeString(int angka) {
     return to_string(angka);
 }
 
+string keHurufKecil(string teks) {
+    for (int i = 0; i < teks.length(); i++) {
+        teks[i] = tolower(teks[i]);
+    }
+    return teks;
+}
+
 string ambilField(string baris, int posisiField) {
     string hasil = "";
     int field = 0;
@@ -1117,6 +1124,109 @@ bool cekHakAksesGaji()
 
     file.close();
 }
+
+    void cariKaryawanByJabatan()
+    {
+        ifstream file("data_karyawan.txt");
+
+        if(!file.is_open())
+        {
+            cout << "File data karyawan tidak ditemukan!\n";
+            return;
+        }
+
+        string jabatanCari;
+        cout << "Masukkan Jabatan Karyawan : ";
+        getline(cin, jabatanCari);
+
+        jabatanCari = keHurufKecil(jabatanCari);
+
+        string line;
+        bool ketemu = false;
+        int nomor = 0;
+
+        cout << "\n============================== HASIL PENCARIAN JABATAN ==============================\n";
+        cout << left
+             << setw(10) << "ID"
+             << setw(20) << "Nama"
+             << setw(15) << "Jabatan"
+             << setw(20) << "Alamat"
+             << setw(15) << "No HP"
+             << setw(6)  << "Umur"
+             << setw(6)  << "JK"
+             << setw(15) << "Gaji Pokok"
+             << endl;
+        cout << "--------------------------------------------------------------------------------------\n";
+
+        while(getline(file, line))
+        {
+            string id = "";
+            string nama = "";
+            string jabatan = "";
+            string alamat = "";
+            string nohp = "";
+            string umur = "";
+            string jk = "";
+            string gaji = "";
+
+            int field = 0;
+
+            for(int i = 0; i < line.length(); i++)
+            {
+                if(line[i] == '|')
+                {
+                    field++;
+                }
+                else
+                {
+                    if(field == 0)
+                        id += line[i];
+                    else if(field == 1)
+                        nama += line[i];
+                    else if(field == 2)
+                        jabatan += line[i];
+                    else if(field == 3)
+                        alamat += line[i];
+                    else if(field == 4)
+                        nohp += line[i];
+                    else if(field == 5)
+                        umur += line[i];
+                    else if(field == 6)
+                        jk += line[i];
+                    else if(field == 7)
+                        gaji += line[i];
+                }
+            }
+
+            if(keHurufKecil(jabatan).find(jabatanCari) != string::npos)
+            {
+                ketemu = true;
+                nomor++;
+                cout << left
+                     << setw(10) << id
+                     << setw(20) << nama
+                     << setw(15) << jabatan
+                     << setw(20) << alamat
+                     << setw(15) << nohp
+                     << setw(6)  << umur
+                     << setw(6)  << jk
+                     << setw(15) << formatRupiah(gaji)
+                     << endl;
+            }
+        }
+
+        if(!ketemu)
+        {
+            cout << "Tidak ada karyawan dengan jabatan tersebut.\n";
+        }
+        else
+        {
+            cout << "--------------------------------------------------------------------------------------\n";
+            cout << "Total ditemukan: " << nomor << " karyawan.\n";
+        }
+
+        file.close();
+    }
 
     void ubahDataKaryawan()
 	{
@@ -2181,9 +2291,72 @@ public:
 	    file.close();
 	    return false;
 	}
+
+	void cariObatSebagian(string keyword){
+	    ifstream file("daftar_obat.txt");
+
+	    if(!file.is_open()){
+	        cout << "File daftar obat tidak ditemukan!\n";
+	        return;
+	    }
+
+	    keyword = ubahKeLower(keyword);
+
+	    string line;
+	    bool ketemu = false;
+	    int total = 0;
+
+	    cout << "\n================================ HASIL PENCARIAN OBAT ================================\n";
+	    cout << left
+	         << setw(10) << "Kode"
+	         << setw(22) << "Nama Obat"
+	         << setw(14) << "Harga"
+	         << setw(8)  << "Stok"
+	         << setw(14) << "Tgl Exp"
+	         << setw(12) << "Kategori"
+	         << setw(10) << "Satuan"
+	         << endl;
+	    cout << "--------------------------------------------------------------------------------------\n";
+
+	    while(getline(file, line)){
+	        stringstream ss(line);
+	        string kode, nama, hargaStr, stokStr, exp, kat, sat;
+
+	        getline(ss, kode, '|');
+	        getline(ss, nama, '|');
+	        getline(ss, hargaStr, '|');
+	        getline(ss, stokStr, '|');
+	        getline(ss, exp, '|');
+	        getline(ss, kat, '|');
+	        getline(ss, sat, '|');
+
+	        if(ubahKeLower(nama).find(keyword) != string::npos){
+	            ketemu = true;
+	            total++;
+	            cout << left
+	                 << setw(10) << kode
+	                 << setw(22) << nama
+	                 << setw(14) << formatRupiah(atof(hargaStr.c_str()))
+	                 << setw(8)  << stokStr
+	                 << setw(14) << exp
+	                 << setw(12) << kat
+	                 << setw(10) << sat
+	                 << endl;
+	        }
+	    }
+
+	    if(!ketemu){
+	        cout << "Tidak ada obat yang cocok dengan kata kunci '" << keyword << "'.\n";
+	    } else {
+	        cout << "--------------------------------------------------------------------------------------\n";
+	        cout << "Total ditemukan: " << total << " obat.\n";
+	    }
+
+	    file.close();
+	}
 	
 	// 
-	void sortingNama(){
+	void sortingNama(int mode = 1){
 
 	    Obat data[100];
 	    int jumlah = 0;
@@ -2224,31 +2397,51 @@ public:
 	
 	        for(int j=0;j<jumlah-i-1;j++){
 	
-	            if(ubahKeLower(data[j].namaObat) >
-	               ubahKeLower(data[j+1].namaObat)){
-	
+	            bool swapKondisi = false;
+	            if(mode == 1){
+	                // Ascending (A - Z)
+	                swapKondisi = (ubahKeLower(data[j].namaObat) > ubahKeLower(data[j+1].namaObat));
+	            } else {
+	                // Descending (Z - A)
+	                swapKondisi = (ubahKeLower(data[j].namaObat) < ubahKeLower(data[j+1].namaObat));
+	            }
+
+	            if(swapKondisi){
 	                Obat temp=data[j];
 	                data[j]=data[j+1];
 	                data[j+1]=temp;
-	
 	            }
 	        }
 	    }
 	
-	    cout<<"\n===== DAFTAR OBAT (SORTING NAMA A-Z) =====\n\n";
-	    cout<<"KODE|NAMA|HARGA|STOK|TGL EXP|KATEGORI|SATUAN|\n\n";
+	    if(mode == 1){
+	        cout<<"\n================ DAFTAR OBAT (SORTING NAMA A-Z) ================\n\n";
+	    } else {
+	        cout<<"\n================ DAFTAR OBAT (SORTING NAMA Z-A) ================\n\n";
+	    }
+	    cout << left
+	         << setw(10) << "Kode"
+	         << setw(22) << "Nama Obat"
+	         << setw(14) << "Harga"
+	         << setw(8)  << "Stok"
+	         << setw(14) << "Tgl Exp"
+	         << setw(12) << "Kategori"
+	         << setw(10) << "Satuan"
+	         << endl;
+	    cout << "--------------------------------------------------------------------------------\n";
 	
 	    for(int i=0;i<jumlah;i++){
-	
-	        cout<<data[i].kodeObat<<"|"
-	            <<data[i].namaObat<<"|"
-	            <<data[i].harga<<"|"
-	            <<data[i].stok<<"|"
-	            <<data[i].tanggalExpired<<"|"
-	            <<data[i].kategori<<"|"
-	            <<data[i].satuan<<"|"<<endl<<endl;
-	
+	        cout << left
+	             << setw(10) << data[i].kodeObat
+	             << setw(22) << data[i].namaObat
+	             << setw(14) << formatRupiah(data[i].harga)
+	             << setw(8)  << data[i].stok
+	             << setw(14) << data[i].tanggalExpired
+	             << setw(12) << data[i].kategori
+	             << setw(10) << data[i].satuan
+	             << endl;
 	    }
+	    cout << "--------------------------------------------------------------------------------\n";
 	}
 	
 	//
@@ -4042,6 +4235,173 @@ public:
 	    rename("temp.txt","pesanan_supplier.txt");
 	}
 
+	void cariPesananByStatus(string statusCari){
+	    ifstream file("pesanan_supplier.txt");
+
+	    if(!file.is_open()){
+	        cout << "File pesanan supplier tidak ditemukan!" << endl;
+	        return;
+	    }
+
+	    statusCari = keHurufKecil(statusCari);
+
+	    string id, supplier, kode, nama, jumlah, tanggal, status;
+	    bool ketemu = false;
+	    int total = 0;
+
+	    cout << "\n======================== HASIL PENCARIAN STATUS PESANAN ========================\n";
+	    cout << left
+	         << setw(10) << "ID"
+	         << setw(10) << "Supplier"
+	         << setw(10) << "Kode"
+	         << setw(20) << "Nama Obat"
+	         << setw(10) << "Jumlah"
+	         << setw(15) << "Tanggal"
+	         << setw(15) << "Status"
+	         << endl;
+	    cout << "--------------------------------------------------------------------------------\n";
+
+	    while(getline(file,id,'|') &&
+	          getline(file,supplier,'|') &&
+	          getline(file,kode,'|') &&
+	          getline(file,nama,'|') &&
+	          getline(file,jumlah,'|') &&
+	          getline(file,tanggal,'|') &&
+	          getline(file,status))
+	    {
+	        if(keHurufKecil(status).find(statusCari) != string::npos){
+	            ketemu = true;
+	            total++;
+	            cout << left
+	                 << setw(10) << id
+	                 << setw(10) << supplier
+	                 << setw(10) << kode
+	                 << setw(20) << nama
+	                 << setw(10) << jumlah
+	                 << setw(15) << tanggal
+	                 << setw(15) << status
+	                 << endl;
+	        }
+	    }
+
+	    if(!ketemu){
+	        cout << "Tidak ada pesanan dengan status tersebut.\n";
+	    } else {
+	        cout << "--------------------------------------------------------------------------------\n";
+	        cout << "Total ditemukan: " << total << " pesanan.\n";
+	    }
+
+	    file.close();
+	}
+
+	void sortingPesanan(int opsiKriteria, int opsiUrutan){
+	    struct DataPesanan {
+	        string id;
+	        string supplier;
+	        string kode;
+	        string nama;
+	        int jumlah;
+	        string tanggal;
+	        string status;
+	    };
+
+	    DataPesanan data[100];
+	    int count = 0;
+
+	    ifstream file("pesanan_supplier.txt");
+	    if(!file.is_open()){
+	        cout << "File pesanan supplier tidak ditemukan!" << endl;
+	        return;
+	    }
+
+	    string id, supplier, kode, nama, jumlahStr, tanggal, status;
+	    while(getline(file,id,'|') &&
+	          getline(file,supplier,'|') &&
+	          getline(file,kode,'|') &&
+	          getline(file,nama,'|') &&
+	          getline(file,jumlahStr,'|') &&
+	          getline(file,tanggal,'|') &&
+	          getline(file,status))
+	    {
+	        if(count < 100){
+	            data[count].id = id;
+	            data[count].supplier = supplier;
+	            data[count].kode = kode;
+	            data[count].nama = nama;
+	            data[count].jumlah = atoi(jumlahStr.c_str());
+	            data[count].tanggal = tanggal;
+	            data[count].status = status;
+	            count++;
+	        }
+	    }
+	    file.close();
+
+	    if(count == 0){
+	        cout << "Belum ada data pesanan supplier.\n";
+	        return;
+	    }
+
+	    // Bubble Sort
+	    for(int i = 0; i < count - 1; i++){
+	        for(int j = 0; j < count - i - 1; j++){
+	            bool tukar = false;
+	            if(opsiKriteria == 1){
+	                // Kriteria Tanggal (Format DD-MM-YYYY atau DD/MM/YYYY diubah ke YYYYMMDD untuk perbandingan)
+	                string tgl1 = data[j].tanggal;
+	                string tgl2 = data[j+1].tanggal;
+	                string k1 = tgl1, k2 = tgl2;
+	                if(tgl1.length() >= 10 && tgl2.length() >= 10){
+	                    k1 = tgl1.substr(6, 4) + tgl1.substr(3, 2) + tgl1.substr(0, 2);
+	                    k2 = tgl2.substr(6, 4) + tgl2.substr(3, 2) + tgl2.substr(0, 2);
+	                }
+	                if(opsiUrutan == 1){
+	                    tukar = (k1 > k2); // Terlama ke Terbaru
+	                } else {
+	                    tukar = (k1 < k2); // Terbaru ke Terlama
+	                }
+	            } else {
+	                // Kriteria Jumlah Pesanan
+	                if(opsiUrutan == 1){
+	                    tukar = (data[j].jumlah > data[j+1].jumlah); // Terkecil ke Terbesar
+	                } else {
+	                    tukar = (data[j].jumlah < data[j+1].jumlah); // Terbesar ke Terkecil
+	                }
+	            }
+
+	            if(tukar){
+	                DataPesanan temp = data[j];
+	                data[j] = data[j+1];
+	                data[j+1] = temp;
+	            }
+	        }
+	    }
+
+	    cout << "\n========================== HASIL SORTING PESANAN SUPPLIER ==========================\n";
+	    cout << left
+	         << setw(10) << "ID"
+	         << setw(10) << "Supplier"
+	         << setw(10) << "Kode"
+	         << setw(20) << "Nama Obat"
+	         << setw(10) << "Jumlah"
+	         << setw(15) << "Tanggal"
+	         << setw(15) << "Status"
+	         << endl;
+	    cout << "------------------------------------------------------------------------------------\n";
+
+	    for(int i = 0; i < count; i++){
+	        cout << left
+	             << setw(10) << data[i].id
+	             << setw(10) << data[i].supplier
+	             << setw(10) << data[i].kode
+	             << setw(20) << data[i].nama
+	             << setw(10) << data[i].jumlah
+	             << setw(15) << data[i].tanggal
+	             << setw(15) << data[i].status
+	             << endl;
+	    }
+	    cout << "------------------------------------------------------------------------------------\n";
+	}
+
 };
 
 // perubahan class
@@ -4488,6 +4848,103 @@ public:
 
     void laporanTahunan() {
         tampilLaporan(3);
+    }
+
+    void sortingPengeluaran() {
+        struct DataKeuangan {
+            string id;
+            string tanggal;
+            string jenis;
+            string kategori;
+            string keterangan;
+            double pemasukan;
+            double pengeluaran;
+        };
+
+        DataKeuangan data[100];
+        int count = 0;
+
+        ifstream file(fileKeuangan);
+        if(!file.is_open()){
+            cout << "File laporan keuangan tidak dapat dibuka!\n";
+            return;
+        }
+
+        string line;
+        while(getline(file, line)){
+            stringstream ss(line);
+            string id, tanggal, jenis, kategori, keterangan, masukStr, keluarStr;
+
+            getline(ss, id, '|');
+            getline(ss, tanggal, '|');
+            getline(ss, jenis, '|');
+            getline(ss, kategori, '|');
+            getline(ss, keterangan, '|');
+            getline(ss, masukStr, '|');
+            getline(ss, keluarStr);
+
+            double masuk = 0;
+            double keluar = 0;
+            try {
+                masuk = stod(masukStr);
+                keluar = stod(keluarStr);
+            } catch(...) {
+                continue;
+            }
+
+            if(keluar > 0 && count < 100){
+                data[count].id = id;
+                data[count].tanggal = tanggal;
+                data[count].jenis = jenis;
+                data[count].kategori = kategori;
+                data[count].keterangan = keterangan;
+                data[count].pemasukan = masuk;
+                data[count].pengeluaran = keluar;
+                count++;
+            }
+        }
+        file.close();
+
+        if(count == 0){
+            cout << "Tidak ada data pengeluaran yang tercatat.\n";
+            return;
+        }
+
+        // Bubble Sort pengeluaran terbesar ke terkecil (Descending)
+        for(int i = 0; i < count - 1; i++){
+            for(int j = 0; j < count - i - 1; j++){
+                if(data[j].pengeluaran < data[j+1].pengeluaran){
+                    DataKeuangan temp = data[j];
+                    data[j] = data[j+1];
+                    data[j+1] = temp;
+                }
+            }
+        }
+
+        double totalSemuaPengeluaran = 0;
+        cout << "\n================= PENGELUARAN TERBESAR KE TERKECIL =================\n";
+        cout << left
+             << setw(10) << "ID"
+             << setw(12) << "Tanggal"
+             << setw(14) << "Kategori"
+             << setw(26) << "Keterangan"
+             << setw(18) << "Nominal (Rp)"
+             << endl;
+        cout << "--------------------------------------------------------------------\n";
+
+        for(int i = 0; i < count; i++){
+            cout << left
+                 << setw(10) << data[i].id
+                 << setw(12) << data[i].tanggal
+                 << setw(14) << data[i].kategori
+                 << setw(26) << data[i].keterangan
+                 << setw(18) << formatRupiah(data[i].pengeluaran)
+                 << endl;
+            totalSemuaPengeluaran += data[i].pengeluaran;
+        }
+
+        cout << "--------------------------------------------------------------------\n";
+        cout << "Total Pengeluaran : Rp " << formatRupiah(totalSemuaPengeluaran) << endl;
     }
 };
 
@@ -5109,6 +5566,189 @@ public:
 	
 	}
 
+	void cariTransaksiByObat(string namaObatCari){
+	    ifstream file("riwayat_transaksi.txt");
+
+	    if(!file.is_open()){
+	        cout << "Riwayat transaksi belum tersedia." << endl;
+	        return;
+	    }
+
+	    namaObatCari = keHurufKecil(namaObatCari);
+
+	    string line;
+	    bool ketemu = false;
+	    int totalBaris = 0;
+
+	    cout << "\n============================== HASIL PENCARIAN TRANSAKSI ==============================\n";
+	    cout << left
+	         << setw(12) << "ID TRX"
+	         << setw(12) << "Tanggal"
+	         << setw(8)  << "Jam"
+	         << setw(20) << "Nama Obat"
+	         << setw(8)  << "Qty"
+	         << setw(14) << "Harga"
+	         << setw(14) << "Subtotal"
+	         << endl;
+	    cout << "----------------------------------------------------------------------------------------\n";
+
+	    while(getline(file, line)){
+	        stringstream ss(line);
+	        string id, tanggal, jam, nama, jumlah, harga, subtotal;
+
+	        getline(ss, id, '|');
+	        getline(ss, tanggal, '|');
+	        getline(ss, jam, '|');
+	        getline(ss, nama, '|');
+	        getline(ss, jumlah, '|');
+	        getline(ss, harga, '|');
+	        getline(ss, subtotal, '|');
+
+	        if(keHurufKecil(nama).find(namaObatCari) != string::npos){
+	            ketemu = true;
+	            totalBaris++;
+	            cout << left
+	                 << setw(12) << id
+	                 << setw(12) << tanggal
+	                 << setw(8)  << jam
+	                 << setw(20) << nama
+	                 << setw(8)  << jumlah
+	                 << setw(14) << formatRupiah(atof(harga.c_str()))
+	                 << setw(14) << formatRupiah(atof(subtotal.c_str()))
+	                 << endl;
+	        }
+	    }
+
+	    if(!ketemu){
+	        cout << "Tidak ditemukan transaksi untuk obat dengan kata kunci: " << namaObatCari << endl;
+	    } else {
+	        cout << "----------------------------------------------------------------------------------------\n";
+	        cout << "Total item transaksi ditemukan: " << totalBaris << endl;
+	    }
+
+	    file.close();
+	}
+
+	void sortingTransaksiByTotal(){
+	    struct ItemTrx {
+	        string nama;
+	        string qty;
+	        string harga;
+	        string subtotal;
+	    };
+
+	    struct HeaderTrx {
+	        string id;
+	        string tanggal;
+	        string jam;
+	        double totalTrx;
+	        ItemTrx items[20];
+	        int itemCount;
+	    };
+
+	    HeaderTrx daftarTrx[100];
+	    int jumlahTrx = 0;
+
+	    ifstream file("riwayat_transaksi.txt");
+	    if(!file.is_open()){
+	        cout << "Riwayat transaksi belum tersedia." << endl;
+	        return;
+	    }
+
+	    string line;
+	    while(getline(file, line)){
+	        stringstream ss(line);
+	        string id, tanggal, jam, nama, qty, harga, subtotal;
+
+	        getline(ss, id, '|');
+	        getline(ss, tanggal, '|');
+	        getline(ss, jam, '|');
+	        getline(ss, nama, '|');
+	        getline(ss, qty, '|');
+	        getline(ss, harga, '|');
+	        getline(ss, subtotal, '|');
+
+	        double sub = atof(subtotal.c_str());
+
+	        int idx = -1;
+	        for(int i = 0; i < jumlahTrx; i++){
+	            if(daftarTrx[i].id == id){
+	                idx = i;
+	                break;
+	            }
+	        }
+
+	        if(idx == -1){
+	            if(jumlahTrx < 100){
+	                idx = jumlahTrx;
+	                daftarTrx[idx].id = id;
+	                daftarTrx[idx].tanggal = tanggal;
+	                daftarTrx[idx].jam = jam;
+	                daftarTrx[idx].totalTrx = 0;
+	                daftarTrx[idx].itemCount = 0;
+	                jumlahTrx++;
+	            }
+	        }
+
+	        if(idx != -1 && daftarTrx[idx].itemCount < 20){
+	            int ic = daftarTrx[idx].itemCount;
+	            daftarTrx[idx].items[ic].nama = nama;
+	            daftarTrx[idx].items[ic].qty = qty;
+	            daftarTrx[idx].items[ic].harga = harga;
+	            daftarTrx[idx].items[ic].subtotal = subtotal;
+	            daftarTrx[idx].itemCount++;
+	            daftarTrx[idx].totalTrx += sub;
+	        }
+	    }
+	    file.close();
+
+	    if(jumlahTrx == 0){
+	        cout << "Belum ada transaksi yang tercatat.\n";
+	        return;
+	    }
+
+	    // Bubble Sort transaksi berdasarkan totalTrx tertinggi ke terendah (Descending)
+	    for(int i = 0; i < jumlahTrx - 1; i++){
+	        for(int j = 0; j < jumlahTrx - i - 1; j++){
+	            if(daftarTrx[j].totalTrx < daftarTrx[j+1].totalTrx){
+	                HeaderTrx temp = daftarTrx[j];
+	                daftarTrx[j] = daftarTrx[j+1];
+	                daftarTrx[j+1] = temp;
+	            }
+	        }
+	    }
+
+	    cout << "\n==============================================" << endl;
+	    cout << "     RIWAYAT TRANSAKSI (TOTAL TERTINGGI)" << endl;
+	    cout << "==============================================" << endl;
+
+	    for(int i = 0; i < jumlahTrx; i++){
+	        cout << "\nID Transaksi : " << daftarTrx[i].id << endl;
+	        cout << "Tanggal      : " << daftarTrx[i].tanggal << endl;
+	        cout << "Jam          : " << daftarTrx[i].jam << endl;
+	        cout << "------------------------------------------------" << endl;
+	        cout << left
+	             << setw(20) << "Nama Obat"
+	             << setw(8) << "Qty"
+	             << setw(10) << "Harga"
+	             << setw(12) << "Subtotal"
+	             << endl;
+	        cout << "------------------------------------------------" << endl;
+
+	        for(int k = 0; k < daftarTrx[i].itemCount; k++){
+	            cout << left
+	                 << setw(20) << daftarTrx[i].items[k].nama
+	                 << setw(8) << daftarTrx[i].items[k].qty
+	                 << setw(10) << daftarTrx[i].items[k].harga
+	                 << setw(12) << daftarTrx[i].items[k].subtotal
+	                 << endl;
+	        }
+	        cout << "------------------------------------------------" << endl;
+	        cout << "TOTAL TRANSAKSI : Rp " << formatRupiah(daftarTrx[i].totalTrx) << endl;
+	        cout << "================================================" << endl;
+	    }
+	}
+
     void batalkanTransaksi();
     void refundTransaksi();
 
@@ -5193,10 +5833,11 @@ class Pesanan {
         cout<<"1. Input Karyawan"<<endl;
         cout<<"2. Data Karyawan"<<endl;
         cout<<"3. Cari Karyawan"<<endl;
-        cout<<"4. Ubah Data"<<endl;
-        cout<<"5. Hapus Data"<<endl;
-        cout<<"6. Input Absensi"<<endl;
-        cout<<"7. Penggajian"<<endl;
+        cout<<"4. Cari Karyawan by Jabatan"<<endl;
+        cout<<"5. Ubah Data"<<endl;
+        cout<<"6. Hapus Data"<<endl;
+        cout<<"7. Input Absensi"<<endl;
+        cout<<"8. Penggajian"<<endl;
         cout<<"0. Kembali"<<endl;
 
         cout<<"Pilih : ";
@@ -5218,18 +5859,22 @@ class Pesanan {
                 break;
 
             case 4:
-                karyawan.ubahDataKaryawan();
+                karyawan.cariKaryawanByJabatan();
                 break;
 
             case 5:
-                karyawan.hapusDataKaryawan();
+                karyawan.ubahDataKaryawan();
                 break;
 
             case 6:
-                karyawan.inputAbsensi();
+                karyawan.hapusDataKaryawan();
                 break;
 
             case 7:
+                karyawan.inputAbsensi();
+                break;
+
+            case 8:
 
                 if(karyawan.cekHakAksesGaji())
                 {
@@ -5269,6 +5914,7 @@ void menuKelolaObat() {
         cout << "6. Stok Menipis\n";
         cout << "7. Cek Kadaluarsa\n";
         cout << "8. Monitoring Obat\n";
+        cout << "9. Urutkan Obat (Sorting Nama)\n";
         cout << "0. Kembali\n";
         cout << "Pilih : ";
 
@@ -5280,23 +5926,37 @@ void menuKelolaObat() {
             break;
 
         case 2:
-            cout << "Nama Obat : ";
-            getline(cin, namaCari);
+        {
+            cout << "\n--- PILIH METODE PENCARIAN ---\n";
+            cout << "1. Cari Nama Lengkap / Detail Obat\n";
+            cout << "2. Cari Sebagian Nama Obat\n";
+            cout << "Pilih : ";
+            int subPilih = inputPilihanMenu();
 
-            if (obat.cariObat(namaCari)) {
-                cout << "===============================\n";
-                cout << "|     DATA OBAT DITEMUKAN     |\n";
-                cout << "===============================";
-                cout << "\nKode    : " << obat.getkodeObat() << endl;
-                cout << "Nama    : " << obat.getnamaObat() << endl;
-                cout << "Harga   : " << obat.getHarga() << endl;
-                cout << "Stok    : " << obat.getStok() << endl;
-                cout << "Expired : " << obat.gettanggalExpired() << endl;
-                cout << "===============================\n";
+            if (subPilih == 2) {
+                cout << "Masukkan sebagian kata kunci nama obat: ";
+                getline(cin, namaCari);
+                obat.cariObatSebagian(namaCari);
             } else {
-                cout << "Obat tidak ditemukan.\n";
+                cout << "Nama Obat : ";
+                getline(cin, namaCari);
+
+                if (obat.cariObat(namaCari)) {
+                    cout << "===============================\n";
+                    cout << "|     DATA OBAT DITEMUKAN     |\n";
+                    cout << "===============================";
+                    cout << "\nKode    : " << obat.getkodeObat() << endl;
+                    cout << "Nama    : " << obat.getnamaObat() << endl;
+                    cout << "Harga   : " << obat.getHarga() << endl;
+                    cout << "Stok    : " << obat.getStok() << endl;
+                    cout << "Expired : " << obat.gettanggalExpired() << endl;
+                    cout << "===============================\n";
+                } else {
+                    cout << "Obat tidak ditemukan.\n";
+                }
             }
             break;
+        }
 
         case 3:
             obat.inputObat();
@@ -5322,11 +5982,26 @@ void menuKelolaObat() {
             obat.tampilMonitoring();
             break;
 
+        case 9:
+        {
+            cout << "\n--- PENGURUTAN OBAT BY NAMA ---\n";
+            cout << "1. Nama A - Z (Ascending)\n";
+            cout << "2. Nama Z - A (Descending)\n";
+            cout << "Pilih : ";
+            int modeSort = inputPilihanMenu();
+            if (modeSort == 2) {
+                obat.sortingNama(2);
+            } else {
+                obat.sortingNama(1);
+            }
+            break;
+        }
+
         case 0:
             return;
 
         default:
-            cout << "Pilihan salah! Masukkan angka 0 sampai 8.\n";
+            cout << "Pilihan salah! Masukkan angka 0 sampai 9.\n";
             break;
         }
 
@@ -5353,6 +6028,8 @@ void menuKelolaSupplier() {
         cout << "7. Lihat Pesanan Supplier\n";
         cout << "8. Update Status Pesanan\n";
         cout << "9. Konfirmasi Barang Diterima\n";
+        cout << "10. Cari Pesanan by Status\n";
+        cout << "11. Urutkan Pesanan Supplier\n";
         cout << "0. Kembali\n";
         cout << "Pilih : ";
 
@@ -5405,11 +6082,44 @@ void menuKelolaSupplier() {
             supplier.konfirmasiBarang();
             break;
 
+        case 10:
+        {
+            string statusCari;
+            cout << "\nMasukkan status pesanan yang dicari (Menunggu/Dikirim/Diterima): ";
+            getline(cin, statusCari);
+            supplier.cariPesananByStatus(statusCari);
+            break;
+        }
+
+        case 11:
+        {
+            cout << "\n--- PENGURUTAN PESANAN SUPPLIER ---\n";
+            cout << "Pilih Kriteria:\n";
+            cout << "1. Berdasarkan Tanggal Pesanan\n";
+            cout << "2. Berdasarkan Jumlah Pesanan\n";
+            cout << "Pilihan Kriteria : ";
+            int krit = inputPilihanMenu();
+
+            cout << "\nPilih Arah Pengurutan:\n";
+            if (krit == 1) {
+                cout << "1. Terlama ke Terbaru (Ascending)\n";
+                cout << "2. Terbaru ke Terlama (Descending)\n";
+            } else {
+                cout << "1. Terkecil ke Terbesar (Ascending)\n";
+                cout << "2. Terbesar ke Terkecil (Descending)\n";
+            }
+            cout << "Pilihan Arah : ";
+            int arah = inputPilihanMenu();
+
+            supplier.sortingPesanan(krit, arah);
+            break;
+        }
+
         case 0:
             return;
 
         default:
-            cout << "Pilihan salah! Masukkan angka 0 sampai 9.\n";
+            cout << "Pilihan salah! Masukkan angka 0 sampai 11.\n";
             break;
         }
 
@@ -5428,6 +6138,7 @@ void menuLaporanKeuangan() {
         cout << "2. Laporan Bulanan\n";
         cout << "3. Laporan Tahunan\n";
         cout << "4. Input Pengeluaran Rutin\n";
+        cout << "5. Urutkan Pengeluaran Terbesar ke Terkecil\n";
         cout << "0. Kembali\n";
         cout << "Pilih : ";
 
@@ -5450,11 +6161,15 @@ void menuLaporanKeuangan() {
             laporan.inputPengeluaranRutin();
             break;
 
+        case 5:
+            laporan.sortingPengeluaran();
+            break;
+
         case 0:
             return;
 
         default:
-            cout << "Pilihan salah! Masukkan angka 0 sampai 4.\n";
+            cout << "Pilihan salah! Masukkan angka 0 sampai 5.\n";
             break;
         }
 
@@ -5485,6 +6200,51 @@ void menuLogAktivitas() {
 
         default:
             cout << "Pilihan salah! Masukkan angka 0 sampai 1.\n";
+            break;
+        }
+
+        kembaliMenu();
+
+    } while (true);
+}
+
+void menuRiwayatTransaksi() {
+    Transaksi transaksi;
+    int pilih;
+
+    do {
+        cout << "\n=== MENU RIWAYAT TRANSAKSI ===\n";
+        cout << "1. Tampil Semua Riwayat Transaksi\n";
+        cout << "2. Cari Transaksi by Nama Obat\n";
+        cout << "3. Urutkan Transaksi by Total Tertinggi\n";
+        cout << "0. Kembali\n";
+        cout << "Pilih : ";
+
+        pilih = inputPilihanMenu();
+
+        switch (pilih) {
+        case 1:
+            transaksi.tampilRiwayat();
+            break;
+
+        case 2:
+        {
+            string obatCari;
+            cout << "Masukkan nama obat yang dicari di transaksi: ";
+            getline(cin, obatCari);
+            transaksi.cariTransaksiByObat(obatCari);
+            break;
+        }
+
+        case 3:
+            transaksi.sortingTransaksiByTotal();
+            break;
+
+        case 0:
+            return;
+
+        default:
+            cout << "Pilihan salah! Masukkan angka 0 sampai 3.\n";
             break;
         }
 
@@ -5547,7 +6307,7 @@ void menuAdmin() {
             break;
 
         case 5:
-            transaksi.tampilRiwayat();
+            menuRiwayatTransaksi();
             break;
 
         case 6:
@@ -5634,7 +6394,7 @@ void menuKaryawan() {
             break;
 
         case 6:
-            transaksi.tampilRiwayat();
+            menuRiwayatTransaksi();
             break;
 
         case 7:
@@ -5836,4 +6596,3 @@ int main(){
 
     return 0;
 }
-
